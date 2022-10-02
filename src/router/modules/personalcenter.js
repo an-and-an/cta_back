@@ -4,7 +4,7 @@ export default [{
   path: "/personalcenter",
   name: 'personalcenter',
   meta: { title: '个人中心' },
-  icon: 'el-icon-location',
+  icon: 'UserFilled',
   component: Layout,
   children: [
     {
@@ -12,7 +12,7 @@ export default [{
       name: 'personalcenter1',
       meta: { title: '个人中心2' },
       component: PersonalCenter,
-      icon: 'el-icon-location',
+      icon: 'UserFilled',
     }
   ]
 }]

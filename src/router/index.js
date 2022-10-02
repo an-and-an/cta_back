@@ -37,22 +37,23 @@ import home from './modules/home'
 export const fixedRoutes = [...home]
 
 // 动态菜单
-import test from './modules/test'
 import users from './modules/users';
 import admins from './modules/admins'
 import news from './modules/news'
 import materials from './modules/materials'
 import personalcenter from './modules/personalcenter'
-// import guoxinan from './modules/guoxinan'
+import guoxinan from './modules/guoxinan'
 import recruitment from './modules/recruitment'
+import active from './modules/active'
 export const asyncRoutes = [
   ...users,
   ...admins,
   ...news,
   ...materials,
   ...personalcenter,
-  // ...guoxinan,
+  ...guoxinan,
   ...recruitment,
+  ...active,
 ]
 // console.log(asyncRoutes);
 

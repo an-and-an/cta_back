@@ -14,11 +14,10 @@
     <el-form class="form face" :model="model" :rules="rules" ref="loginForm">
       <h1 class="title">{{ title }}</h1>
       <el-form-item prop="username">
-        <el-input class="text" v-model="model.username" prefix-icon="el-icon-user-solid" clearable placeholder="用户名" />
+        <el-input class="text" v-model="model.username" prefix-icon="User" clearable placeholder="用户名" />
       </el-form-item>
       <el-form-item prop="password">
-        <el-input class="text" v-model="model.password" prefix-icon="el-icon-lock" show-password clearable
-          placeholder="密码" />
+        <el-input class="text" v-model="model.password" prefix-icon="Lock" show-password clearable placeholder="密码" />
       </el-form-item>
       <el-form-item>
         <el-button-group style="width:100%">
@@ -44,6 +43,7 @@ import {
 } from 'vue'
 import { Login } from '@/api/login'
 import { useStore } from 'vuex'
+import { encryptByMd5 } from '@/utils/encrypt.js'
 import { useRouter, useRoute } from 'vue-router'
 // import { title } from 'process'
 export default defineComponent({
@@ -58,8 +58,8 @@ export default defineComponent({
     const loginForm = ref(null)
     const state = reactive({
       model: {
-        username: 'ymx',
-        password: '123456',
+        username: '',
+        password: '',
         type: true,
       },
       title: '社团成员',
@@ -81,18 +81,18 @@ export default defineComponent({
       btnText: computed(() => (state.loading ? '登录中...' : '登录')),
       //切换
       changeModelType: () => {
-       // console.log(" state.model.type1--", state.model.type);
+        // console.log(" state.model.type1--", state.model.type);
         state.model.type = !state.model.type;
         //console.log(" state.model.type2--", state.model.type);
         if (state.model.type) {
-          loginForm.value.$el.style.transition = "0.8s";
+          loginForm.value.$el.style.transition = "0.8s"
           loginForm.value.$el.style.transform = 'rotateY(360deg)'
         } else {
-          loginForm.value.$el.style.transition = "0.8s";
+          loginForm.value.$el.style.transition = "0.8s"
           loginForm.value.$el.style.transform = 'rotateX(360deg)'
         }
         setTimeout(() => {
-          loginForm.value.$el.style.transition = '';
+          loginForm.value.$el.style.transition = ''
           loginForm.value.$el.style.transform = ''
           if (state.model.type) {
             state.title = '社团成员'
@@ -109,8 +109,10 @@ export default defineComponent({
         loginForm.value.validate(async valid => {
           if (valid) {
             state.loading = true
-            //console.log("---state.model.type---", state.model.type);
-            const { code, data, message } = await Login(state.model)
+            const { code, data, message } = await Login({
+              ...state.model,
+              password: encryptByMd5(state.model.password)
+            })
             if (+code === 0) {
               ctx.$message.success({
                 message: '登录成功',
@@ -172,13 +174,16 @@ export default defineComponent({
 
       :deep(.el-input__inner) {
         border: 1px solid rgba(255, 255, 255, 0.1);
-        background: rgba(0, 0, 0, 0.1);
-        color: #fff;
+        // background: rgba(40, 52, 67, 0.1);
+        background: regba(0, 0, 0, 0.1);
+        // color: #fff;
+        color: black;
         height: 48px;
         line-height: 48px;
 
         &::placeholder {
-          color: rgba(255, 255, 255, 0.2);
+          color: rgba(255, 255, 255, 0.9);
+          // color: white();
         }
       }
     }

@@ -5,7 +5,7 @@ export default [
         component: Layout,
         name: 'materials',
         meta: { title: '资料管理' },
-        icon: 'el-icon-location',
+        icon: 'Folder',
         children: [
             {
                 path: '',

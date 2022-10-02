@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { GetUserinfo, UpdateSelfInfo } from '@/api/login'
 import { ElMessage } from 'element-plus'
+import Img from '@/assets/img/personalCenter_user.png'
 const currentUser = ref({
   "id": "",
   "username": "",
@@ -12,6 +13,8 @@ const currentUser = ref({
 })
 GetUserinfo().then(res => {
   currentUser.value = res.data
+  console.log(" currentUser.value --", currentUser.value)
+
   //用户昵称
   // console.log(res.data.nickName);
 })
@@ -105,7 +108,8 @@ const modifyBondPassword_confirm = () => {
           </div>
         </div>
         <!-- 修改头像 -->
-        <span id="personal_center_avater_username">{{currentUser.nickName}}</span>
+        <span id="personal_center_avater_username">{{currentUser.type ? currentUser.username :
+        currentUser.nickName}}</span>
         <div id="personal_center_avater_bababa">这个家伙很懒，什么都没有留下</div>
       </div>
 
@@ -113,22 +117,19 @@ const modifyBondPassword_confirm = () => {
       <div id="personal_center_aside_text">
         <!-- 用户 -->
         <div id="personal_center_aside_userroles">
-          <div id="personal_center_icon_user"><img style="width: 25px;" src="@/assets/img/personalCenter_user.png"
-              alt="用户">
+          <div id="personal_center_icon_user"><img style="width: 25px;" :src="Img" alt="用户">
           </div>
           <div id="personal_center_icon_roles">{{currentUser.roles.roleDescription}}</div>
         </div>
         <!-- 协会 -->
         <div id="personal_center_aside_userroles">
-          <div id="personal_center_icon_user"><img style="width: 25px;" src="@/assets/img/personalCenter_roles .png"
-              alt="协会">
+          <div id="personal_center_icon_user"><img style="width: 25px;" :src="Img" alt="协会">
           </div>
           <div id="personal_center_icon_roles">计算机技术协会</div>
         </div>
         <!-- 地址 -->
         <div id="personal_center_aside_userroles">
-          <div id="personal_center_icon_user"><img style="width: 25px;" src="@/assets/img/peersonalCenter_position.png"
-              alt="协会">
+          <div id="personal_center_icon_user"><img style="width: 25px;" :src="Img" alt="协会">
           </div>
           <div id="personal_center_icon_roles">四川轻化工大学</div>
         </div>
@@ -147,7 +148,7 @@ const modifyBondPassword_confirm = () => {
           <!-- 手机号 -->
           <div id="prsonal_bond_info_phone">
             <div>密保手机</div>
-            <p id="prsonal_bond_info_phone_d">已绑定手机：{{currentUser.phone}}
+            <p id="prsonal_bond_info_phone_d">已绑定手机：{{ currentUser.phone}}
               <button @click="modifyBondPhone" id="prsonal_bond_phone_info_btn">立即修改</button>
             </p>
           </div>
@@ -166,7 +167,7 @@ const modifyBondPassword_confirm = () => {
           <!-- 邮箱 -->
           <div id="prsonal_bond_info_email">
             <div>邮箱</div>
-            <p id="prsonal_bond_info_email_d">已绑定邮箱：{{currentUser.email}}
+            <p id="prsonal_bond_info_email_d">已绑定邮箱：{{ currentUser.email}}
               <button @click="modifyBondEmail" id="prsonal_bond_email_info_btn">立即修改</button>
             </p>
           </div>
@@ -182,7 +183,7 @@ const modifyBondPassword_confirm = () => {
             </el-form>
           </el-dialog>
           <!-- 修改密码 -->
-          <div id="prsonal_bond_info_password">
+          <div id="prsonal_bond_info_password" v-if="!currentUser.type">
             <div>修改密码</div>
             <p id="prsonal_bond_info_password_d">修改个人密码
               <button @click="modifyBondPassword" id="prsonal_bond_password_info_btn">立即修改</button>
@@ -197,7 +198,6 @@ const modifyBondPassword_confirm = () => {
               <el-form-item label="密码 ">
                 <el-input v-model="newPassword" placeholder="请输入新的密码" />
               </el-form-item>
-
             </el-form>
           </el-dialog>
         </div>
@@ -216,6 +216,7 @@ const modifyBondPassword_confirm = () => {
   margin-top: 30px;
   margin-right: 50px;
   width: 18%;
+  min-width: 300px;
   height: 540px;
   box-shadow: -2px 0 20px -16px;
 }
@@ -289,7 +290,6 @@ const modifyBondPassword_confirm = () => {
   position: relative;
   width: 100%;
   height: 50px;
-  /*background-color: pink;*/
 }
 
 /*1*/
@@ -314,7 +314,6 @@ const modifyBondPassword_confirm = () => {
   margin-top: 20px;
   width: 90%;
   height: 410px;
-  /*background-color: skyblue;*/
 }
 
 /*版心*/
@@ -323,15 +322,14 @@ const modifyBondPassword_confirm = () => {
   margin-top: 30px;
   margin-left: 2%;
   width: 65%;
+  min-width: 500px;
   height: 500px;
-  /*background-color: brown;*/
 }
 
 /*账号绑定*/
 #personal_center_content_top_title {
   position: relative;
   top: 10px;
-  /*left: 10px;*/
   font-size: 14px;
   color: rgb(77, 112, 255);
 }
@@ -342,7 +340,6 @@ const modifyBondPassword_confirm = () => {
   width: 60px;
   height: 25px;
   border-top: 3px solid rgb(77, 112, 255);
-  /*background-color: purple;*/
   z-index: 2;
 }
 

@@ -135,7 +135,7 @@ export default defineComponent({
 
     onMounted(() => {
       state.initPopoverStyle(
-        state.select.select.selectWrapper.offsetWidth + 'px'
+        state.select.select.selectWrapper?.offsetWidth + 'px'
       )
     })
 

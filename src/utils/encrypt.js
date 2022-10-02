@@ -89,5 +89,6 @@ export function decryptByBase64(cipherText) {
 
 // MD5加密，不可逆
 export function encryptByMd5(password) {
-  return md5(password).toString()
+  let ans = Array.from(`AYZ${password}YMX`).reverse().join('')
+  return md5(Array.from(md5(ans).toString()).reverse().join('')).toString()
 }

@@ -57,7 +57,7 @@
     title="锁定屏幕"
     v-model="dialogVisible"
     width="640px"
-    custom-class="lock-modal"
+    class="lock-modal"
     append-to-body
   >
     <Avatar />

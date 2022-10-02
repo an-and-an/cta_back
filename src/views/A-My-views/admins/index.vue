@@ -1,19 +1,9 @@
-<!--
- * @Descripttion: 
- * @version: 
- * @Date: 2021-04-20 11:06:21
- * @LastEditors: huzhushan@126.com
- * @LastEditTime: 2021-04-23 15:16:12
- * @Author: huzhushan@126.com
- * @HomePage: https://huzhushan.gitee.io/vue3-element-admin
- * @Github: https://github.com/huzhushan/vue3-element-admin
- * @Donate: https://huzhushan.gitee.io/vue3-element-admin/donate/
--->
 <script setup>
 import { getAllRoles } from '@/api/getRouter'
 import { CreateAdmin, GetAllAdmin, SetAdminPassword, DeleteAdmin } from '@/api/login'
 import { ElMessage } from 'element-plus'
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
+import { encryptByMd5 } from '@/utils/encrypt.js'
 // import { debounce } from '@/utils'
 const adminInfoList = ref([])
 const pageInfo = ref({
@@ -33,7 +23,7 @@ const getAdminInfoList = async (roles = adminRolesInfoFilterOption.value.map(ite
         roles,
         username: adminListInfoSearch.value
     })
-    // console.log(res);
+    console.log(res.list);
     adminInfoList.value = res.list
     pageTotalItem.value = res.total
     pageCount.value = res.page
@@ -53,14 +43,12 @@ const getNewAdminInfoList = (index) => {
 const showAddAdminView = ref(false);
 const rolesList = ref([]);
 getAllRoles().then(res => {
-    // console.log("6666666666--", res);
-    rolesList.value = res.data
+    rolesList.value = res.data.filter(item => ![26, 27, 28].includes(item.id))
     adminRolesInfoFilterOption.value = res.data.map(item => ({ value: item.id, text: item.roleDescription }))
-    // currentCheckedAdminRolesList.value = res.data.map(item => item.value)
     getAdminInfoList()
 })
 
-const formData = ref({
+const formData = reactive({
     username: "",
     password: "",
     phone: "",
@@ -72,7 +60,8 @@ const AddAdminAccountBtn = () => {
 
 }
 const addAdminAccount = () => {
-    CreateAdmin(formData.value).then(res => {
+    formData.password = encryptByMd5(formData.password)
+    CreateAdmin(formData).then(res => {
         showAddAdminView.value = false;
         if (res.code == 0)
             ElMessage({
@@ -87,6 +76,8 @@ const addAdminAccount = () => {
                 offset: 250,
             })
         getAdminInfoList()
+    }).catch(err => {
+        console.log(err);
     })
 }
 const dropdown1 = ref()
@@ -115,7 +106,7 @@ const modifyAdminPassward = () => {
     //输入的两次密码一致
     if (CurrentAdminPassward.value == CurrentAdminPasswardAgain.value) {
         SetAdminPassword({
-            password: CurrentAdminPassward.value,
+            password: encryptByMd5(CurrentAdminPassward.value),
             id: CurrentAdminInEditUserId.value
         }).then(res => {
             //修改成功
@@ -180,6 +171,7 @@ const ComfirmToDeleteAdminAccount = () => {
     })
 
 }
+
 </script>
     
 <template>
@@ -215,15 +207,12 @@ const ComfirmToDeleteAdminAccount = () => {
                             </template>
                         </el-dropdown>
                     </template>
-                    <!-- <template #default="scope">
-                        <el-tag>{{ scope.row.roles.roleDescription }}</el-tag>
-                    </template> -->
                 </el-table-column>
                 <!-- 搜索 -->
                 <el-table-column>
                     <template #header>
                         <el-input v-model="adminListInfoSearch" @input="getadminListInfoSearch" :clearable="true"
-                            resize="both" placeholder="请输入要搜索的用户" size="small" width="200px" fixed="right">
+                            resize="both" placeholder="请输入要搜索的用户" width="200px" fixed="right">
                         </el-input>
                     </template>
                 </el-table-column>
@@ -231,18 +220,18 @@ const ComfirmToDeleteAdminAccount = () => {
                     <template #default="scope">
                         <!-- 删除管理员 -->
                         <el-button @click="deleteAdminAccount(scope.row.id,scope.row.username)" type="primary" circle
-                            style="position:relative;right:50px;" size="small">
-                            <!-- <svg-icon name="delete" /> -->
-                            <div style="width:20px;height:20px; ">
-                                <img src="@/assets/img/admin/deleteAdminAccountIcon1.png" alt=""
-                                    style="width:20px;height:20px;padding:0;" />
+                            style="position:relative;right:50px;" >
+                            <div >
+                                <el-icon>
+                                    <Delete />
+                                </el-icon>
                             </div>
                         </el-button>
                     </template>
                 </el-table-column>
                 <el-table-column align="right" width="120px" fixed="right">
                     <template #header>
-                        <el-button type="primary" @click="AddAdminAccountBtn" size="small"
+                        <el-button type="primary" @click="AddAdminAccountBtn" 
                             style="position:relative;right:40px">添加
                         </el-button>
                     </template>
@@ -251,7 +240,9 @@ const ComfirmToDeleteAdminAccount = () => {
                         <el-button @click="editAdminPassward(scope.row.username,scope.row.id)" type="primary" circle
                             style="position:relative;right:50px">
                             <div style="width:15px;height:15px; ">
-                                <svg-icon name="edit" />
+                                <el-icon>
+                                    <Edit />
+                                </el-icon>
                             </div>
 
                         </el-button>
@@ -260,12 +251,12 @@ const ComfirmToDeleteAdminAccount = () => {
 
             </el-table>
         </div>
-        <div id="admin-list-footer">.
+        <div id="admin-list-footer">
             <el-pagination background layout="prev, pager, next" :total="pageTotalItem" :hide-on-single-page="true"
                 @current-change="getNewAdminInfoList" :page-size="20" :pager-count="15" />
         </div>
     </div>
-    <!-- addadmin dialog -->
+    <!-- 添加管理员 dialog -->
     <el-dialog v-model="showAddAdminView">
         <div class="create_admin_box">
             <el-form label-width="70px" label-position="left">

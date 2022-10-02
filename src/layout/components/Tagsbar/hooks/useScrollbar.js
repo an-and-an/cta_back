@@ -42,27 +42,27 @@ export const useScrollbar = tagsItem => {
   }
 
   const moveToTarget = currentTag => {
-    const containerWidth = scrollContainer.value.scrollbar.offsetWidth
-    const scrollWrapper = scrollContainer.value.wrap
+    const containerWidth = scrollContainer.value.scrollbar?.offsetWidth
+    let scrollWrapper = scrollContainer.value.wrap
     const tagList = tagsItem.value
 
     let firstTag = null
     let lastTag = null
-
     if (tagList.length > 0) {
       firstTag = tagList[0]
       lastTag = tagList[tagList.length - 1]
     }
-    if (firstTag === currentTag) {
+    if (firstTag === currentTag && scrollWrapper) {
       scrollWrapper.scrollLeft = 0
-    } else if (lastTag === currentTag) {
+    } else if (lastTag === currentTag && scrollWrapper) {
       scrollWrapper.scrollLeft = scrollWrapper.scrollWidth - containerWidth
     } else {
       const el = currentTag.$el.nextElementSibling
-      scrollWrapper.scrollLeft =
-        el.offsetLeft + el.offsetWidth > containerWidth
-          ? el.offsetLeft - el.offsetWidth
-          : 0
+
+      const x = el?.offsetLeft + el?.offsetWidth > containerWidth
+        ? el.offsetLeft - el?.offsetWidth
+        : 0
+      if (scrollWrapper) scrollWrapper.scrollLeft = x
     }
   }
 

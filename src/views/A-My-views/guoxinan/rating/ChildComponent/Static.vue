@@ -2,15 +2,9 @@
 import { ref } from 'vue';
 import { SetScore, GetAllProject } from '@/api/guoxinan'
 const showStaticGroupMark = ref(['1'])
-// 下载文件
-// const fileDownload = (uuid) => {
-//   window.open(
-//     `/api/files?uuid=${uuid}`,
-//     '_blank'
-//   )
-// }
 const GetAllStaticProject = (() => {
   GetAllProject().then(res => {
+    // console.log("----",res);
     res.data.dynamic.forEach(item => {
       staticProjects.value.push({
         projectId: item.id,
@@ -155,7 +149,7 @@ const itemClick = (id, idx, score) => {
     </el-collapse>
   </div>
 </template>
-
+  
 <style>
 .rating-item {
   height: 80px;

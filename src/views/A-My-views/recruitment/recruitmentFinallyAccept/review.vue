@@ -1,14 +1,24 @@
 <script setup>
-import { defineEmit } from 'vue';
-// import {ref} from 'vue'
-// import { ref } from 'vue'
-// const props =
- defineProps(['user','status'])
-const emit = defineEmit(['audit'])
-
-const audit = (id, res) => {
-    emit('audit', id, res)
-
+import { ref } from 'vue'
+defineProps(['user', 'status', 'current_role_id'])
+const emit = defineEmits(['FinallySetOfficial', 'FinallyRejectOfficial'])
+const id = ref()
+const department=ref()
+// 录取
+const showFinallySetOfficial = ref(false)
+const finally_set_official = (user_id) => {
+    showFinallySetOfficial.value = true
+    id.value = user_id
+}
+const finally_set = () => {
+    emit('FinallySetOfficial', id)
+    showFinallySetOfficial.value = false
+}
+//拒绝
+const finally_reject_official = (user_id,user_department) => {
+    id.value = user_id
+    department.value=user_department
+    emit('FinallyRejectOfficial', id,department)
 }
 </script>
 <template>
@@ -19,10 +29,9 @@ const audit = (id, res) => {
                 <tr>
                     <td class="label">
                         <div class="cell-item">
-                            <!-- <el-icon>
-                            <User />
-                        </el-icon>姓名 -->
-                            姓名
+                            <el-icon>
+                                <User />
+                            </el-icon>姓名
                         </div>
                     </td>
                     <td class="content">
@@ -30,10 +39,9 @@ const audit = (id, res) => {
                     </td>
                     <td class="label">
                         <div class="cell-item">
-                            <!-- <el-icon>
-                            <Male />
-                        </el-icon>性别 -->
-                            性别
+                            <el-icon>
+                                <Male />
+                            </el-icon>性别
                         </div>
                     </td>
                     <td class="content">
@@ -41,10 +49,9 @@ const audit = (id, res) => {
                     </td>
                     <td rowspan="2" class="label">
                         <div class="cell-item">
-                            <!-- <el-icon>
-                            <Picture />
-                        </el-icon>一寸照 -->
-                            一寸照
+                            <el-icon>
+                                <Picture />
+                            </el-icon>一寸照
                         </div>
                     </td>
                     <td rowspan="2" style="padding: 0;">
@@ -54,13 +61,17 @@ const audit = (id, res) => {
                 <tr>
                     <td class="label">
                         <div class="cell-item">
-                            专业
+                            <el-icon>
+                                <TrophyBase />
+                            </el-icon>专业
                         </div>
                     </td>
                     <td class="content"> {{ user.major }}</td>
                     <td class="label">
                         <div class="cell-item">
-                            班级
+                            <el-icon>
+                                <DataAnalysis />
+                            </el-icon>班级
                         </div>
                     </td>
                     <td class="content"> {{ user.class }}</td>
@@ -68,13 +79,17 @@ const audit = (id, res) => {
                 <tr>
                     <td class="label">
                         <div class="cell-item">
-                            第一志愿
+                            <el-icon>
+                                <Aim />
+                            </el-icon>第一志愿
                         </div>
                     </td>
                     <td class="content">{{ user.firstChoice }}</td>
                     <td class="label">
                         <div class="cell-item">
-                            第二志愿
+                            <el-icon>
+                                <Star />
+                            </el-icon>第二志愿
                         </div>
                     </td>
                     <td class="content">{{ user.secondChoice }}</td>
@@ -111,24 +126,25 @@ const audit = (id, res) => {
                 </tr>
             </table>
         </el-card>
-        <div class="first_trial_icon" v-if="status == 0">
-            <img @click="audit(user.id, true)" src="@/assets/svg/pass.svg" alt=""
-                style="width: 50px;aspect-ratio: 1 / 1; margin-right: 150px">
-            <img @click="audit(user.id, false)" src="@/assets/svg/unpass.svg" alt=""
-                style="width: 50px;aspect-ratio: 1 / 1; margin-left: 150px">
+        <div class="bottom_button" id="bottom_button">
+            <el-button v-if="status==4 && current_role_id==21" type="primary" @click="finally_set_official(user.id,user.finallyDepartment)">录取
+            </el-button>
+            <el-button v-if="status==4 && current_role_id==21" type="primary" @click="finally_reject_official(user.id)">
+                拒绝
+            </el-button>
         </div>
-        <div v-else style="display: flex; flex-direction: row;justify-content:center;margin-top:30px">
-            <img v-if="status==1" src="@/assets/svg/pass2.svg" alt="" class="res_first_trial">
-            <img v-else src="@/assets/svg/fail_pass.svg" alt="" class="res_first_trial">
-            <img src="@/assets/svg/resubmit.svg" alt="" style="width: 50px;aspect-ratio: 1 / 1;" @click="change_status">
+        <div>
+            <el-dialog v-model="showFinallySetOfficial" width="30%">
+                <span>确认录取{{user.username}}同学?</span>
+                <template #footer>
+                    <el-button type="primary" size="small" @click="finally_set">确认</el-button>
+                </template>
+            </el-dialog>
         </div>
-        <!-- <div>000{{status}}</div> -->
     </div>
-
 </template>
 <style scoped>
 .header {
-    /* background-color: red; */
     text-align: start;
     font-weight: 800;
 }
@@ -149,8 +165,8 @@ const audit = (id, res) => {
 /*初筛*/
 .res_first_trial {
     position: absolute;
-    top: 120px;
-    right: 0px;
+    top: 130px;
+    right: 20px;
     width: 70px;
     aspect-ratio: 1 / 1;
     transform: rotate(80deg);
@@ -162,8 +178,6 @@ const audit = (id, res) => {
 }
 
 .info {
-    width: 100%;
-    margin-top: 20px;
 }
 
 .cell-item {
@@ -174,9 +188,9 @@ const audit = (id, res) => {
 }
 
 .text-area {
-    white-space: pre;
+    white-space: pre-wrap;
     text-align: start;
-    min-height: 8rem;
+    min-height: 7rem;
 }
 
 
@@ -188,7 +202,6 @@ td {
 
 td {
     padding: 15px;
-    /* min-width: 100px; */
 }
 
 .content {
@@ -212,5 +225,20 @@ table,
 th,
 td {
     border: 1px solid #EBEEF5;
+}
+
+/* 底部按钮 */
+.bottom_button {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+/* 预录取 */
+.acceptDepartmentOption {
+    width: 100%;
+
 }
 </style>

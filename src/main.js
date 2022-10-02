@@ -45,11 +45,15 @@ Object.values(Directives).forEach(fn => fn(app))
 import useErrorHandler from './error-log'
 
 useErrorHandler(app)
-
+// 
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css';
+import '@vueup/vue-quill/dist/vue-quill.bubble.css';
 app
   .use(ElementPlus, {
     locale,
   })
   .use(store)
   .use(router)
+  .component('QuillEditor', QuillEditor)
   .mount('#app')

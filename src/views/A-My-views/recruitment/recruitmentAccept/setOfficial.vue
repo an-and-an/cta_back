@@ -10,12 +10,13 @@
             <el-input v-model="formData.id" />
           </el-form-item>
           <el-form-item label="部门" :required="true">
-            <el-select v-model="formData.department"  @change="getDepartments"  class="m-2" placeholder="请选择部门" size="large">
-              <el-option v-for="(department,index) in departments" :key="index" :label="idepartment" :value="item.id" />
+            <el-select v-model="formData.department" @change="getDepartments" class="m-2" placeholder="请选择部门"
+              size="large">
+              <el-option v-for="(department,index) in departments" :key="index" :label="department" :value="department" />
             </el-select>
           </el-form-item>
           <div style="display: flex; justify-content: center;">
-            <el-button type="primary" @click="addOfficialAccount"  size="small"  >确认</el-button>
+            <el-button type="primary" @click="addOfficialAccount" size="small">确认</el-button>
           </div>
         </el-form>
       </div>
@@ -27,9 +28,9 @@
 import { defineProps } from 'vue';
 import { ref } from 'vue'
 import { GetAllDepartment } from '@/api/recruitment'
-const emit = defineEmit(['audit'])
+const emit = defineEmits(['audit'])
 const addOfficialAccount = () => {
-  emit('addOfficialAccount',formData.id,formData.department)
+  emit('addOfficialAccount', formData.id, formData.department)
 }
 defineProps(['showAddOfficial'])
 const formData = ref({

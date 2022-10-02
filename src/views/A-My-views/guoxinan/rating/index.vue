@@ -1,17 +1,13 @@
 <script setup>
-import StaticRating from './Component/staticRating.vue';
-import DynamicRating from './Component/dynamicRating.vue';
+import Static from './ChildComponent/Static.vue'
+import Dynamic from './ChildComponent/Dynamic.vue'
 </script>
 <template>
   <div>
-    <h1>评分列表</h1>
-    <div>
-      <h2>静态组</h2>
-      <StaticRating></StaticRating>
-    </div>
-    <div>
-      <h2>动态组</h2>
-      <DynamicRating></DynamicRating>
-    </div>
+    <h2>评分列表</h2>
+    <h3>静态组</h3>
+    <Static/>
+    <h3>动态组</h3>
+    <Dynamic />
   </div>
 </template>

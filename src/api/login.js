@@ -1,5 +1,6 @@
 import request from '@/utils/request'
 
+import { ElMessage } from 'element-plus'
 // 登录接口
 export const Login = data => {
   // data.type = Boolean(data.type === true)
@@ -15,9 +16,24 @@ export const Login = data => {
 
 // 获取登录用户信息
 export const GetUserinfo = () => {
-  return request({
-    url: '/admin/getUserInfo',
-    method: 'get',
+  return new Promise((resolve, reject) => {
+    request({
+      url: '/admin/getUserInfo',
+      method: 'get',
+    }).then((res) => {
+      const { code, data, message } = res
+      if (code !== 0) {
+        ElMessage({ message, type: 'warning' })
+        reject(message)
+        return
+      }    
+      if (data.type) {
+        data.phone = data.phoneNumber
+        data.email = data.qq + '@qq.com'
+      }
+      res.data = data
+      resolve(res)
+    })
   })
 }
 //创建一个管理员
