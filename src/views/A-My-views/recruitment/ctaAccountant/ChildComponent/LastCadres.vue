@@ -3,7 +3,6 @@
 </template>
 <script setup>
 import ListCpm from '@/components/common/list/index.vue'
-// import { debounce } from '@/utils/index.js';
 import { GetAllFormerCadres } from '@/api/replacement'
 import { ref } from 'vue'
 // 搜索

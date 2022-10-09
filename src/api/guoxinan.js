@@ -22,14 +22,14 @@ export const GetAllWorkAndScore = () => {
   })
 }
 //国信安作品初审
-const FirstTrialGxaWork = (data) => {
+export const FirstTrialGxaWork = (data) => {
   return request({
     url: `/gxa/firstTrialGxaWork/${data.id}/${data.status}`,
     method: 'patch'
   })
 }
 //获取所有未审核或或已拒绝的作品
-const GetUnapprovedWork = () => {
+export const GetUnapprovedWork = () => {
   return request({
     url: '/gxa/getUnapprovedWork/',
     method: 'get',

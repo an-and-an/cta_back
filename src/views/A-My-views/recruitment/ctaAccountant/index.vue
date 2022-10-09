@@ -5,7 +5,6 @@ import currentAccountant from './ChildComponent/currentAccountant.vue'
 import LastCadres from './ChildComponent/LastCadres.vue'
 const activeTagPage = ref('current_all')
 const currentCadres = ref(null)
-
 watch(activeTagPage, (n, o) => n === 'current_cadre' && currentCadres.value.getCurrentCadres())
 </script>  
 <template>

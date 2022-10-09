@@ -79,7 +79,7 @@ async function replacement() {
   } else {
     ElMessage({
       type: 'error',
-      message: '当前不能换届'
+      message: '当前时间不能换届'
     })
   }
   // 

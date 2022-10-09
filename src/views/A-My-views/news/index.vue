@@ -1,11 +1,13 @@
 <template>
     <div>
-        <Top @releaseNews="setNews" />
+        <Top :currentRoleId="current_role_id" @releaseNews="setNews" />
+        <Tip />
         <div class="set_news_box" id="set_news_box">
             <ReleaseNews :showDialog="showSetNews" @off="offSetNews" @releaseNews="release" />
         </div>
-        <div style="margin-top:10px">
-            <NewsTable :tableData="newsInfoList" @checkNews="checkDetailNews" @modifyNews="modifyNewsContent" />
+        <div style="margin-top:0px">
+            <NewsTable :tableData="newsInfoList" :currentRoleId="current_role_id" @checkNews="checkDetailNews"
+                @modifyNews="modifyNewsContent" @cancelNews="cancelNewsDisplay" @auditNews="auditNews" />
         </div>
         <newsDetail :showDialog="showDetailNews" :newsInfo="theOne" @off="offCheckNews" />
         <modifyNews :dialog="isShowModify" :content="mopdifyNewsInfo" @off="offModifyNews" @modify="updateNews" />
@@ -14,15 +16,24 @@
     </div>
 </template>
 <script setup>
-import { reactive, ref } from 'vue'
-import { GetTable, SetNews, ModifyNews } from '@/api/news'
+import { reactive, ref, provide } from 'vue'
+import { GetTable, SetNews, ModifyNews, RepoulseNews, AuditNews } from '@/api/news'
+import { GetUserinfo } from '@/api/login'
 import Top from './Components/Top.vue'
+import Tip from './Components/Tip.vue'
 import NewsTable from './Components/NewsTable.vue'
 import newsDetail from './Components/newsDetail.vue'
 import ReleaseNews from './Components/ReleaseNews.vue'
 import bottom from '@/views/A-My-Views/users/bottom.vue'
 import modifyNews from './Components/modifyNews.vue'
 import { ElMessage } from 'element-plus'
+//获取当前登录用户的id
+const current_role_id = ref()
+const getUserInfo = async () => {
+    const { data } = await GetUserinfo()
+    current_role_id.value = data.roles.id
+}
+getUserInfo()
 //获取新闻
 const newsInfoList = ref([])
 const getNewsData = reactive({
@@ -67,6 +78,7 @@ const release = (title, content) => {
 }
 const offSetNews = () => {
     showSetNews.value = false
+    getAllTable(getNewsData)
 }
 //查看新闻
 const theOne = ref()
@@ -83,41 +95,41 @@ const offCheckNews = () => {
 const isShowModify = ref(false)
 const modifyId = ref()
 const mopdifyNewsInfo = ref()
+provide('dialog', 'isShowModify')
 const modifyNewsContent = (id) => {
-    console.log("thei id is--",id);
     modifyId.value = id
     mopdifyNewsInfo.value = newsInfoList.value.find(item => item.id === id)
     isShowModify.value = true
 }
-const updateNews = (title, content) => {
+function updateNews(title, content) {
     ModifyNews({
         id: modifyId.value,
         title: title,
-        content:content
-    }).then(res => {
-        if (res.code === 0) {
-            isShowModify.value = false 
-            ElMessage({
-                type: 'success',
-                message: '成功提交修改！',
-                offset: 250,
-                duration: 1000,
-            }) 
-        }else{
-            ElMessage({
-                type: 'success',
-                message: '提交失败，请重新提交修改！',
-                offset: 250,
-                duration: 1000,
-            }) 
-        }
-
+        content: content
     })
-
+    getAllTable(getNewsData)
 }
 const offModifyNews = () => {
     isShowModify.value = false
+    getAllTable(getNewsData)
 }
+//打回
+const cancelNewsId = ref()
+const cancelNewsDisplay = (id) => {
+    cancelNewsId.value = id
+    RepoulseNews({ id: cancelNewsId.value })
+    // getAllTable(getNewsData)
+}
+//问题：打回、审核
+//审核
+const auditNews = (id, res, refusal) => {
+    AuditNews({
+        isApprove: res,
+        reasonsForRefusal: refusal
+    }, id)
+    // getAllTable(getNewsData)
+}
+
 //页码显示
 const total = ref()
 const getNewPage = (page) => {
@@ -132,7 +144,7 @@ const pageSizeUpdate = (pageSize) => {
 
 <style scoped>
 .set_news_box {
-    margin-top: 50px;
+    margin-top: 0px;
     width: 100%;
     min-width: 1000px;
 }

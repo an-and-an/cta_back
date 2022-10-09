@@ -20,7 +20,7 @@ export const SetEndTime = (data) => {
     method: 'patch',
   })
 }
-// 查询活动是否处于活动状态
+// 查询活动状态
 export const queryActive = (activeName) => {
   return request({
     url: `/active-time/get/${activeName}`,

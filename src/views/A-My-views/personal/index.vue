@@ -13,10 +13,7 @@ const currentUser = ref({
 })
 GetUserinfo().then(res => {
   currentUser.value = res.data
-  console.log(" currentUser.value --", currentUser.value)
-
-  //用户昵称
-  // console.log(res.data.nickName);
+  // console.log(" currentUser.value --", currentUser.value)
 })
 //更新信息
 const updateInfo = () => {
@@ -50,7 +47,6 @@ const isShowChangeAvatar = ref(false)
 const successfullyUploadAvater = (res) => {
   avatarUrl.value = res.data[0].Host + "/" + res.data[0].RelativePath
   currentUser.value.avatarUrl = avatarUrl.value
-  console.log("currentUser.value.avatarUrl--", currentUser.value.avatarUrl);
   updateInfo()
 }
 //修改电话
@@ -63,7 +59,6 @@ const modifyBondPhone_confirm = () => {
   currentUser.value.phone = newPhone
   showModifyBondPhone.value = false
   updateInfo()
-  //console.log("currentUser", currentUser.value.phone)
 }
 // 修改邮箱
 const newEmail = ref()
@@ -74,7 +69,6 @@ const modifyBondEmail = () => {
 const modifyBondEmail_confirm = () => {
   currentUser.value.email = newEmail
   showModifyBondEmail.value = false
-  console.log("currentUser--email--", currentUser.value.email);
   updateInfo()
 }
 //修改密码
@@ -112,7 +106,6 @@ const modifyBondPassword_confirm = () => {
         currentUser.nickName}}</span>
         <div id="personal_center_avater_bababa">这个家伙很懒，什么都没有留下</div>
       </div>
-
       <!-- -- -->
       <div id="personal_center_aside_text">
         <!-- 用户 -->
@@ -161,7 +154,6 @@ const modifyBondPassword_confirm = () => {
               <el-form-item label="手机号 ">
                 <el-input v-model="newPhone" placeholder="请输入新的手机号" />
               </el-form-item>
-
             </el-form>
           </el-dialog>
           <!-- 邮箱 -->

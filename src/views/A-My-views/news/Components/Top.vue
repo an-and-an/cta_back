@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from 'vue'
+const props = defineProps(['currentRoleId'])
 const emit = defineEmits(['releaseNews'])
 //发布
 const release = () => {
@@ -15,16 +16,12 @@ const searchNews = () => {
 <template>
     <div style="width:100%;min-width:1000px">
         <div>
-            <el-button-group>
-                <el-button type="primary">
-                    新闻
-                </el-button>
-                <el-button type="primary" @click="release">
-                    新建
-                </el-button>
-            </el-button-group>
+            <!-- -->
+            <el-button  v-if="props.currentRoleId==29"  type="primary" @click="release">
+                新建
+            </el-button>
             <el-input v-model="searchValue" @change="searchNews" placeholder="搜索"
-                style="width:35%;min-width:200px; margin-left:50px;margin-right: 200px;" />
+                style="width:35%;min-width:200px; margin-left:50px;position:relative;left:25% ;" />
         </div>
     </div>
 </template>
