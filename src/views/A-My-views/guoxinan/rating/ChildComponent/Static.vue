@@ -4,17 +4,16 @@ import { SetScore, GetAllProject } from '@/api/guoxinan'
 const showStaticGroupMark = ref(['1'])
 const GetAllStaticProject = (() => {
   GetAllProject().then(res => {
-    // console.log("----",res);
-    res.data.dynamic.forEach(item => {
-      staticProjects.value.push({
-        projectId: item.id,
-        name: item.workName || 'workName',
-        url: item.websiteUrl,
-        type: 1,
-        description: item.websiteIntroduction,
-        ratings: item.score
-      })
-    })
+    // res.data.staic.forEach(item => {
+    //   staticProjects.value.push({
+    //     projectId: item.id,
+    //     name: item.workName || 'workName',
+    //     url: item.websiteUrl,
+    //     type: 1,
+    //     description: item.websiteIntroduction,
+    //     ratings: item.score
+    //   })
+    // })
   })
 })
 GetAllStaticProject()
@@ -101,10 +100,9 @@ const ratingRules = ref([
 ])
 //评分
 const itemClick = (id, idx, score) => {
+  // console.log('点击评分---',score);
   SetScore({ id, idx, score }).then(res => {
     console.log(res);
-  }).catch(err => {
-    console.log(err);
   })
 }
 </script>
@@ -140,7 +138,7 @@ const itemClick = (id, idx, score) => {
                 <br>
                 <br>
                 <el-rate v-model="project.ratings[subrule.idx-1]" :allow-half="true"
-                  @change="v => itemClick(project.projectId, subrule.idx, v)" />
+                  @change="val => itemClick(project.projectId, subrule.idx-1, val)" />
               </div>
             </el-descriptions-item>
           </el-descriptions>

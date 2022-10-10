@@ -11,7 +11,7 @@ export const SetScore = (data) => {
   return request({
     url: '/gxa',
     method: 'put',
-    data
+    data,
   })
 }
 //获取作品信息

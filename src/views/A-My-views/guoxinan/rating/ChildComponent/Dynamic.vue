@@ -4,20 +4,21 @@ import { SetScore, GetAllProject } from '@/api/guoxinan'
 const showDynanmicGroupMark = ref('1')
 const GetAllDynanmicProject = (() => {
   GetAllProject().then(res => {
-    /************************************/
-    console.log("res.data--", res.data);
-    res.data.dynamic.forEach(item => {
-      dynamicProjects.value.push({
-        projectId: item.id,
-        name: item.workName || '国信安作品',
-        url: item.websiteUrl,
-        type: 1,
-        description: item.websiteIntroduction,
-        ratings: item.score
-      })
-    })
+    console.log('获取作品--',res.data.dynamic);
+    // res.data.dynamic.forEach(item => {
+    //   dynamicProjects.value.push({
+    //     projectId: item.id,
+    //     name: item.workName || '国信安作品',
+    //     url: item.websiteUrl,
+    //     type: 1,
+    //     description: item.websiteIntroduction,
+    //     ratings: item.score
+    //   })
+    // })
+    
   })
-})()
+})
+GetAllDynanmicProject()
 //动态组
 const dynamicProjects = ref([])
 //评分项
