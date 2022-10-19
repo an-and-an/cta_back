@@ -7,7 +7,7 @@
 </template>
 <script setup>
 import { ref } from 'vue'
-const pageSizes = ref(['2', '3', '10', '20', '40', '80', '100', '200'])
+const pageSizes = ref(['5', '10', '20', '40', '80', '100', '200'])
 const emit = defineEmits(['getNewPage', 'pageSizeUpdate'])
 defineProps(['pageTotal', 'page'])
 const getNewPage = (newPage) => {

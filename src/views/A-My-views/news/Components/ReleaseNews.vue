@@ -9,7 +9,7 @@
           <el-button @click="release" type="primary">发布</el-button>
         </div>
       </div>
-      <div >
+      <div>
         <QuillEditor theme="snow" contentType="html" toolbar="full" v-model:content="state.content" />
       </div>
     </el-dialog>

@@ -10,7 +10,7 @@
           <el-button size="small" @click="check(scope.row.id)" type="primary">查看</el-button>
         </template>
       </el-table-column>
-      <el-table-column  prop="" label="修改" width="80px">
+      <el-table-column prop="" label="修改" width="80px">
         <template #default="scope">
           <el-button size="small" @click="modify(scope.row.id)" type="primary">
             <el-icon>
@@ -19,16 +19,24 @@
           </el-button>
         </template>
       </el-table-column>
-      <el-table-column v-if="props.currentRoleId==22" prop="" label="取消公示" width="80px">
+      <el-table-column v-if="props.currentRoleId==21 || props.currentRoleId==22" prop="" label="取消公示" width="80px">
         <template #default="scope">
           <el-button size="small" @click="cancelDisplay(scope.row.id)" type="primary"> 打回</el-button>
         </template>
       </el-table-column>
-      <el-table-column v-if="props.currentRoleId==22"  prop="" label="审核" width="200px">
+      <el-table-column v-if="props.currentRoleId==21 || props.currentRoleId==22" prop="" label="审核" width="200px">
         <template #default="scope">
           <el-button-group class="ml-4" size="small">
-            <el-button type="primary" @click="audit(scope.row.id,true)"><el-icon><Check /></el-icon></el-button>
-            <el-button type="primary" @click="audit(scope.row.id,false)"><el-icon><Close /></el-icon></el-button>
+            <el-button type="primary" @click="audit(scope.row.id,true)">
+              <el-icon>
+                <Check />
+              </el-icon>
+            </el-button>
+            <el-button type="primary" @click="audit(scope.row.id,false)">
+              <el-icon>
+                <Close />
+              </el-icon>
+            </el-button>
           </el-button-group>
         </template>
       </el-table-column>
@@ -46,7 +54,7 @@
 </template>
 <script setup>
 import { ref } from 'vue'
-const props = defineProps(['tableData','currentRoleId'])
+const props = defineProps(['tableData', 'currentRoleId'])
 const emit = defineEmits(['checkNews', 'modifyNews', 'cancelNews', 'auditNews'])
 //查看新闻
 const check = (id) => {

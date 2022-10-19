@@ -52,14 +52,14 @@
         admin
       </template>
       <template v-else>
-        <img class="avatar" :src="userinfo.avatar" />
+        <img class="avatar" :src="userinfo.avatarUrl" />
         {{ userinfo.name }}
       </template>
     </div>
     <template #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item>
-          <router-link to="personalcenter">个人中心</router-link>
+          <router-link to="/personalcenter">个人中心</router-link>
         </el-dropdown-item>
         <lock-modal />
         <el-dropdown-item @click="logout">退出登录</el-dropdown-item>

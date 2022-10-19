@@ -4,7 +4,7 @@ export default [
         path: '/materials',
         component: Layout,
         name: 'materials',
-        meta: { title: '资料管理' },
+        meta: { title: '竞赛题库' },
         icon: 'Folder',
         children: [
             {

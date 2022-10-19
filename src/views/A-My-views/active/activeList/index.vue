@@ -3,7 +3,6 @@ import { ref, reactive } from 'vue'
 import { GetAllActiveList, SetStartTime, SetEndTime } from '@/api/activeTime.js'
 import activeListTable from './ChildComponent/activeListTable.vue'
 import setActiveTime from './ChildComponent/setActiveTime.vue'
-import bottom from './ChildComponent/bottom.vue'
 import { ElMessage } from 'element-plus'
 import { parseTime } from '@/utils'
 //所有活动列表
@@ -67,6 +66,5 @@ const setActiveTimeRange = (time1, time2) => {
     <activeListTable :tableInfo="activeList" @setActive="showSet" />
     <setActiveTime v-if.async="showSetActive" :activeName="setActiveName" @setActiveTimeRange="setActiveTimeRange"
       @close="() => { showSetActive = false }" />
-    <bottom :pageTotal="10" :page="20" />
   </div>
 </template>

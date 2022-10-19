@@ -1,16 +1,15 @@
 <script setup>
 const props = defineProps(['work'])
-const emit=defineEmits(['audit'])
+const emit = defineEmits(['audit'])
 const trial = (res) => {
-  emit('audit',props.work.id,res)
+  emit('audit', props.work.id, res)
 }
 </script>
 <template>
   <div>
     <div class="work_info_card_box">
       <el-card :body-style="{ padding: '5px' }">
-        <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-          class="image" />
+        <img :src="work.showImg" class="image" />
         <div style="padding: 14px">
           <span>{{work.gxaApplicationForm
           .teamName}}</span>
@@ -18,7 +17,16 @@ const trial = (res) => {
           <span>{{work.gxaApplicationForm
           .workName}}</span>
           <br />
-          <span>Yummy hamburger</span>
+          <div
+            style="overflow: hidden;text-overflow:ellipsis; white-space: nowrap; width:100%;height: 30px;font-size: 18px;">
+            {{work.websiteIntroduction}}
+          </div>
+          <span style="margin-right:20px">
+            <el-link href="work.websiteUrl" target="_blank">查看网页</el-link>
+          </span>
+          <span>
+            <el-link href="work.githubUrl" target="_blank">源代码</el-link>
+          </span>
           <div class="bottom">
             <el-button text type="primary" @click="trial(true)">通过</el-button>
             <el-button text type="primary" @click="trial(false)">拒绝</el-button>

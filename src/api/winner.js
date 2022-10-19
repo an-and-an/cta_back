@@ -30,11 +30,9 @@ export const DeleteAward = (id) => {
 }
 // 获取获奖者列表 public
 export const GetWinners = (data) => {
-  return new Promise((resolve, reject) => {
-    request({
-      url: `/previous_winners/${id}`,
-      method: 'get',
-      params: data
-    })
+  return request({
+    url: `/previous_winners/getPreviousWinnersList`,
+    method: 'get',
+    params: data
   })
 }

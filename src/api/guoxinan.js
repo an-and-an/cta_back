@@ -14,13 +14,6 @@ export const SetScore = (data) => {
     data,
   })
 }
-//获取作品信息
-export const GetAllWorkAndScore = () => {
-  return request({
-    url: '/gxa/getAllWorkAndScore',
-    method: 'get',
-  })
-}
 //国信安作品初审
 export const FirstTrialGxaWork = (data) => {
   return request({
@@ -33,5 +26,21 @@ export const GetUnapprovedWork = () => {
   return request({
     url: '/gxa/getUnapprovedWork/',
     method: 'get',
+  })
+}
+//获取作品信息
+export const GetAllWorkAndScore = () => {
+  return request({
+    url: '/gxa/getAllWorkAndScore',
+    method: 'get',
+  })
+}
+//获取所有已经报名了的队伍
+
+export const GetAllTeam = (data) => {
+  return request({
+    url: '/gxa/registeredList',
+    method: 'get',
+    params:data,
   })
 }

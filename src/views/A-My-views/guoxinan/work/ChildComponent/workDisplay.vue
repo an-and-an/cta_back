@@ -1,19 +1,26 @@
 <template>
   <div>
     <h5>国信安作品审核</h5>
-    <el-radio-group v-model="display" style="margin-bottom: 30px">
-      <el-radio-button label="1">未审核</el-radio-button>
-      <el-radio-button label="3">已拒绝</el-radio-button>
-    </el-radio-group>
-    <el-tabs tab-position="right"  class="demo-tabs">
-      <el-tab-pane label="static">
-        <div v-for="item in staticWorkList" class="card_container">
-          <workInfoCard :work="item" @audit="getFirstTrial" />
+    <el-tabs tab-position="right" class="demo-tabs">
+      <el-tab-pane label="静态">
+        <div class="given_box">
+          <div v-for="item in staticWorkList" class="card_container">
+            <workInfoCard :work="item" @audit="getFirstTrial" />
+          </div>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="dynamic">
-        <div v-for="item in dynamicWorkList" class="card_container">
-          <workInfoCard :work="item" @audit="getFirstTrial" />
+      <el-tab-pane label="动态" class="work_box">
+        <div class="given_box">
+          <div v-for="item in dynamicWorkList" class="card_container">
+            <workInfoCard :work="item" @audit="getFirstTrial" />
+          </div>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="已拒绝">
+        <div class="given_box">
+          <div v-for="item in rejectedWorkList" class="card_container">
+            <workInfoCard :work="item" @audit="getFirstTrial" />
+          </div>
         </div>
       </el-tab-pane>
     </el-tabs>
@@ -23,7 +30,6 @@
 import workInfoCard from './workInfoCard.vue'
 import { GetUnapprovedWork, FirstTrialGxaWork } from '@/api/guoxinan'
 import { ref } from 'vue'
-const display = ref()
 //国信安作品初审
 const getFirstTrial = (id, ans) => {
   FirstTrialGxaWork({
@@ -31,6 +37,7 @@ const getFirstTrial = (id, ans) => {
     status: ans,
   }).then(res => {
     console.log(res.message);
+    getUnapprovedWork()
   })
 }
 //获取所有未审核或拒绝的作品
@@ -39,14 +46,12 @@ const dynamicWorkList = ref([])
 const rejectedWorkList = ref([])
 const getUnapprovedWork = () => {
   GetUnapprovedWork().then(res => {
-    console.log(res.data);
     dynamicWorkList.value = res.data.dynamic
     staticWorkList.value = res.data.static
     rejectedWorkList.value = res.data.rejected
   })
 }
 getUnapprovedWork()
-
 </script>
 <style scoped>
 .demo-tabs>.el-tabs__content {
@@ -61,7 +66,13 @@ getUnapprovedWork()
   height: 100%;
 }
 
+.given_box {
+  display: flex;
+  justify-content: center;
+}
+
 .card_container {
   width: 520px;
+  display: flex;
 }
 </style>

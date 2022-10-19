@@ -66,6 +66,7 @@ const release = (title, content) => {
                 offset: 250,
                 duration: 1000,
             })
+            getAllTable()
         } else {
             ElMessage({
                 type: 'error',

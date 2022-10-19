@@ -31,9 +31,6 @@ const getAdminInfoList = async (roles = adminRolesInfoFilterOption.value.map(ite
 const getadminListInfoSearch = () => {
     getAdminInfoList()
 }
-// const getadminListInfoSearch = debounce(() => {
-//     getAdminInfoList()
-// }, 2000)
 //换页
 const getNewAdminInfoList = (index) => {
     pageInfo.value.page = index
@@ -248,8 +245,10 @@ const ComfirmToDeleteAdminAccount = () => {
                         </el-button>
                     </template>
                 </el-table-column>
-
             </el-table>
+
+
+            
         </div>
         <div id="admin-list-footer">
             <el-pagination background layout="prev, pager, next" :total="pageTotalItem" :hide-on-single-page="true"

@@ -1,9 +1,0 @@
-<script>
-</script>
-<template>
-  <div>
-    <h1>
-      活动首页
-    </h1>
-  </div>
-</template>

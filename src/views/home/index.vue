@@ -12,7 +12,6 @@ const pageInfo = ref({
 })
 const getAdminInfoList = () => {
   GetAllAdmin(pageInfo.value).then(res => {
-    //console.log(res)
     adminInfoList.value = res.list
   })
 }
@@ -26,7 +25,6 @@ const showAddAdminView = ref(false);
 
 const rolesList = ref([]);
 getAllRoles().then(res => {
-  //console.log(res.data)
   rolesList.value = res.data
 })
 

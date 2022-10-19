@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import {  onMounted, ref } from 'vue'
 const props = defineProps(['questionNo', 'questionType', 'question', 'optionA', 'optionB', 'optionC', 'optionD', 'ans'])
 const mapType = (type) => {
   if (type == 1) return '单选题'
@@ -22,17 +22,11 @@ const init = () => {
 }
 
 onMounted(init)
-
-
-
 </script>
 <template>
   <div>
     <div>
       <h6>{{`${questionNo}.(${mapType(questionType)})${question}`}}</h6>
-      <div style="float:right">
-        <el-button type="danger" icon="Delete" size="small" @click="delete" />
-      </div>
       <div v-if="questionType==1 || questionType==2">
         <ol>
           <li>

@@ -1,26 +1,8 @@
 <script setup>
 import { ref } from 'vue'
-import { SetScore, GetAllProject } from '@/api/guoxinan'
+import { SetScore } from '@/api/guoxinan'
+const props = defineProps(['infoList', 'type'])
 const showDynanmicGroupMark = ref('1')
-const GetAllDynanmicProject = (() => {
-  GetAllProject().then(res => {
-    console.log('获取作品--',res.data.dynamic);
-    // res.data.dynamic.forEach(item => {
-    //   dynamicProjects.value.push({
-    //     projectId: item.id,
-    //     name: item.workName || '国信安作品',
-    //     url: item.websiteUrl,
-    //     type: 1,
-    //     description: item.websiteIntroduction,
-    //     ratings: item.score
-    //   })
-    // })
-    
-  })
-})
-GetAllDynanmicProject()
-//动态组
-const dynamicProjects = ref([])
 //评分项
 const ratingRules = ref([
   {
@@ -100,6 +82,7 @@ const ratingRules = ref([
     ],
   },
 ])
+console.log(props.infoList);
 //评分
 const itemClick = (id, idx, score) => {
   SetScore({ id, idx, score }).then(res => {
@@ -110,43 +93,55 @@ const itemClick = (id, idx, score) => {
 }
 </script>
 <template>
-  <el-collapse v-model="showDynanmicGroupMark">
-    <el-collapse-item v-for="project in dynamicProjects" :key="project.projectId" :title="project.name">
-      <el-card id=" static_project_info">
-        <el-descriptions title="项目信息" direction:vertical :column="4">
-          <el-descriptions-item label="名称" span="1">
-            <div>{{project.name}}</div>
-          </el-descriptions-item>
-          <el-descriptions-item label="部署网站" span="1">
-            <div><a href="project.url"><button>访问</button></a></div>
-          </el-descriptions-item>
-          <el-descriptions-item label="类型">
-            <div>动态</div>
-          </el-descriptions-item>
-          <el-descriptions-item label="作品描述" span="1">
-            <div>{{ project.description }}</div>
-          </el-descriptions-item>
-        </el-descriptions>
-      </el-card>
-      <el-card id="static_project_mark_detail">
-        <el-descriptions title="您的评分" direction:vertical :column="1">
-          <el-descriptions-item v-for="rule in ratingRules" :key="rule.column" label="rule." span="1">
-            <template #label>
-              <div style="font-size: 24px; color: black">{{rule.column}}</div>
-            </template>
-            <div v-for="subrule in rule.subRules" :key="subrule.idx" class="rating-item">
-              <span class="demonstration">{{ subrule.desc }}</span>
-              <br>
-              <br>
-              <el-rate v-model="project.ratings[subrule.idx-1]" :allow-half="true"
-                @change="v => itemClick(project.projectId, subrule.idx, v)" />
-            </div>
-          </el-descriptions-item>
-        </el-descriptions>
-      </el-card>
-    </el-collapse-item>
-  </el-collapse>
-</template>
-<style>
+  <div class="box">
+    <el-card>
+      <el-collapse v-model="showDynanmicGroupMark">
+        <el-collapse-item v-for="project in props.infoList" :key="project.id" :title="project.workName
+        ">
+          <el-descriptions title="项目信息" direction:vertical :column="4">
+            <el-descriptions-item label="名称" span="1">
+              <div>{{project.workName}}</div>
+            </el-descriptions-item>
+            <el-descriptions-item label="部署网站" span="1">
+              <div><a :href="project.websiteUrl" target="_blank"><button>访问</button></a></div>
+            </el-descriptions-item>
+            <el-descriptions-item label="源代码" span="1">
+              <div><a :href="project.githubUrl" target="_blank"><button>查看</button></a></div>
+            </el-descriptions-item>
+            <el-descriptions-item label="类型">
+              <div>{{ props.type ? '静态' : '动态'}}</div>
+            </el-descriptions-item>
+            <el-descriptions-item label="作品描述" span="1">
+              <div>{{ project.websiteIntroduction }}</div>
+            </el-descriptions-item>
+          </el-descriptions>
+          <br>
+          <!-- </el-card> -->
+          <!-- <el-card id="static_project_mark_detail"> -->
+          <el-descriptions title="您的评分" direction:vertical :column="1">
+            <el-descriptions-item v-for="rule in ratingRules" :key="rule.column" span="1">
+              <template #label>
+                <div style="font-size: 24px; color: black">{{rule.column}}</div>
+              </template>
+              <el-row>
+                <el-col v-for="subrule in rule.subRules" :key="subrule.idx" class="rating-item" :span="8">
+                  <span class="demonstration">{{ subrule.desc }}</span>
+                  <br>
+                  <el-rate v-model="project.score[subrule.idx-1]" :allow-half="true"
+                    @change="v => itemClick(project.id, subrule.idx-1, v)" />
+                </el-col>
+              </el-row>
+            </el-descriptions-item>
+          </el-descriptions>
+          <!-- </el-card> -->
+        </el-collapse-item>
+      </el-collapse>
+    </el-card>
 
+  </div>
+</template>
+<style scoped>
+.box>>>.el-card__body {
+  padding: 0 10px !important;
+}
 </style>

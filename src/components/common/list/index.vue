@@ -6,13 +6,12 @@
       </el-table-column>
       <slot></slot>
     </el-table>
-    <pager v-if="isPage" :page="props.page" :total-number="props.totalNumber" @page-change="pageChange"
-      @size-change="sizeChange" />
+    <pager v-if="isPage" :page="page" :total-number="totalNumber" @page-change="pageChange" @size-change="sizeChange" />
   </div>
 </template>
 <script setup>
 import Pager from './pager.vue'
-const props = defineProps(['list', 'select', 'totalNumber', 'page', 'isPage'])
+defineProps(['list', 'select', 'totalNumber', 'page', 'isPage'])
 const emit = defineEmits(['pageChange', 'sizeChange'])
 function pageChange(n) {
   emit('pageChange', n)

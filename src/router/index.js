@@ -19,6 +19,7 @@ import guoxinan from './modules/guoxinan'
 import recruitment from './modules/recruitment'
 import active from './modules/active'
 import banner from './modules/banner'
+import competition_credit from './modules/competition_credit'
 export const asyncRoutes = [
   ...users,
   ...admins,
@@ -29,31 +30,20 @@ export const asyncRoutes = [
   ...recruitment,
   ...active,
   ...banner,
+  ...competition_credit,
 ]
-// console.log(asyncRoutes);
-
-
 const res = (function print(routers) {
   const res = []
   routers.forEach((router) => {
-    // res.push({
-    //   title: router.meta.title,
-    //   name: router.name,
-    //   children: router.children ? print(router.children) : []
-    // })
-    // console.log(router);
     const { meta, name, children } = router
     const ans = { title: meta.title, name }
     if (children) {
       ans.children = print(children)
     }
-    res.push(ans);
-  });
-  return res;
-})(asyncRoutes);
-
-//console.log(res);
-// asyncRoutes.forEach((item))
+    res.push(ans)
+  })
+  return res
+})(asyncRoutes)
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
