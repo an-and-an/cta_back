@@ -1,5 +1,6 @@
 <template>
   <div>
+    <searchBox @search="getSearch" />
     <workInfoList :list="teams" />
     <bottom class="pager" :pageTotal="total" :page="getTeamInfo.page" @getNewPage="getNewPage"
       @pageSizeUpdate="pageSizeUpdate" />
@@ -7,6 +8,7 @@
 </template>
 <script setup>
 import { ref } from 'vue'
+import searchBox from './Components/searchBox.vue'
 import workInfoList from './Components/workInfoList.vue'
 import bottom from '@/views/A-My-Views/users/bottom.vue'
 import { GetAllWorkAndScore, GetAllTeam } from '@/api/guoxinan'
@@ -28,12 +30,20 @@ const getTeamInfo = ref({
 const total = ref()
 function getAllTeam() {
   GetAllTeam(getTeamInfo.value).then(res => {
+    res.list.forEach(element => {
+      element.group ? element.group = '动态' : element.group = '静态'
+    });
     teams.value = res.list
     total.value = res.total
     console.log(teams.value)
   })
 }
 getAllTeam()
+//搜索队伍
+function getSearch(value) {
+  getTeamInfo.value.content = value
+  getAllTeam()
+}
 const getNewPage = (page) => {
   getTeamInfo.value.page = page
   getAllTeam()
