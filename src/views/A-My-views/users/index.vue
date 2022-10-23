@@ -35,8 +35,8 @@ const getSearch = (content) => {
         pageSize: data.pageSize,
         content: content,
     }).then(res => {
-        console.log("搜索成功", res);
         allUserList.value = res.list
+        total.value = res.total
     })
 }
 //页码
