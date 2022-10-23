@@ -23,7 +23,6 @@ const getAdminInfoList = async (roles = adminRolesInfoFilterOption.value.map(ite
         roles,
         username: adminListInfoSearch.value
     })
-    console.log(res.list);
     adminInfoList.value = res.list
     pageTotalItem.value = res.total
     pageCount.value = res.page
@@ -209,7 +208,7 @@ const ComfirmToDeleteAdminAccount = () => {
                 <el-table-column>
                     <template #header>
                         <el-input v-model="adminListInfoSearch" @input="getadminListInfoSearch" :clearable="true"
-                            resize="both" placeholder="请输入要搜索的用户" width="200px" fixed="right">
+                            resize="both" placeholder="请输入要搜索的用户" width="200px" fixed="right" suffix-icon="Search">
                         </el-input>
                     </template>
                 </el-table-column>
@@ -217,8 +216,8 @@ const ComfirmToDeleteAdminAccount = () => {
                     <template #default="scope">
                         <!-- 删除管理员 -->
                         <el-button @click="deleteAdminAccount(scope.row.id,scope.row.username)" type="primary" circle
-                            style="position:relative;right:50px;" >
-                            <div >
+                            style="position:relative;right:50px;">
+                            <div>
                                 <el-icon>
                                     <Delete />
                                 </el-icon>
@@ -228,8 +227,7 @@ const ComfirmToDeleteAdminAccount = () => {
                 </el-table-column>
                 <el-table-column align="right" width="120px" fixed="right">
                     <template #header>
-                        <el-button type="primary" @click="AddAdminAccountBtn" 
-                            style="position:relative;right:40px">添加
+                        <el-button type="primary" @click="AddAdminAccountBtn" style="position:relative;right:40px">添加
                         </el-button>
                     </template>
                     <template #default="scope">
@@ -248,7 +246,7 @@ const ComfirmToDeleteAdminAccount = () => {
             </el-table>
 
 
-            
+
         </div>
         <div id="admin-list-footer">
             <el-pagination background layout="prev, pager, next" :total="pageTotalItem" :hide-on-single-page="true"

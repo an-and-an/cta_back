@@ -13,7 +13,8 @@ const getSearchByEnter = () => {
       
 <template>
   <div class="search_user_by_studentid_box">
-    <el-input v-model="inputValue" @input="getSearch" @change="getSearchByEnter" :clearable="true" resize="both" />
+    <el-input v-model="inputValue" @input="getSearch" @change="getSearchByEnter" :clearable="true" resize="both"       placeholder="请输入用户名"
+      suffix-icon="Search"/>
   </div>
 </template>
 <style scoped>

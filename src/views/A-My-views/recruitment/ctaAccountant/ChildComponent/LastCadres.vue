@@ -1,4 +1,7 @@
 <template>
+  <el-select v-model="session" @change="changeSession" placeholder="Select" size="large">
+    <el-option v-for="item in options" :key="item" :label="item" :value="item" />
+  </el-select>
   <list-cpm :list="list" :select="select" />
 </template>
 <script setup>
@@ -44,7 +47,17 @@ const select = [
     fixed: 'right'
   },
 ]
-
+//选择届
+const date = new Date()
+const currentYear = date.getFullYear()
+const options = ref([])
+for (let i = 0; i < 4; i++) {
+  options.value.push(`${currentYear - i + 1}`)
+}
+const changeSession = (val) => {
+  session.value = val
+  GetAllFormerCadre()
+}
 async function GetAllFormerCadre() {
   const res = await GetAllFormerCadres(session.value)
   list.value.splice(0, list.value.length, ...res.data)

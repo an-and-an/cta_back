@@ -5,12 +5,12 @@
     </h4>
     <el-row>
       <el-col :span="5">
-        <el-select v-model="getRecordInfo.semester" placeholder="Select" size="large">
+        <el-select v-model="getRecordInfo.semester" @change="changeSemester" placeholder="Select" size="large">
           <el-option v-for="item in options" :key="item" :label="item" :value="item" />
         </el-select>
       </el-col>
       <el-col :span="5">
-        <el-select v-model="getRecordInfo.group" placeholder="Select" size="large">
+        <el-select v-model="getRecordInfo.group" @change="changeGroup" placeholder="Select" size="large">
           <el-option label="A组" :value="true" />
           <el-option label="B组" :value="false" />
         </el-select>
@@ -273,6 +273,16 @@ function UPLOADTEMPLATE() {
   a.click()
 }
 getRecord()
+//换组
+function changeGroup(val) {
+  getRecordInfo.value.group = val
+  getRecord()
+}
+//换届
+function changeSemester(val) {
+  getRecordInfo.value.semester = val
+  getRecord()
+}
 </script>
 <style scoped>
 
