@@ -1,16 +1,20 @@
 <template>
   <div>
-    <el-input v-model="search" class="w-50 m-2" suffix-icon="Search" placeholder="请输入队伍名称进行搜索" @input="getSearch" />
+    <el-input v-model="search" suffix-icon="Search" placeholder="请输入队伍名称进行搜索" @input="getSearch" />
+    <el-button type="primary" @click="exportTable">导出</el-button>
   </div>
 </template>
 <script setup>
 import { debounce } from '@/utils/index'
 import { ref } from 'vue'
-const emit = defineEmits(['search'])
+const emit = defineEmits(['search', 'exportTable'])
 const search = ref()
 const getSearch = debounce(() => {
   emit('search', search.value)
 }, 1000)
+function exportTable() {
+  emit('exportTable')
+}
 </script>
 <style scoped>
 div {

@@ -1,7 +1,7 @@
 <script setup>
 defineProps(['tableInfo'])
 const emit = defineEmits(['deleteUser', 'update'])
-const show = (updateId,updateUsername) => {
+const edit = (updateId,updateUsername) => {
   emit('update',updateId,updateUsername)
 }
 const deleteUser = (id) => {
@@ -30,7 +30,7 @@ const deleteUser = (id) => {
       <el-table-column prop="" label="" width="300px" fixed="right">
         <template #default="scope">
           <!-- 修改按钮 -->
-          <el-button @click="show(scope.row.id,scope.row.username)" type="primary" circle>
+          <el-button @click="edit(scope.row.id,scope.row.username)" type="primary" circle>
             <el-icon>
               <Edit />
             </el-icon>

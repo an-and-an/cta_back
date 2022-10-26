@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { GetUserinfo, UpdateSelfInfo } from '@/api/login'
 import { ElMessage } from 'element-plus'
+import { encryptByMd5 } from '@/utils/encrypt'
 import Img from '@/assets/img/personalCenter_user.png'
 const currentUser = ref({
   "id": "",
@@ -18,7 +19,7 @@ GetUserinfo().then(res => {
 //更新信息
 const updateInfo = () => {
   UpdateSelfInfo({
-    password: newPassword.value,
+    password: encryptByMd5(newPassword.value),
     avatarUrl: currentUser.value.avatarUrl,
     email: currentUser.value.email,
     phone: currentUser.value.phone,
@@ -81,7 +82,6 @@ const modifyBondPassword_confirm = () => {
   showModifyBondPassword.value = false
   updateInfo()
 }
-
 </script>
 <template>
   <div>
@@ -102,8 +102,9 @@ const modifyBondPassword_confirm = () => {
           </div>
         </div>
         <!-- 修改头像 -->
-        <span id="personal_center_avater_username">{{currentUser.type ? currentUser.username :
-        currentUser.nickName}}</span>
+        <span id="personal_center_avater_username">{{ currentUser.type ? currentUser.username :
+            currentUser.nickName
+        }}</span>
         <div id="personal_center_avater_bababa">这个家伙很懒，什么都没有留下</div>
       </div>
       <!-- -- -->
@@ -112,7 +113,7 @@ const modifyBondPassword_confirm = () => {
         <div id="personal_center_aside_userroles">
           <div id="personal_center_icon_user"><img style="width: 25px;" :src="Img" alt="用户">
           </div>
-          <div id="personal_center_icon_roles">{{currentUser.roles.roleDescription}}</div>
+          <div id="personal_center_icon_roles">{{ currentUser.roles.roleDescription }}</div>
         </div>
         <!-- 协会 -->
         <div id="personal_center_aside_userroles">
@@ -141,7 +142,7 @@ const modifyBondPassword_confirm = () => {
           <!-- 手机号 -->
           <div id="prsonal_bond_info_phone">
             <div>密保手机</div>
-            <p id="prsonal_bond_info_phone_d">已绑定手机：{{ currentUser.phone}}
+            <p id="prsonal_bond_info_phone_d">已绑定手机：{{ currentUser.phone }}
               <button @click="modifyBondPhone" id="prsonal_bond_phone_info_btn">立即修改</button>
             </p>
           </div>
@@ -159,7 +160,7 @@ const modifyBondPassword_confirm = () => {
           <!-- 邮箱 -->
           <div id="prsonal_bond_info_email">
             <div>邮箱</div>
-            <p id="prsonal_bond_info_email_d">已绑定邮箱：{{ currentUser.email}}
+            <p id="prsonal_bond_info_email_d">已绑定邮箱：{{ currentUser.email }}
               <button @click="modifyBondEmail" id="prsonal_bond_email_info_btn">立即修改</button>
             </p>
           </div>

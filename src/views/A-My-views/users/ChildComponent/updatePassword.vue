@@ -2,10 +2,9 @@
 import { ElMessage } from 'element-plus';
 import { ref } from 'vue'
 const emit = defineEmits(['offUpdate', 'updatePassword'])
-defineProps(['showUpdate', 'username'])
+const props = defineProps(['showUpdate', 'username'])
 //关闭对话框
 const off = () => {
-  // console.log("点击关闭对话框啦！");
   emit('offUpdate')
 }
 //确认修改
@@ -34,9 +33,9 @@ const update = () => {
       </template>
       <el-form label-width="100px" label-position="left">
         <!-- 修改用户 -->
-        <el-form-item label="用户" :required="true">
+        <!-- <el-form-item label="用户" :required="true">
           <el-input v-model="username" />
-        </el-form-item>
+        </el-form-item> -->
         <!-- 新密码 -->
         <el-form-item label="密码 " :required="true">
           <el-input v-model="PasswardOnce" type="password" placeholder="请输入新密码" show-password />

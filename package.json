@@ -17,6 +17,7 @@
     "quill": "^1.3.6",
     "quill-image-uploader": "^1.2.3",
     "sass": "^1.54.9",
+    "vee-validate": "^4.0.3",
     "vite-plugin-svg-icons": "^2.0.1",
     "vue": "^3.2.37",
     "vue-router": "^4.1.5",

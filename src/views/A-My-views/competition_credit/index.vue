@@ -25,8 +25,11 @@
       <el-col :span="4">
         <el-button type="primary" @click="UPLOADTEMPLATE">下载模板</el-button>
       </el-col>
+      <el-col :span="4">
+        <el-button type="primary" @click="set">添加</el-button>
+      </el-col>
     </el-row>
-    <list :list="creditList" :select="BaseRow" :is-page="false">
+    <list :list="creditList" :select="BaseRow" :is-page="false" >
       <el-table-column v-for="(item, index) in flexRow" :key="index" :label="item" width="80">
         <template #default="scope">
           <el-popover effect="light" trigger="hover" placement="top" width="auto">
@@ -68,13 +71,40 @@
       <el-input v-model="compititionName" placeholder="比赛名称" />
       <el-button type="success" @click="UPLOAD()">确定无误</el-button>
     </el-dialog>
+    <!-- 单独新增积分记录 -->
+    <el-dialog v-model="isShowSet" width="40%" style="min-width:400px;">
+      <template #footer>
+        <el-button @click="setNewRecord" type="primary" size="small">确认</el-button>
+      </template>
+      <el-form label-width="100px" :rules="rules">
+        <el-form-item label="比赛名称 " prop="compititionName">
+          <el-input v-model="setData.compititionName" placeholder="请输入比赛名称" clearable/>
+        </el-form-item>
+        <el-form-item label="备注信息 " prop="description">
+          <el-input v-model="setData.description" placeholder="请输入积分备注信息" clearable />
+        </el-form-item>
+        <el-form-item label="学号 " prop="studentId">
+          <el-input v-model="setData.studentId" placeholder="请输入学号" clearable/>
+        </el-form-item>
+        <el-form-item label="积分 " prop="integral">
+          <el-input v-model="setData.integral" type="number" placeholder="请输入积分" clearable />
+        </el-form-item>
+        <el-form-item label="学期 " prop="semester">
+          <el-select v-model="setData.semester" placeholder="请选择" size="large">
+            <el-option v-for="item in options" :key="item" :label="item" :value="item" />
+          </el-select>
+        </el-form-item>
+      </el-form>
+
+    </el-dialog>
   </div>
+
 </template>
 <script setup>
-import { ref } from "vue"
-import { read, utils } from 'xlsx';
+import { ref, reactive } from "vue"
+import { read, utils } from 'xlsx'
 import { GetRecord, UpdateRecord, SetRecord, DeleteRecord } from '@/api/competition_credit'
-import { ElMessage } from 'element-plus';
+import { ElMessage } from 'element-plus'
 import List from '@/components/common/list/index.vue'
 // 获取/查询积分记录, public
 const creditList = ref([])
@@ -273,6 +303,73 @@ function UPLOADTEMPLATE() {
   a.click()
 }
 getRecord()
+//单独添加
+const isShowSet = ref(false)
+function set() {
+  isShowSet.value = true
+}
+const setData = ref({
+  semester: '2022-2023',
+  compititionName: '',
+  integral: '',
+  description: '',
+  studentId: '',
+})
+const rules = reactive({
+  compititionName: [
+    { required: 'true', message: '请输入比赛名称！' , trigger: 'blur' },
+  ],
+  description: [
+    { required: true, message: '请输入积分备注！', trigger: 'blur'  },
+  ],
+  studentId: [
+    { required: true, message: '请输入学号!', trigger: 'blur'  },
+    { min: 11, max: 11, message: '请检查学号是否输入正确！', trigger: 'blur'  }
+  ],
+  integral: [
+    { required: true, message: '请输入积分!', trigger: 'blur' },
+  ],
+  semester: [
+    { required: true, message: '请选择学期！', trigger: 'blur' },
+  ],
+})
+
+function setNewRecord() {
+  isShowSet.value = false
+  SetRecord(setData.value).then(res => {
+    if (res.code === 0) {
+      getRecord()
+      ElMessage({
+        type: 'success',
+        message: '添加成功！',
+        duration: 1000,
+        offset: 250,
+      })
+    } else if (res.code === -2) {
+      ElMessage({
+        type: 'warning',
+        message: '该用户不存在！',
+        duration: 2000,
+        offset: 250,
+      })
+    } else if (res.code === -3) {
+      ElMessage({
+        type: 'warning',
+        message: '请勿重复添加！',
+        duration: 2000,
+        offset: 250,
+      })
+    }
+    else {
+      ElMessage({
+        type: 'error',
+        message: '添加失败，请检查输入！',
+        durationa: 1000,
+        offseta: 250,
+      })
+    }
+  })
+}
 //换组
 function changeGroup(val) {
   getRecordInfo.value.group = val
