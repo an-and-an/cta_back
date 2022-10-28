@@ -1,5 +1,16 @@
+<template>
+    <div>
+        <searchBox @search="getSearch" />
+        <userInfoTable :tableInfo="allUserList" @deleteUser="deleteAUser" @update="showUpdate" />
+        <updatePassword :showUpdate="isShowUpdate" :username="updateUsername" @offUpdate="offUpdateDialog"
+            @updatePassword="modigyUserPassword" :isShow="isShow" />
+        <bottom class="pager" :pageTotal="total" :page="data.page" @getNewPage="getNewPage"
+            @pageSizeUpdate="pageSizeUpdate" />
+    </div>
+</template>
+
 <script setup>
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 import { GetAllUser, DeleteUser, UpdateUserInfo } from '@/api/user'
 import searchBox from './ChildComponent/searchBox.vue';
 import userInfoTable from './ChildComponent/userInfoTable.vue'
@@ -7,22 +18,19 @@ import bottom from './bottom.vue'
 import updatePassword from './ChildComponent/updatePassword.vue'
 import { encryptByMd5 } from '@/utils/encrypt.js'
 import { ElMessage } from 'element-plus';
-const data = {
+const data = reactive({
     page: 1,
     pageSize: 10,
     content: ''
-}
+})
+
 //获取所有用户
-//总条目数
 const total = ref()
 const allUserList = ref([])
 const getAllUserInfoList = (content) => {
     data.content = content
-    GetAllUser({
-        page: data.page,
-        pageSize: data.pageSize,
-        content: content,
-    }).then(res => {
+    GetAllUser(data).then(res => {
+        console.log(res);
         allUserList.value = res.list
         total.value = res.total
     })
@@ -30,39 +38,18 @@ const getAllUserInfoList = (content) => {
 getAllUserInfoList()
 //搜索
 const getSearch = (content) => {
-    GetAllUser({
-        page: data.page,
-        pageSize: data.pageSize,
-        content: content,
-    }).then(res => {
-        allUserList.value = res.list
-        total.value = res.total
-    })
+    getAllUserInfoList(content)
 }
 //页码
 const getNewPage = (page) => {
     data.page = page
-    GetAllUser({
-        page: page,
-        pageSize: data.pageSize,
-        username: data.username,
-    }).then(res => {
-        allUserList.value = res.list
-        total.value = res.total
-    })
+    getAllUserInfoList()
 }
 const pageSizeUpdate = (pageSize) => {
     data.pageSize = pageSize
-    GetAllUser({
-        page: data.page,
-        pageSize: data.pageSize,
-        username: data.username,
-    }).then(res => {
-        allUserList.value = res.list
-        total.value = res.total
-    })
 }
-//修改用户密码
+//修改用户信息
+const isShow = ref(true)
 const isShowUpdate = ref(false)
 const updateId = ref()
 const updateUsername = ref()
@@ -74,10 +61,11 @@ const showUpdate = (id, username) => {
 const offUpdateDialog = () => {
     isShowUpdate.value = false
 }
-const modigyUserPassword = (password) => {
+const modigyUserPassword = (username, password) => {
     UpdateUserInfo({
         id: updateId.value,
         password: encryptByMd5(password),
+        username: username,
     }).then(res => {
         if (res.code === 0) {
             ElMessage({
@@ -112,17 +100,7 @@ const deleteAUser = (id) => {
     })
 }
 </script>
-    
-<template>
-    <div>
-        <searchBox @search="getSearch" />
-        <userInfoTable :tableInfo="allUserList" @deleteUser="deleteAUser" @update="showUpdate" />
-        <updatePassword :showUpdate="isShowUpdate" :username="updateUsername" @offUpdate="offUpdateDialog"
-            @updatePassword="modigyUserPassword" />
-        <bottom class="pager" :pageTotal="total" :page="data.page" @getNewPage="getNewPage"
-            @pageSizeUpdate="pageSizeUpdate" />
-    </div>
-</template>
+
 <style scoped>
 .pager {
     z-index: 999;

@@ -18,36 +18,39 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import { QuillEditor } from '@vueup/vue-quill'
+import { ElMessage } from 'element-plus'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import { ElMessage } from 'element-plus';
+
 const emit = defineEmits(['off', 'releaseNews'])
-defineProps(['showDialog'])
+const props = defineProps(['showDialog'])
 
 const newsTitle = ref()
-const state = reactive({
-  content: '新闻内容',
-  _content: '',
-  editorOption: {
-    placeholder: 'core',
-    modules: {},
-  }
-})
-//发布
+const state = reactive(
+  {
+    content: '新闻内容',
+    _content: '',
+    editorOption:
+    {
+      placeholder: 'core',
+      modules: {},
+    }
+  })
 const release = () => {
   if (newsTitle.value) {
     emit('releaseNews', newsTitle.value, state.content)
     offDialog()
   } else {
-    ElMessage({
-      type: 'warning',
-      message: '新闻标题不能为空，请检查输入！',
-      offset: 250,
-      duration: 1000,
+    ElMessage(
+      {
+        type: 'warning',
+        message: '新闻标题不能为空，请检查输入！',
+        offset: 250,
+        duration: 1000,
 
-    })
+      }
+    )
   }
 }
-//关闭对话框
 const offDialog = () => {
   emit('off')
 }

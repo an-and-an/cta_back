@@ -1,10 +1,10 @@
 <template>
   <!-- 筛选、搜索 -->
   <top @changeUserInfo="changeUserInfo" @changeUserInfoByState="changeUserInfoByState"
-    @showAddDialog="showAddOfficial=true" @searchRecruitment="searchRecruitment"
-    :showSelectDepartmentView="showSelectDepartmentView" />
+    @showAddDialog="showAddOfficial = true" @searchRecruitment="searchRecruitment"
+    :showSelectDepartmentView="showSelectDepartmentView" @derive="deriveExcel" />
   <!-- 展示、列表 -->
-  <recruitmentTable :userInfo="recuitmentsUserInfo" @itemClick="itemClick" />
+  <recruitmentTable :userInfo="recuitmentsUserInfo" @itemClick="itemClick" id="table" />
   <!-- 详细信息 -->
   <el-drawer v-model="isShowDetailRecruitmrntInfo" size="50%">
     <review :user="DetailRecruitmrntInfo" class="details" :status="checkStatus" @FinallySetOfficial="FinallySetOfficial"
@@ -19,10 +19,11 @@ import { ref, reactive } from 'vue'
 import top from './top.vue'
 import recruitmentTable from './recruitmentTable.vue'
 import review from './review.vue'
-import bottom from '@/views/A-My-Views/users/bottom.vue'
+import bottom from '../bottom.vue'
 import { GetUserinfo } from '@/api/login'
 import { GetRecruitment, FinallySendOffer, SetOfficial } from '@/api/recruitment'
 import { ElMessage } from 'element-plus'
+import * as XLSX from 'xlsx'
 //初始值
 const showSelectDepartmentView = ref(false)
 const current_role_id = ref()
@@ -45,6 +46,7 @@ const getUserInfo = async () => {
   })
 }
 getUserInfo()
+
 //获取干事申请表
 const recuitmentsUserInfo = ref([])
 const getRecruitmentsData = reactive({
@@ -166,6 +168,21 @@ const getNewPage = (page) => {
 const pageSizeUpdate = (pageSize) => {
   getRecruitmentsData.pageSize = pageSize
   getRecruitments(getRecruitmentsData)
+}
+//导出全部
+const deriveExcel = async () => {
+  getRecruitmentsData.pageSize = total.value
+  getRecruitments(getRecruitmentsData)
+  let workbook = XLSX.utils.table_to_book(document.getElementById('table'));
+  try {
+    XLSX.writeFile(workbook, '初筛结果.xlsx');
+    ElMessage({
+      type: 'success',
+      message: '导出成功!'
+    });
+  } catch (e) {
+    ElMessage.error('导出失败!')
+  }
 }
 </script>
 <style>

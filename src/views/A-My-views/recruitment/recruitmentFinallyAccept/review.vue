@@ -3,7 +3,7 @@ import { ref } from 'vue'
 defineProps(['user', 'status', 'current_role_id'])
 const emit = defineEmits(['FinallySetOfficial', 'FinallyRejectOfficial'])
 const id = ref()
-const department=ref()
+const department = ref()
 // 录取
 const showFinallySetOfficial = ref(false)
 const finally_set_official = (user_id) => {
@@ -15,16 +15,16 @@ const finally_set = () => {
     showFinallySetOfficial.value = false
 }
 //拒绝
-const finally_reject_official = (user_id,user_department) => {
+const finally_reject_official = (user_id, user_department) => {
     id.value = user_id
-    department.value=user_department
-    emit('FinallyRejectOfficial', id,department)
+    department.value = user_department
+    emit('FinallyRejectOfficial', id, department)
 }
 </script>
 <template>
     <div class="detailInfoBox">
         <el-card>
-            <div class="header">{{user.username}}&nbsp;</div>
+            <div class="header">{{ user.username }}&nbsp;</div>
             <table class="info">
                 <tr>
                     <td class="label">
@@ -127,15 +127,17 @@ const finally_reject_official = (user_id,user_department) => {
             </table>
         </el-card>
         <div class="bottom_button" id="bottom_button">
-            <el-button v-if="status==4 && current_role_id==21" type="primary" @click="finally_set_official(user.id,user.finallyDepartment)">录取
+            <el-button v-if="status == 4 && current_role_id == 21" type="primary"
+                @click="finally_set_official(user.id, user.finallyDepartment)">录取
             </el-button>
-            <el-button v-if="status==4 && current_role_id==21" type="primary" @click="finally_reject_official(user.id)">
+            <el-button v-if="status == 4 && current_role_id == 21 && current_role_id == 9" type="primary"
+                @click="finally_reject_official(user.id)">
                 拒绝
             </el-button>
         </div>
         <div>
             <el-dialog v-model="showFinallySetOfficial" width="30%">
-                <span>确认录取{{user.username}}同学?</span>
+                <span>确认录取{{ user.username }}同学?</span>
                 <template #footer>
                     <el-button type="primary" size="small" @click="finally_set">确认</el-button>
                 </template>
@@ -175,9 +177,6 @@ const finally_reject_official = (user_id,user_department) => {
 .inchPhoto {
     width: 100px;
     aspect-ratio: 5 / 7;
-}
-
-.info {
 }
 
 .cell-item {

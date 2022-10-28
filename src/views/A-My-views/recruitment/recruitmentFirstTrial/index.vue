@@ -1,10 +1,10 @@
 <template>
   <!-- 筛选、搜索 -->
   <top @changeUserInfo="changeUserInfo" @changeUserInfoByState="changeUserInfoByState"
-    @showAddDialog="showAddOfficial=true" @searchRecruitment="searchRecruitment"
-    :showSelectDepartmentView="showSelectDepartmentView" />
+    @showAddDialog="showAddOfficial = true" @searchRecruitment="searchRecruitment"
+    :showSelectDepartmentView="showSelectDepartmentView" @derive="deriveExcel" />
   <!-- 展示、列表 -->
-  <recruitmentTable :userInfo="recuitmentsUserInfo" @itemClick="itemClick" />
+  <recruitmentTable :userInfo="recuitmentsUserInfo" @itemClick="itemClick" id="table" />
   <!-- 详细信息 -->
   <el-drawer v-model="isShowDetailRecruitmrntInfo" size="50%">
     <review :user="DetailRecruitmrntInfo" class="details" @audit="firstTrial" :status="checkStatus" :loading="loadView"
@@ -12,7 +12,7 @@
   </el-drawer>
   <!-- 页码 -->
   <div>
-    <bottom class="pager" :pageTotal="total" :page="getRecruitmentsData.page" @getNewPage="getNewPage"
+    <bottom class="pager" :page-total="total" :page="getRecruitmentsData.page" @getNewPage="getNewPage"
       @pageSizeUpdate="pageSizeUpdate" />
   </div>
 </template>
@@ -21,10 +21,13 @@ import { ref, reactive } from 'vue'
 import top from './top.vue'
 import recruitmentTable from './recruitmentTable.vue'
 import review from './review.vue'
-import bottom from '@/views/A-My-Views/users/bottom.vue'
+import bottom from '../bottom.vue'
 import { GetUserinfo } from '@/api/login'
 import { GetRecruitment, FirstTrialRecruitment } from '@/api/recruitment'
 import { ElMessage } from 'element-plus'
+import * as XLSX from 'xlsx'
+//页码显示
+const total = ref()
 //初始值
 const showSelectDepartmentView = ref(false)
 const current_role_id = ref()
@@ -57,19 +60,18 @@ const getRecruitmentsData = reactive({
   content: ''
 })
 //获取干事申请表
-const getRecruitments = (data) => {
-  GetRecruitment(data).then(res => {
-    recuitmentsUserInfo.value = res.list
-    total.value = res.total
-    if (res.list.length == 0) {
-      ElMessage({
-        message: '没有相关用户！',
-        type: 'warning',
-        offset: 250,
-        duration: 1000
-      })
-    }
-  })
+const getRecruitments = async (data) => {
+  const res = await GetRecruitment(data)
+  recuitmentsUserInfo.value = res.list
+  total.value = res.total
+  if (res.list.length == 0) {
+    ElMessage({
+      message: '没有相关用户！',
+      type: 'warning',
+      offset: 250,
+      duration: 1000
+    })
+  }
 }
 //选取状态
 const changeUserInfoByState = (value) => {
@@ -112,7 +114,6 @@ const firstTrial = (trailId, trail) => {
     status: trail,
   }).then(res => {
     if (res.code == 0) {
-      // trail ? getRecruitmentsData.status = 2 : getRecruitmentsData.status = 3
       setTimeout(() => {
         trail ? checkStatus.value = 2 : checkStatus.value = 3
         loadView.value = false
@@ -136,11 +137,8 @@ const firstTrial = (trailId, trail) => {
 //搜索干事申请表
 const searchRecruitment = (searchValue) => {
   getRecruitmentsData.content = searchValue
-  // console.log(getRecruitmentsData);
   getRecruitments({ ...getRecruitmentsData })
 }
-//页码显示
-const total = ref()
 const getNewPage = (page) => {
   getRecruitmentsData.page = page
   getRecruitments(getRecruitmentsData)
@@ -148,6 +146,22 @@ const getNewPage = (page) => {
 const pageSizeUpdate = (pageSize) => {
   getRecruitmentsData.pageSize = pageSize
   getRecruitments(getRecruitmentsData)
+}
+
+//导出
+const deriveExcel = async () => {
+  getRecruitmentsData.pageSize = total.value
+  await getRecruitments(getRecruitmentsData)
+  let workbook = XLSX.utils.table_to_book(document.getElementById('table'));
+  try {
+    XLSX.writeFile(workbook, '干事申请表.xlsx');
+    ElMessage({
+      type: 'success',
+      message: '导出成功!'
+    });
+  } catch (e) {
+    ElMessage.error('导出失败!')
+  }
 }
 </script>
 <style>

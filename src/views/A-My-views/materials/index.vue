@@ -1,10 +1,10 @@
 <script setup>
 import displayQuestion from './Components/displayQuestion.vue'
 import setQuestion from './Components/setQuestion.vue'
-import { ref } from 'vue'
-import { GetQuestionList, SetNewQuestion, UpdateQuestion, DeleteQuestion } from '@/api/computer_competition'
-import { ElMessage } from 'element-plus'
 import bottom from '@/views/A-My-Views/users/bottom.vue'
+import { ref } from 'vue'
+import { GetQuestionList, SetNewQuestion } from '@/api/computer_competition'
+import { ElMessage } from 'element-plus'
 //获取题目列表
 const total = ref()
 const questionList = ref([])
@@ -13,20 +13,18 @@ const getInfo = ref({
     pageSize: 10,
     content: ''
 })
-const getList = (getInfo) => {
+const getList = () => {
     GetQuestionList({
-        page: getInfo.page,
-        pageSize: getInfo.pageSize,
-        content: getInfo.content
+        page: getInfo.value.page,
+        pageSize: getInfo.value.pageSize,
+        content: getInfo.value.content
     }).then(res => {
         total.value = res.total
         questionList.value = res.list
     })
 }
-getList(getInfo)
-const updateList = () => {
-    getList(getInfo)
-}
+getList()
+
 //添加题目
 const setNewQuetion = (info) => {
     SetNewQuestion({
@@ -60,22 +58,22 @@ const setNewQuetion = (info) => {
 //查询题目
 const search = (info) => {
     getInfo.value.content = info
-    getList(getInfo.value)
+    getList()
 }
 //更新页
 const getNewPage = (page) => {
     getInfo.value.page = page
-    getList(getInfo.value)
+    getList()
 }
 const pageSizeUpdate = (pageSize) => {
     getInfo.value.pageSize = pageSize
-    getList(getInfo.value)
+    getList()
 }
 </script>
 <template>
     <div class="basic_box">
-        <setQuestion @setQuestion="setNewQuetion" @search="search" />
-        <displayQuestion :questionList="questionList" @update="updateList" />
+        <setQuestion @setQuestion="setNewQuetion" @search="search" @update="getList"/>
+        <displayQuestion :questionList="questionList" :showOp="true" @update="getList" />
         <bottom class="pager" :pageTotal="total" :page="getInfo.page" @getNewPage="getNewPage"
             @pageSizeUpdate="pageSizeUpdate" />
     </div>

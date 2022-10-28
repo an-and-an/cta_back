@@ -1,8 +1,8 @@
 <script setup>
 defineProps(['tableInfo'])
 const emit = defineEmits(['deleteUser', 'update'])
-const edit = (updateId,updateUsername) => {
-  emit('update',updateId,updateUsername)
+const edit = (updateId, updateUsername) => {
+  emit('update', updateId, updateUsername)
 }
 const deleteUser = (id) => {
   emit('deleteUser', id)
@@ -10,7 +10,7 @@ const deleteUser = (id) => {
 </script>
 <template>
   <div style="width:100%;min-width:1000px">
-    <el-table :data="tableInfo" :highlight-current-row="true">
+    <el-table :data="tableInfo" :highlight-current-row="true" max-height="73vh">
       <el-table-column prop="avatarUrl" label="头像" width="100px">
         <template #default="scope">
           <div style="width: 50px; height: 50px; border-radius:25px;">
@@ -27,10 +27,10 @@ const deleteUser = (id) => {
       <el-table-column prop="studentId" label="学号" width="150px" />
       <el-table-column prop="phoneNumber" label="电话" width="150px" />
       <el-table-column prop="qq" label="QQ" width="150px" />
-      <el-table-column prop="" label="" width="300px" fixed="right">
+      <el-table-column prop="" label="操作" width="200px" fixed="right">
         <template #default="scope">
           <!-- 修改按钮 -->
-          <el-button @click="edit(scope.row.id,scope.row.username)" type="primary" circle>
+          <el-button @click="edit(scope.row.id, scope.row.username)" type="primary" circle>
             <el-icon>
               <Edit />
             </el-icon>

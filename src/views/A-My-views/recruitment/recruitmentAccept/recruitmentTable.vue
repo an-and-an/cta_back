@@ -16,7 +16,6 @@
     </el-table>
   </div>
 </template>
-
 <script setup>
 const userRecruitmentsInfo = defineProps(['userInfo'])
 </script>

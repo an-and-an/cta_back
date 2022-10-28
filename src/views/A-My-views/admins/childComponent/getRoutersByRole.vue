@@ -2,13 +2,11 @@
 import { nextTick, ref } from 'vue';
 import { getAllRoles } from '@/api/getRouter';
 import { getRouterByRole, setRoleRouters } from '@/api/setRoleRouters'
-import router, { asyncRoutes } from '@/router'
+import { router, asyncRoutes } from '@/router'
 import { ElTree } from 'element-plus'
 // import { defaultProps } from 'element-plus/lib/el-popper';
 async function getRoute() {
     const res = await getAllRoles()
-    /********************************/
-    // console.log("res.data.roles:  ---  ", res.data);
     return res.data;
 }
 const adminList = ref([])
@@ -54,8 +52,6 @@ const getRouter = (routers: any[], allRouters: any[]) => {
                     title: i.title,
                     children: []
                 }
-                // if (i.children && i.children.length > 0) _r.children = getRouter(routers, i.children)
-                // else delete _r.children
                 res.push(_r)
             }
         })
@@ -105,11 +101,14 @@ const props = {
             <el-table-column prop="roleDescription" label="角色描述"></el-table-column>
             <el-table-column fixed="right" label="操作" width="120" prop="roleName">
                 <template #default="scope">
-                    <el-button @click="showClick(scope.row.roleName)" size="small">编辑</el-button>
+                    <el-button @click="showClick(scope.row.roleName)" size="small" type="primary">
+                        <el-icon>
+                            <Edit />
+                        </el-icon>
+                    </el-button>
                 </template>
             </el-table-column>
         </el-table>
-        <!-- dialog -->
         <el-dialog v-model="isShow" :modal="true">
             <div>
                 <el-tree ref="treeRef" :props="props" :data="showRouter" show-checkbox node-key="name" />

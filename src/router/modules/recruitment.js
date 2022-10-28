@@ -3,7 +3,7 @@ const AllDepartment = () => import('@/views/A-My-views/recruitment/ctaAccountant
 const recruitmentFirstTrial = () => import('@/views/A-My-views/recruitment/recruitmentFirstTrial/index.vue')
 const recruitmentFinallyAccept = () => import('@/views/A-My-views/recruitment/recruitmentFinallyAccept/index.vue')
 const recruitmentAccept = () => import('@/views/A-My-views/recruitment/recruitmentAccept/index.vue')
-
+const recruitmentAccepted = () => import('@/views/A-My-views/recruitment/Accepted/index.vue')
 
 export default [{
   path: '/recruitment',
@@ -38,6 +38,13 @@ export default [{
       name: 'recruitmentFinallyAccept',
       component: recruitmentFinallyAccept,
       meta: { title: '干事申请表最终录取' },
+      icon: 'User',
+    },
+    {
+      path: 'recruitmentAccepted',
+      name: 'recruitmentAccepted',
+      component: recruitmentAccepted,
+      meta: { title: '已预录取干事' },
       icon: 'User',
     },
   ]

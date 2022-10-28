@@ -1,29 +1,31 @@
 <template>
   <!-- 筛选、搜索 -->
   <top @changeUserInfo="changeUserInfo" @changeUserInfoByState="changeUserInfoByState"
-    @showAddDialog="showAddOfficial=true" @searchRecruitment="searchRecruitment"
+    @showAddDialog="showAddOfficial = true" @searchRecruitment="searchRecruitment" @derive="deriveExcel"
     :showSelectDepartmentView="showSelectDepartmentView" />
   <!-- 展示、列表 -->
-  <recruitmentTable :userInfo="recuitmentsUserInfo" @itemClick="itemClick" />
+  <recruitmentTable :userInfo="recuitmentsUserInfo" @itemClick="itemClick" id="table" />
   <!-- 详细信息 -->
   <el-drawer v-model="isShowDetailRecruitmrntInfo" size="50%">
     <review :user="DetailRecruitmrntInfo" class="details" @audit="firstTrial" :status="checkStatus"
       @change_status="change_status" @setOfficial="setOfficial" @FinallySetOfficial="FinallySetOfficial"
-      @reject_set="reject_set" :current_role_id="current_role_id" :isSelect="isSelectDepartment" :current_role_department="getRecruitmentsData.department" />
+      @reject_set="reject_set" :current_role_id="current_role_id" :isSelect="isSelectDepartment"
+      :current_role_department="getRecruitmentsData.department" />
   </el-drawer>
   <!-- 页码 -->
   <bottom class="pager" :pageTotal="total" :page="getRecruitmentsData.page" @getNewPage="getNewPage"
-    @pageSizeUpdate="pageSizeUpdate" />
+    @pageSizeUpdate="pageSizeUpdate" :pageSize="getRecruitmentsData.pageSize" />
 </template>
 <script setup>
 import { ref, reactive } from 'vue'
 import top from './top.vue'
 import recruitmentTable from './recruitmentTable.vue'
 import review from './review.vue'
-import bottom from '@/views/A-My-Views/users/bottom.vue'
+import bottom from '../bottom.vue'
 import { GetUserinfo } from '@/api/login'
-import { GetRecruitment, SetOfficial, FinallySendOffer } from '@/api/recruitment'
+import { GetRecruitment, SetOfficial } from '@/api/recruitment'
 import { ElMessage } from 'element-plus'
+import * as XLSX from 'xlsx'
 //初始值
 const showSelectDepartmentView = ref(false)
 const current_role_id = ref()
@@ -63,18 +65,22 @@ const getRecruitmentsData = reactive({
 })
 //获取干事申请表
 const getRecruitments = (data) => {
-  GetRecruitment(data).then(res => {
-    total.value = res.total
-    recuitmentsUserInfo.value = res.list
-    if (recuitmentsUserInfo.length===0) {
-      ElMessage({
-        message: '没有相关用户！',
-        type: 'warning',
-        offset: 250,
-        duration: 1000
-      })
-    }
+  return new Promise((resolved, rejected) => {
+    GetRecruitment(data).then(res => {
+      total.value = res.total
+      recuitmentsUserInfo.value = res.list
+      if (recuitmentsUserInfo.length === 0) {
+        ElMessage({
+          message: '没有相关用户！',
+          type: 'warning',
+          offset: 250,
+          duration: 1000
+        })
+      }
+      resolved()
+    })
   })
+
 }
 getRecruitments(getRecruitmentsData)
 //选取状态
@@ -158,6 +164,42 @@ const getNewPage = (page) => {
 const pageSizeUpdate = (pageSize) => {
   getRecruitmentsData.pageSize = pageSize
   getRecruitments(getRecruitmentsData)
+}
+//导出
+const deriveExcel = async () => {
+  // const { list } = await GetRecruitment({
+  //   page: 1,
+  //   pageSize: total.value,
+  //   status: "firstTrialed",
+  // });
+  // const data = [
+  //   ['id', '第一志愿', '第二志愿', '姓名', '学院', '专业'],
+  // ]
+  // list.forEach((v) => {
+  //   const { id, firstChoice, secondChoice, user } = v;
+  //   const { username, college, major } = user
+  //   const _ = [id, firstChoice, secondChoice, username, college, major]
+  //   data.push(_)
+  // })
+  // const _1 = XLSX.utils.aoa_to_sheet(data)
+  //
+  // const res = XLSX.utils.sheet_to_csv(_1)
+  // XLSX.writeFile(_1, "Report.xlsb")
+  // const _1 = XLSX.utils.json_to_sheet(data)
+  // const _2 = XLSX.utils.sheet_to_csv(_1)
+  // XLSX.writeFile(_2, "Report.xlsb");
+  getRecruitmentsData.pageSize = total.value
+  getRecruitments(getRecruitmentsData)
+  let workbook = XLSX.utils.table_to_book(document.getElementById('table'));
+  try {
+    XLSX.writeFile(workbook, '初筛结果.xlsx');
+    ElMessage({
+      type: 'success',
+      message: '导出成功!'
+    });
+  } catch (e) {
+    ElMessage.error('导出失败!')
+  }
 }
 </script>
 <style>

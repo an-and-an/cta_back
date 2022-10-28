@@ -1,10 +1,10 @@
 <template>
   <div>
-    <el-table :data="tableData " style="width: 100%" :row-class-name="tableRowClassName">
+    <el-table :data="tableData" style="width: 100%" :row-class-name="tableRowClassName" max-height="70vh">
       <el-table-column prop="author.username" label="发布用户" width="150px" />
       <el-table-column prop="title" label="标题" width="200px" :show-overflow-tooltip="true" />
       <el-table-column prop="content" label="内容" width="350px" :show-overflow-tooltip="true" />
-      <el-table-column prop="isApprove" label="状态" width="120px" />
+      <el-table-column prop="isApprove" label="状态" width="120px">{{ isApprove ? '暂未发布' : '已发布' }}</el-table-column>
       <el-table-column prop="" label="查看" width="80px">
         <template #default="scope">
           <el-button size="small" @click="check(scope.row.id)" type="primary">查看</el-button>
@@ -19,20 +19,20 @@
           </el-button>
         </template>
       </el-table-column>
-      <el-table-column v-if="props.currentRoleId==21 || props.currentRoleId==22" prop="" label="取消公示" width="80px">
+      <el-table-column v-if="props.currentRoleId == 21 || props.currentRoleId == 22" prop="" label="取消公示" width="80px">
         <template #default="scope">
           <el-button size="small" @click="cancelDisplay(scope.row.id)" type="primary"> 打回</el-button>
         </template>
       </el-table-column>
-      <el-table-column v-if="props.currentRoleId==21 || props.currentRoleId==22" prop="" label="审核" width="200px">
+      <el-table-column v-if="props.currentRoleId == 21 || props.currentRoleId == 22" prop="" label="审核" width="200px">
         <template #default="scope">
           <el-button-group class="ml-4" size="small">
-            <el-button type="primary" @click="audit(scope.row.id,true)">
+            <el-button type="primary" @click="audit(scope.row.id, true)">
               <el-icon>
                 <Check />
               </el-icon>
             </el-button>
-            <el-button type="primary" @click="audit(scope.row.id,false)">
+            <el-button type="primary" @click="audit(scope.row.id, false)">
               <el-icon>
                 <Close />
               </el-icon>
@@ -58,7 +58,6 @@ const props = defineProps(['tableData', 'currentRoleId'])
 const emit = defineEmits(['checkNews', 'modifyNews', 'cancelNews', 'auditNews'])
 //查看新闻
 const check = (id) => {
-  // console.log('id---',props.currentRoleId);
   emit('checkNews', id)
 }
 // 修改新闻
@@ -84,10 +83,11 @@ const offAudit = () => {
   isShowAudit.value = false
 }
 
-const tableRowClassName = ({
-  row,
-  rowIndex,
-}) => {
+const tableRowClassName = (
+  {
+    row,
+  }
+) => {
   if (row.isApprove) return 'success-row'
   else if (row.reasonsForRefusal) return 'warning-row'
   return ''

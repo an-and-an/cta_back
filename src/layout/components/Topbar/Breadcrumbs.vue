@@ -71,8 +71,6 @@ export default defineComponent({
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  // background-color: red;
-  // border: 1px solid red;
   width: 800px;
 
   :deep(a),

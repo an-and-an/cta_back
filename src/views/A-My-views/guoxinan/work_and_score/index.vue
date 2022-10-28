@@ -61,30 +61,6 @@ function fullArray(list) {
         class: item[team].class
       })
     }
-    // if (item.leader) {
-    //   const { college, major, studentId, username, qq, phoneNumber } = item.leader
-    //   res.push({
-    //     ...baseInfo,
-    //     college, major, studentId, username, qq, phoneNumber,
-    //     class: item.leader.class
-    //   })
-    // }
-    // if (item.teamMember1) {
-    //   const { college, major, studentId, username, qq, phoneNumber } = item.teamMember1
-    //   res.push({
-    //     ...baseInfo,
-    //     college, major, studentId, username, qq, phoneNumber,
-    //     class: item.teamMember1.class
-    //   })
-    // }
-    // if (item.teamMember2) {
-    //   const { college, major, studentId, username, qq, phoneNumber } = item.teamMember2
-    //   res.push({
-    //     ...baseInfo,
-    //     college, major, studentId, username, qq, phoneNumber,
-    //     class: item.teamMember2.class
-    //   })
-    // }
   })
   return res
 }

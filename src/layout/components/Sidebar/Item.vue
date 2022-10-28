@@ -13,7 +13,6 @@ export default defineComponent({
   props: ['title', 'icon'],
   setup({ icon }) {
     const isElementIcon = computed(() => icon && icon.startsWith('el-icon'))
-    // console.log(icon)
     return {
       isElementIcon,
     }

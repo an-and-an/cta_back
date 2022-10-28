@@ -1,15 +1,15 @@
 <template>
   <div>
-    <div v-for="(item,index) in questionList" :key="item.id">
-      <div style="float:right">
-        <el-button type="danger" icon="Delete" size="small" @click="itemClick(item.id,index+1)" />
+    <div v-for="(item, index) in questionList" :key="item.id">
+      <div v-if="showOp" style="float:right">
+        <el-button type="danger" icon="Delete" size="small" @click="itemClick(item.id, index + 1)" />
         <el-button type="primary" icon="Edit" size="small" @click="editClick(item)" />
       </div>
-      <Question :questionNo="index+1" :question="item.topic" :questionType="item.type" :optionA="item.optionA"
+      <Question :questionNo="index + 1" :question="item.topic" :questionType="item.type" :optionA="item.optionA"
         :optionB="item.optionB" :optionC="item.optionC" :optionD="item.optionD" :ans="item.ans" />
     </div>
     <el-dialog v-model="isShowDialog" class="dialog">
-      确认删除题目&nbsp;{{deleteNo}}&nbsp;?
+      确认删除题目&nbsp;{{ deleteNo }}&nbsp;?
       <template #footer>
         <el-button type="primary" size="small" @click="comfirmDelete">
           确认
@@ -25,7 +25,7 @@ import edit from './edit.vue'
 import { DeleteQuestion } from '@/api/computer_competition'
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
-const props = defineProps(['questionList'])
+const props = defineProps(['questionList', 'showOp'])
 const emit = defineEmits(['update'])
 //点击编辑
 const editInfo = ref({})

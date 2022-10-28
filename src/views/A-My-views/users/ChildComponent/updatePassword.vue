@@ -1,48 +1,70 @@
 <script setup>
 import { ElMessage } from 'element-plus';
-import { ref } from 'vue'
+import { ref, reactive, onMounted, watch } from 'vue'
 const emit = defineEmits(['offUpdate', 'updatePassword'])
-const props = defineProps(['showUpdate', 'username'])
+const props = defineProps(['showUpdate', 'username', 'isShow'])
 //关闭对话框
 const off = () => {
   emit('offUpdate')
 }
 //确认修改
-const PasswardOnce = ref()
-const PasswardAgain = ref()
 const update = () => {
-  if (PasswardOnce.value == PasswardAgain.value) {
-    emit('updatePassword', PasswardOnce.value)
+  obj.user = props.username
+  if (obj.PasswardOnce == obj.PasswardAgain) {
+    emit('updatePassword', obj.user, obj.PasswardOnce)
     off()
-  } else {
-    ElMessage({
-      type: 'warning',
-      message: '两次输入的密码不一致，请重新输入！',
-      offset: 250,
-      duration: 1000,
-    })
+  }
+  else {
+    ElMessage(
+      {
+        type: 'warning',
+        message: '两次输入的密码不一致，请重新输入！',
+        offset: 250,
+        duration: 1000,
+      }
+    )
   }
 }
+//表单验证
+const obj = reactive(
+  {
+    PasswardAgain: '',
+    user: '',
+    PasswardOnce: '',
+  }
+)
+const rules = reactive({
+  user:
+    [
+      { required: true, message: '请输入用户名！', trigger: 'blur' }
+    ],
+  PasswardOnce:
+    [
+      { required: true, message: '请输入密码！', trigger: 'blur' }
+    ],
+  PasswardAgain:
+    [
+      { required: true, message: '请再次输入密码!', trigger: 'blur' }
+    ],
+})
+watch(() => props.username, (n, o) => obj.user = n);
+// watch(() => obj.user, (n))
 </script>
 <template>
-  <div>
+  <div v-if="isShow">
     <el-dialog v-model="showUpdate" width="50%" @close="off">
-      <!-- 确认修改 -->
       <template #footer>
         <el-button @click="update" type="primary" size="small">确认</el-button>
       </template>
-      <el-form label-width="100px" label-position="left">
-        <!-- 修改用户 -->
-        <!-- <el-form-item label="用户" :required="true">
-          <el-input v-model="username" />
-        </el-form-item> -->
-        <!-- 新密码 -->
-        <el-form-item label="密码 " :required="true">
-          <el-input v-model="PasswardOnce" type="password" placeholder="请输入新密码" show-password />
+      <el-form label-width="100px" label-position="left" :rules="rules" :model="obj">
+        <el-form-item label="用户名" prop="user">
+          <el-input v-model="obj.user" />
         </el-form-item>
-        <!-- 新密码确认 -->
-        <el-form-item label="确认密码 " :required="true">
-          <el-input v-model="PasswardAgain" type="password" placeholder="请再次输入密码" />
+        <el-form-item label="密码 " prop="PasswardOnce">
+          <el-input v-model="obj.PasswardOnce" type="password" placeholder="请输入新密码" show-password />
+        </el-form-item>
+        <el-form-item label="确认密码 " prop="PasswardAgain">
+          <el-input v-model="obj.PasswardAgain" type="password" placeholder="请再次输入密码" />
         </el-form-item>
       </el-form>
     </el-dialog>

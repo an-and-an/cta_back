@@ -1,4 +1,5 @@
 const Layout = () => import("@/layout/index.vue")
+const Lib=() => import("@/views/A-My-views/materials/index.vue")
 export default [
     {
         path: '/materials',
@@ -10,8 +11,8 @@ export default [
             {
                 path: '',
                 name: 'material1',
-                component: () => import("@/views/A-My-views/materials/index.vue"),
-                meta: { title: 'material1' },
+                component: Lib,
+                meta: { title: '竞赛题库' },
                 icon: 'el-icon-location'
             },
         ]

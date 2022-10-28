@@ -188,9 +188,7 @@ const ComfirmToDeleteAdminAccount = () => {
                 <el-table-column prop="roles.roleDescription">
                     <template #header>
                         <el-dropdown ref="dropdown1" trigger="click" placement="top-start" :hide-on-click="false">
-                            <span class="el-dropdown-link">角色
-                                <!-- <svg-icon name="ArrowDown" /> -->
-                            </span>
+                            <span class="el-dropdown-link">角色</span>
                             <template #dropdown>
                                 <div style="width: 200px; height: 220px;">
                                     <el-checkbox-group size="small" v-model="currentCheckedAdminRolesList"
@@ -215,7 +213,7 @@ const ComfirmToDeleteAdminAccount = () => {
                 <el-table-column align="right" width="100px" fixed="right">
                     <template #default="scope">
                         <!-- 删除管理员 -->
-                        <el-button @click="deleteAdminAccount(scope.row.id,scope.row.username)" type="primary" circle
+                        <el-button @click="deleteAdminAccount(scope.row.id, scope.row.username)" type="primary" circle
                             style="position:relative;right:50px;">
                             <div>
                                 <el-icon>
@@ -232,7 +230,7 @@ const ComfirmToDeleteAdminAccount = () => {
                     </template>
                     <template #default="scope">
                         <!-- 修改密码 -->
-                        <el-button @click="editAdminPassward(scope.row.username,scope.row.id)" type="primary" circle
+                        <el-button @click="editAdminPassward(scope.row.username, scope.row.id)" type="primary" circle
                             style="position:relative;right:50px">
                             <div style="width:15px;height:15px; ">
                                 <el-icon>
@@ -302,7 +300,7 @@ const ComfirmToDeleteAdminAccount = () => {
     </el-dialog>
     <!-- 删除管理员dialog -->
     <el-dialog v-model="showDeleteAdminAccount" width="50%">
-        <span>确认删除管理员{{deleteAdminInfo.account}}</span>
+        <span>确认删除管理员{{ deleteAdminInfo.account }}</span>
         <template #footer>
             <el-button @click="ComfirmToDeleteAdminAccount" type="primary" size="small">确认</el-button>
         </template>

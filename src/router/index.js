@@ -4,11 +4,9 @@ import redirect from './modules/redirect'
 import error from './modules/error'
 import login from './modules/login'
 import lock from './modules/lock'
-import home from './modules/home'
 /* 菜单栏的路由 */
 // 固定菜单
-export const fixedRoutes = [...home]
-
+export const fixedRoutes = [...personalcenter]
 // 动态菜单
 import users from './modules/users';
 import admins from './modules/admins'
@@ -25,7 +23,6 @@ export const asyncRoutes = [
   ...admins,
   ...news,
   ...materials,
-  ...personalcenter,
   ...guoxinan,
   ...recruitment,
   ...active,
@@ -49,7 +46,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: '/home',
+      redirect: '/personalcenter',
     },
     ...redirect, // 统一的重定向配置
     ...login,
@@ -65,5 +62,4 @@ const router = createRouter({
     }
   },
 })
-
 export default router

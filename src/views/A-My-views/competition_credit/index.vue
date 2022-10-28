@@ -16,7 +16,7 @@
         </el-select>
       </el-col>
       <el-col :span="4">
-        <el-upload ref="upload" class="upload-demo" action="" :limit="1" :on-change="onChange" :auto-upload="false">
+        <el-upload action="" :limit="1" :on-change="onChange" :auto-upload="false">
           <template #trigger>
             <el-button type="primary">上传榜单</el-button>
           </template>
@@ -29,7 +29,7 @@
         <el-button type="primary" @click="set">添加</el-button>
       </el-col>
     </el-row>
-    <list :list="creditList" :select="BaseRow" :is-page="false" >
+    <list :list="creditList" :select="BaseRow" :is-page="false">
       <el-table-column v-for="(item, index) in flexRow" :key="index" :label="item" width="80">
         <template #default="scope">
           <el-popover effect="light" trigger="hover" placement="top" width="auto">
@@ -45,7 +45,8 @@
             <template #reference>
               <el-tag v-if="scope.row[scope.column.label]?.integral" effect="dark"
                 :type="type(scope.row[scope.column.label])">{{
-                scope.row[scope.column.label]?.integral }}</el-tag>
+                    scope.row[scope.column.label]?.integral
+                }}</el-tag>
               <p v-else></p>
             </template>
           </el-popover>
@@ -76,15 +77,15 @@
       <template #footer>
         <el-button @click="setNewRecord" type="primary" size="small">确认</el-button>
       </template>
-      <el-form label-width="100px" :rules="rules">
+      <el-form label-width="100px" :rules="rules" :model=setData>
         <el-form-item label="比赛名称 " prop="compititionName">
-          <el-input v-model="setData.compititionName" placeholder="请输入比赛名称" clearable/>
+          <el-input v-model="setData.compititionName" placeholder="请输入比赛名称" clearable />
         </el-form-item>
         <el-form-item label="备注信息 " prop="description">
           <el-input v-model="setData.description" placeholder="请输入积分备注信息" clearable />
         </el-form-item>
         <el-form-item label="学号 " prop="studentId">
-          <el-input v-model="setData.studentId" placeholder="请输入学号" clearable/>
+          <el-input v-model="setData.studentId" placeholder="请输入学号" clearable />
         </el-form-item>
         <el-form-item label="积分 " prop="integral">
           <el-input v-model="setData.integral" type="number" placeholder="请输入积分" clearable />
@@ -308,31 +309,40 @@ const isShowSet = ref(false)
 function set() {
   isShowSet.value = true
 }
-const setData = ref({
-  semester: '2022-2023',
-  compititionName: '',
-  integral: '',
-  description: '',
-  studentId: '',
-})
-const rules = reactive({
-  compititionName: [
-    { required: 'true', message: '请输入比赛名称！' , trigger: 'blur' },
-  ],
-  description: [
-    { required: true, message: '请输入积分备注！', trigger: 'blur'  },
-  ],
-  studentId: [
-    { required: true, message: '请输入学号!', trigger: 'blur'  },
-    { min: 11, max: 11, message: '请检查学号是否输入正确！', trigger: 'blur'  }
-  ],
-  integral: [
-    { required: true, message: '请输入积分!', trigger: 'blur' },
-  ],
-  semester: [
-    { required: true, message: '请选择学期！', trigger: 'blur' },
-  ],
-})
+const setData = reactive(
+  {
+    semester: '2022-2023',
+    compititionName: '',
+    integral: '',
+    description: '',
+    studentId: '',
+  }
+)
+const rules = ref(
+  {
+    compititionName:
+      [
+        { required: true, message: '请输入比赛名称！', trigger: 'blur' },
+      ],
+    description:
+      [
+        { required: true, message: '请输入积分备注！', trigger: 'blur' },
+      ],
+    studentId:
+      [
+        { required: true, message: '请输入学号!', trigger: 'blur' },
+        { min: 11, max: 11, message: '请检查学号是否输入正确！', trigger: 'blur' }
+      ],
+    integral:
+      [
+        { required: true, message: '请输入积分!', trigger: 'blur' },
+      ],
+    semester:
+      [
+        { required: true, message: '请选择学期！', trigger: 'blur' },
+      ]
+  }
+)
 
 function setNewRecord() {
   isShowSet.value = false
@@ -381,6 +391,3 @@ function changeSemester(val) {
   getRecord()
 }
 </script>
-<style scoped>
-
-</style>

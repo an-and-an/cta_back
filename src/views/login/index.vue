@@ -1,4 +1,4 @@
- <template>
+<template>
   <div class="login" style="perspective:500px;">
     <el-form class="form face" :model="model" :rules="rules" ref="loginForm">
       <h1 class="title">{{ title }}</h1>
@@ -6,7 +6,8 @@
         <el-input class="text" v-model="model.username" prefix-icon="User" clearable placeholder="用户名" />
       </el-form-item>
       <el-form-item prop="password">
-        <el-input class="text" v-model="model.password" prefix-icon="Lock" show-password clearable placeholder="密码" />
+        <el-input class="text" v-model="model.password"  prefix-icon="Lock" show-password clearable
+          placeholder="密码" />
       </el-form-item>
       <el-form-item>
         <el-button-group style="width:100%">
@@ -53,26 +54,24 @@ export default defineComponent({
       },
       title: '社团成员',
       rules: {
-        userName: [
+        username: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          {
-            min: 6,
-            max: 12,
-            message: '长度在 6 到 12 个字符',
-            trigger: 'blur',
-          },
+          // {
+          //   min: 6,
+          //   max: 12,
+          //   message: '长度在 6 到 12 个字符',
+          //   trigger: 'blur',
+          // },
         ],
       },
       loading: false,
       btnText: computed(() => (state.loading ? '登录中...' : '登录')),
       //切换
       changeModelType: () => {
-        // console.log(" state.model.type1--", state.model.type);
         state.model.type = !state.model.type;
-        //console.log(" state.model.type2--", state.model.type);
         if (state.model.type) {
           loginForm.value.$el.style.transition = "0.8s"
           loginForm.value.$el.style.transform = 'rotateY(360deg)'
@@ -116,7 +115,8 @@ export default defineComponent({
                 // 如果是内部路由地址
                 router.push(targetPath)
               } else {
-                router.push('/')
+                // 改动
+                router.push('/personalcenter')
               }
               store.dispatch('app/setToken', data)
             } else {
@@ -165,7 +165,6 @@ export default defineComponent({
         border: 1px solid rgba(255, 255, 255, 0.1);
         // background: rgba(40, 52, 67, 0.1);
         background: regba(0, 0, 0, 0.1);
-        // color: #fff;
         color: black;
         height: 48px;
         line-height: 48px;
