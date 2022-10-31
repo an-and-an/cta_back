@@ -1,6 +1,6 @@
 <script setup>
 import { ElMessage } from 'element-plus';
-import { ref, reactive, onMounted, watch } from 'vue'
+import {  reactive,  watch } from 'vue'
 const emit = defineEmits(['offUpdate', 'updatePassword'])
 const props = defineProps(['showUpdate', 'username', 'isShow'])
 //关闭对话框
@@ -9,7 +9,6 @@ const off = () => {
 }
 //确认修改
 const update = () => {
-  obj.user = props.username
   if (obj.PasswardOnce == obj.PasswardAgain) {
     emit('updatePassword', obj.user, obj.PasswardOnce)
     off()
@@ -47,8 +46,9 @@ const rules = reactive({
       { required: true, message: '请再次输入密码!', trigger: 'blur' }
     ],
 })
-watch(() => props.username, (n, o) => obj.user = n);
-// watch(() => obj.user, (n))
+watch(() => props.username, (n, o) => {
+  obj.user = n
+})
 </script>
 <template>
   <div v-if="isShow">

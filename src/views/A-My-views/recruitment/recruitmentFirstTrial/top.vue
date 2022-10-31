@@ -1,40 +1,3 @@
-<script setup>
-import { ref } from 'vue';
-import { GetAllDepartment } from '@/api/recruitment'
-import { debounce } from '@/utils'
-const props = defineProps(['showSelectDepartmentView'])
-const emit = defineEmits(['searchRecruitment', 'changeUserInfoByState', 'changeUserInfo', 'derive'])
-//获取所有部门
-const allDepartment = ref([])
-const getGepartments = (() => {
-  GetAllDepartment().then(res => {
-    Object.keys(res.data).forEach(val => {
-      allDepartment.value.push(res.data[val])
-    })
-  }).catch(err => {
-    console.log(err);
-  })
-})
-//部门
-const selectedValue = ref([])
-//状态
-const selectStateValue = ref("delivered")
-//状态选项
-const states = ref([
-  { key: "delivered", value: "已投递" },
-  { key: "firstTrialError", value: "初筛未通过" }
-])
-getGepartments()
-//查询干事申请表
-const recruitmentSearch = ref()
-const getRecruitmentSearch = debounce(() => {
-  emit('searchRecruitment', recruitmentSearch.value)
-}, 1000)
-//导出全部
-const derive = () => {
-  emit('derive')
-}
-</script >
 <template>
   <div class="top_box" id="top_box">
     <!--按部门分类查看-->
@@ -63,6 +26,46 @@ const derive = () => {
     </div>
   </div>
 </template>
+
+<script setup>
+import { ref } from 'vue';
+import { GetAllDepartment } from '@/api/recruitment'
+import { debounce } from '@/utils'
+const props = defineProps(['showSelectDepartmentView','total'])
+const emit = defineEmits(['searchRecruitment', 'changeUserInfoByState', 'changeUserInfo', 'derive','pageSizeUpdate'])
+//获取所有部门
+const allDepartment = ref([])
+const getGepartments = (() => {
+  GetAllDepartment().then(res => {
+    Object.keys(res.data).forEach(val => {
+      allDepartment.value.push(res.data[val])
+    })
+  }).catch(err => {
+    console.log(err);
+  })
+})
+//部门
+const selectedValue = ref([])
+//状态
+const selectStateValue = ref("delivered")
+//状态选项
+const states = ref([
+  { key: "delivered", value: "已投递" },
+  { key: "firstTrialError", value: "初筛未通过" }
+])
+getGepartments()
+//查询干事申请表
+const recruitmentSearch = ref()
+const getRecruitmentSearch = debounce(() => {
+  emit('searchRecruitment', recruitmentSearch.value)
+}, 1000)
+//导出全部
+const derive = () =>  {
+  emit('pageSizeUpdate', props.total)
+  setTimeout(function(){  emit('derive')},1000);
+}
+</script >
+
 <style scoped>
 .top_box {
   width: 100%;

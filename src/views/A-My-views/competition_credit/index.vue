@@ -1,8 +1,6 @@
 <template>
   <div>
-    <h4>
-      竞赛积分首页
-    </h4>
+    <h4>竞赛积分首页</h4>
     <el-row>
       <el-col :span="5">
         <el-select v-model="getRecordInfo.semester" @change="changeSemester" placeholder="Select" size="large">

@@ -2,9 +2,7 @@
   <div>
     <el-row style="width:100%;min-width:500px;">
       <el-col :span="1">
-        <el-button text type="primary" @click="set">
-          新建
-        </el-button>
+        <el-button text type="primary" @click="set">新建</el-button>
       </el-col>
       <el-col :span="7">
         <el-input v-model="searchValue" class="w-50 m-2" placeholder="请输入要查询的题目内容" suffix-icon="Search"
@@ -76,6 +74,7 @@ import { ElMessage } from 'element-plus'
 import displayQuestion from './displayQuestion.vue'
 import { read, utils } from 'xlsx'
 import { SetNewQuestion } from '@/api/computer_competition'
+
 const emit = defineEmits(['setQuestion', 'search', 'update'])
 
 const textareaSize = { minRows: 1, maxRows: 10 }

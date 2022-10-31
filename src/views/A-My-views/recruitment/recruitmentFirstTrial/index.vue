@@ -1,10 +1,19 @@
 <template>
   <!-- 筛选、搜索 -->
-  <top @changeUserInfo="changeUserInfo" @changeUserInfoByState="changeUserInfoByState"
-    @showAddDialog="showAddOfficial = true" @searchRecruitment="searchRecruitment"
-    :showSelectDepartmentView="showSelectDepartmentView" @derive="deriveExcel" />
+  <top 
+  :total="total" 
+  :showSelectDepartmentView="showSelectDepartmentView"
+  @pageSizeUpdate="pageSizeUpdate"  
+  @changeUserInfo="changeUserInfo" 
+  @changeUserInfoByState="changeUserInfoByState"
+  @showAddDialog="showAddOfficial = true" 
+  @searchRecruitment="searchRecruitment"
+  @derive="deriveExcel" />
   <!-- 展示、列表 -->
-  <recruitmentTable :userInfo="recuitmentsUserInfo" @itemClick="itemClick" id="table" />
+  <recruitmentTable 
+  :userInfo="recuitmentsUserInfo" 
+  @itemClick="itemClick" 
+  id="table" />
   <!-- 详细信息 -->
   <el-drawer v-model="isShowDetailRecruitmrntInfo" size="50%">
     <review :user="DetailRecruitmrntInfo" class="details" @audit="firstTrial" :status="checkStatus" :loading="loadView"
@@ -150,8 +159,8 @@ const pageSizeUpdate = (pageSize) => {
 
 //导出
 const deriveExcel = async () => {
-  getRecruitmentsData.pageSize = total.value
-  await getRecruitments(getRecruitmentsData)
+  // getRecruitmentsData.pageSize = total.value
+  // await getRecruitments(getRecruitmentsData)
   let workbook = XLSX.utils.table_to_book(document.getElementById('table'));
   try {
     XLSX.writeFile(workbook, '干事申请表.xlsx');

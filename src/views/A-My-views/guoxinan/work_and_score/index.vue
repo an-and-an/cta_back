@@ -1,27 +1,28 @@
 <template>
   <div>
-    <searchBox @search="getSearch" @exportTable="deriveExcel" />
+    <searchBox  :total="total" @search="getSearch" @exportTable="deriveExcel" @pageSizeUpdate="pageSizeUpdate" />
     <workInfoList :list="teams" id="table" />
-    <bottom class="pager" :pageTotal="total" :page="getTeamInfo.page" @getNewPage="getNewPage"
-      @pageSizeUpdate="pageSizeUpdate" />
+    <!-- <bottom class="pager" :pageTotal="total" :page="getTeamInfo.page" @getNewPage="getNewPage"
+      @pageSizeUpdate="pageSizeUpdate" /> -->
+    <bottom class="pager" :page-total="total" :page="getTeamInfo.page" @getNewPage="getNewPage"
+    @pageSizeUpdate="pageSizeUpdate" :page-size="getTeamInfo.pageSize" />
   </div>
 </template>
 <script setup>
 import { ref } from 'vue'
+import { ElMessage } from 'element-plus'
+import { GetAllWorkAndScore, GetAllTeam } from '@/api/guoxinan'
+import * as XLSX from 'xlsx'
 import searchBox from './Components/searchBox.vue'
 import workInfoList from './Components/workInfoList.vue'
-import bottom from '@/views/A-My-Views/users/bottom.vue'
-import { ElMessage } from 'element-plus'
-import * as XLSX from 'xlsx'
-import { GetAllWorkAndScore, GetAllTeam } from '@/api/guoxinan'
+import bottom from '@/views/A-My-Views/recruitment/bottom.vue'
+
 //获取已经打分的作品信息及其分数
 const workScoreList = ref([])
 function getAllWorkAndScore() {
   GetAllWorkAndScore().then(res => {
   })
 }
-// getAllWorkAndScore()
-//获取所有已经报名了的队伍
 const teams = ref([])
 const getTeamInfo = ref({
   page: 1,
@@ -29,14 +30,13 @@ const getTeamInfo = ref({
   content: ''
 })
 const total = ref()
-function getAllTeam() {
+const  getAllTeam = async() => {
   GetAllTeam(getTeamInfo.value).then(res => {
     res.list.forEach(element => {
       element.group ? element.group = '动态' : element.group = '静态'
-    });
+    })
     teams.value = fullArray(res.list)
     total.value = res.total
-    // console.log(teams.value)
   })
 }
 
@@ -55,11 +55,13 @@ function fullArray(list) {
         continue;
       }
       const { college, major, studentId, username, qq, phoneNumber } = item[team]
-      res.push({
+      res.push(
+        {
         ...baseInfo,
         college, major, studentId, username, qq, phoneNumber,
         class: item[team].class
-      })
+        }
+      )
     }
   })
   return res
@@ -75,20 +77,19 @@ const getNewPage = (page) => {
   getTeamInfo.value.page = page
   getAllTeam()
 }
-const pageSizeUpdate = (pageSize) => {
+const pageSizeUpdate =(pageSize) => {
   getTeamInfo.value.pageSize = pageSize
   getAllTeam()
 }
 
+
+
 //导出表格
-function deriveExcel() {
-  let workbook = XLSX.utils.table_to_book(document.getElementById('table'));
+const deriveExcel = async () => {
+  let workbook = XLSX.utils.table_to_book(document.getElementById('table'))
   try {
     XLSX.writeFile(workbook, '国信安报名信息表.xlsx');
-    ElMessage({
-      type: 'success',
-      message: '导出成功!'
-    });
+    ElMessage.success( '导出成功!')
   } catch (e) {
     ElMessage.error('导出失败!')
   }

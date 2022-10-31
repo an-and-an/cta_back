@@ -2,31 +2,29 @@
   <div>
     <div v-for="(item, index) in questionList" :key="item.id">
       <div v-if="showOp" style="float:right">
-        <el-button type="danger" icon="Delete" size="small" @click="itemClick(item.id, index + 1)" />
-        <el-button type="primary" icon="Edit" size="small" @click="editClick(item)" />
+        <el-button  @click="editClick(item)"  type="primary" icon="Edit" size="small"/>
+        <el-button  @click="itemClick(item.id, index + 1)" type="danger" icon="Delete" size="small" />
       </div>
-      <Question :questionNo="index + 1" :question="item.topic" :questionType="item.type" :optionA="item.optionA"
-        :optionB="item.optionB" :optionC="item.optionC" :optionD="item.optionD" :ans="item.ans" />
+      <Question  :questionNo="index + 1"  :questionInfo="item" />
     </div>
-    <el-dialog v-model="isShowDialog" class="dialog">
-      确认删除题目&nbsp;{{ deleteNo }}&nbsp;?
+    <edit v-if="isShowEditDialog" :editInfo="editInfo" @offEdit="offEdit" />
+    <el-dialog v-model="isShowDeleteDialog" class="dialog">
       <template #footer>
-        <el-button type="primary" size="small" @click="comfirmDelete">
-          确认
-        </el-button>
+        <el-button type="primary" size="small" @click="comfirmDelete">确认</el-button>
       </template>
     </el-dialog>
-    <edit v-if="isShowEditDialog" :editInfo="editInfo" @offEdit="offEdit" />
   </div>
 </template>
 <script setup>
 import Question from './Question.vue'
 import edit from './edit.vue'
-import { DeleteQuestion } from '@/api/computer_competition'
 import { ref } from 'vue'
+import { DeleteQuestion } from '@/api/computer_competition'
 import { ElMessage } from 'element-plus'
+
 const props = defineProps(['questionList', 'showOp'])
 const emit = defineEmits(['update'])
+
 //点击编辑
 const editInfo = ref({})
 const isShowEditDialog = ref(false)
@@ -39,34 +37,38 @@ const offEdit = () => {
   isShowEditDialog.value = false
 }
 //点击删除
-const isShowDialog = ref(false)
+const isShowDeleteDialog = ref(false)
 const deleteNo = ref()
 const deleteId = ref()
 const itemClick = (id, no) => {
   deleteId.value = id
   deleteNo.value = no
-  isShowDialog.value = true
+  isShowDeleteDialog.value = true
 }
 const comfirmDelete = () => {
   DeleteQuestion(deleteId.value).then(res => {
     if (res.code === 0) {
       emit('update')
-      ElMessage({
+      ElMessage(
+        {
         type: 'success',
         message: '删除成功！',
         offset: 250,
         duration: 1000,
-      })
+        }
+      )
     } else {
-      ElMessage({
+      ElMessage(
+        {
         type: 'error',
         message: res.message,
         offset: 250,
         duration: 3000,
-      })
+        }
+      )
     }
   })
-  isShowDialog.value = false
+  isShowDeleteDialog.value = false
 }
 </script>
 <style scoped>

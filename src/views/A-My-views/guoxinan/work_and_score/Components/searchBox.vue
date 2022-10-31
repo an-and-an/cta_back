@@ -7,13 +7,16 @@
 <script setup>
 import { debounce } from '@/utils/index'
 import { ref } from 'vue'
-const emit = defineEmits(['search', 'exportTable'])
+
+const props=defineProps(['total'])
+const emit = defineEmits(['search', 'exportTable','pageSizeUpdate'])
 const search = ref()
 const getSearch = debounce(() => {
   emit('search', search.value)
 }, 1000)
 function exportTable() {
-  emit('exportTable')
+  emit('pageSizeUpdate', props.total)
+  setTimeout(function(){ emit('exportTable')},1000);
 }
 </script>
 <style scoped>

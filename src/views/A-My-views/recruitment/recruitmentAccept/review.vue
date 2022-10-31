@@ -43,6 +43,7 @@ const isSet = () => {
 const set = () => {
     emit('setOfficial', department, id, true)
     showIsSet.value = false
+    department.value = ''
 }
 const reject = () => {
     emit('setOfficial', department, id, false)

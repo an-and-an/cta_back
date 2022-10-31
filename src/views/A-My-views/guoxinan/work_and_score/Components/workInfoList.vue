@@ -1,12 +1,12 @@
 <template>
   <div>
     <el-table :data="list" style="width: 100%" :span-method="spanMethod" max-height="65vh">
-      <el-table-column>
+      <el-table-column label="序号" width="70" align="center" >
         <template #default="scope">
           <span> {{ (scope.$index) / 3 + 1 }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="序号" prop="id" width="70" align="center" />
+      <el-table-column label="id" prop="id" width="70" align="center" />
       <el-table-column label="团队名称" prop="teamName" width="150" align="center" />
       <el-table-column label="作品名称" prop="workName" width="150" align="center" />
       <el-table-column label="组别" prop="group" width="150" align="center" />

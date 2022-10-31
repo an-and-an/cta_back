@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-const props = defineProps(['questionNo', 'questionType', 'question', 'optionA', 'optionB', 'optionC', 'optionD', 'ans'])
+
+const props=defineProps(['questionNo','questionInfo'])
 
 const mapType = (type) => {
   if (type == 1) return '单选题'
@@ -9,41 +10,42 @@ const mapType = (type) => {
 }
 const isAns = ref([false, false, false, false])
 const init = () => {
-  let ans = props.ans
+  let ans = props.questionInfo.ans
   let idx = 0
   while (ans) {
     if (ans & 1) {
-      isAns.value[3 - idx] = true;
+      isAns.value[3 - idx] = true
     }
-    ans >>= 1;
-    idx++;
+    ans >>= 1
+    idx++
   }
 }
+
 onMounted(init)
 </script>
 <template>
   <div>
     <div>
-      <h6>{{ `${questionNo}.(${mapType(questionType)})${question}` }}</h6>
-      <div v-if="questionType == 1 || questionType == 2">
+      <h6>{{ `${questionNo}.(${mapType(props.questionInfo.type)})${props.questionInfo.topic}` }}</h6>
+      <div v-if="props.questionInfo.type === 1 || props.questionInfo.type === 2">
         <ol>
           <li>
-            {{ optionA }}<el-icon v-if="isAns[0]">
+            {{ props.questionInfo.optionA }}<el-icon v-if="isAns[0]">
               <Check />
             </el-icon>
           </li>
           <li>
-            {{ optionB }}<el-icon v-if="isAns[1]">
+            {{ props.questionInfo.optionB }}<el-icon v-if="isAns[1]">
               <Check />
             </el-icon>
           </li>
           <li>
-            {{ optionC }}<el-icon v-if="isAns[2]">
+            {{ props.questionInfo.optionC }}<el-icon v-if="isAns[2]">
               <Check />
             </el-icon>
           </li>
           <li>
-            {{ optionD }}<el-icon v-if="isAns[3]">
+            {{ props.questionInfo.optionD }}<el-icon v-if="isAns[3]">
               <Check />
             </el-icon>
           </li>
@@ -53,12 +55,12 @@ onMounted(init)
         <div>{{ isAns }}</div>
         <ol>
           <li>
-            {{ optionA }}<el-icon v-if="isAns[0]">
+            {{ props.questionInfo.optionA }}<el-icon v-if="isAns[0]">
               <Check />
             </el-icon>
           </li>
           <li>
-            {{ optionB }}
+            {{ props.questionInfo.optionB }}
             <el-icon v-if="isAns[1]">
               <Check />
             </el-icon>
@@ -67,9 +69,11 @@ onMounted(init)
       </div>
     </div>
   </div>
+  <div>
+  </div>
 </template>
 <style scoped>
 li {
-  list-style: upper-alpha;
+  list-style:upper-alpha;
 }
 </style>

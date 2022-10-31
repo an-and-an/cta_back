@@ -30,7 +30,6 @@ const allUserList = ref([])
 const getAllUserInfoList = (content) => {
     data.content = content
     GetAllUser(data).then(res => {
-        console.log(res);
         allUserList.value = res.list
         total.value = res.total
     })
@@ -47,6 +46,7 @@ const getNewPage = (page) => {
 }
 const pageSizeUpdate = (pageSize) => {
     data.pageSize = pageSize
+    getAllUserInfoList()
 }
 //修改用户信息
 const isShow = ref(true)
@@ -68,6 +68,7 @@ const modigyUserPassword = (username, password) => {
         username: username,
     }).then(res => {
         if (res.code === 0) {
+            getAllUserInfoList()
             ElMessage({
                 type: 'success',
                 message: '修改成功！',
