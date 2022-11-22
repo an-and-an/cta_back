@@ -12,6 +12,7 @@
       <template #footer>
         <el-button type="primary" size="small" @click="comfirmDelete">确认</el-button>
       </template>
+      确认删除该题目？
     </el-dialog>
   </div>
 </template>

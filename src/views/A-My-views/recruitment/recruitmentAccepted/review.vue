@@ -1,6 +1,58 @@
+<script setup>
+import { ref } from 'vue'
+import { GetAllDepartment } from '@/api/recruitment'
+const props = defineProps(['user', 'status', 'current_role_id', 'isSelect', 'current_role_department'])
+const emit = defineEmits(['setOfficial'])
+//获取所有部门
+const allDepartment = ref([])
+const getGepartments = (() => {
+    GetAllDepartment().then(res => {
+        Object.keys(res.data).forEach(val => {
+            allDepartment.value.push(res.data[val])
+        })
+    }).catch(err => {
+        console.log(err);
+    })
+})
+getGepartments()
+//预录取
+const showSetOfficial = ref(false)
+const showIsSet = ref(false)
+const showIsReject = ref(false)
+const department = ref()
+const id = ref()
+const set_official = (user_id) => {
+    if (props.isSelect) {
+        showSetOfficial.value = true
+    } else {
+        department.value = props.current_role_department
+        showIsSet.value = true
+    }
+    console.log(props.current_role_department);
+    id.value = user_id
+}
+const reject_official = (user_id) => {
+    id.value = user_id
+    department.value = props.current_role_department
+    showIsReject.value = true
+}
+const isSet = () => {
+    showIsSet.value = true
+    showSetOfficial.value = false
+}
+const set = () => {
+    emit('setOfficial', department, id, true)
+    showIsSet.value = false
+    department.value = ''
+}
+const reject = () => {
+    emit('setOfficial', department, id, false)
+    showIsReject.value = false
+}
+</script>
 <template>
     <div class="detailInfoBox">
-        <el-card  v-loading="loading">
+        <el-card>
             <div class="header">{{user.username}}&nbsp;</div>
             <table class="info">
                 <tr>
@@ -103,81 +155,44 @@
                 </tr>
             </table>
         </el-card>
-        <div class="first_trial_icon" v-if="status == 1">
-            <!-- 通过初筛 -->
-            <img @click="audit(user.id, true)" src="@/assets/svg/pass.svg" alt=""
-                style="width: 50px;aspect-ratio: 1 / 1; margin-right: 150px">
-            <!-- 没有通过初筛 -->
-            <img @click="audit(user.id, false)" src="@/assets/svg/unpass.svg" alt=""
-                style="width: 50px;aspect-ratio: 1 / 1; margin-left: 150px">
-        </div>
-        <div v-else style="display: flex; flex-direction: row;justify-content:center;margin-top:30px">
+        <div style="display: flex; flex-direction: row;justify-content:center;margin-top:30px">
             <img v-if="status==2" src="@/assets/svg/pass2.svg" alt="" class="res_first_trial">
-            <img v-if="status==3" src="@/assets/svg/fail_pass.svg" alt="" class="res_first_trial">
         </div>
         <div class="bottom_button" id="bottom_button">
-            <el-button v-if="status==3" type="primary" @click="change_status">重新审核</el-button>
+            <el-button v-if="status==2 || status==5" type="primary" @click="set_official(user.id)">预录取</el-button>
+            <el-button v-if="status==2 " type="primary" @click="reject_official(user.id)">
+                拒绝</el-button>
+        </div>
+        <!-- 预录取  选择录取部门 -->
+        <div>
+            <el-dialog v-model="showSetOfficial" width="20%" style="margin-left: 35%">
+                <el-radio-group v-model="department" @change="isSet" size="large">
+                    <el-radio v-for="(item,index) in allDepartment" :key="index" :label="item" size="large"
+                        class="acceptDepartmentOption" id="acceptDepartmentOption">{{item}}
+                    </el-radio>
+                </el-radio-group>
+            </el-dialog>
+        </div>
+        <!-- 预录取 -->
+        <div>
+            <el-dialog v-model="showIsSet" width="30%">
+                <span>确认预录取{{user.username}}同学到{{department}}?</span>
+                <template #footer>
+                    <el-button type="primary" size="small" @click="set">确认</el-button>
+                </template>
+            </el-dialog>
+        </div>
+        <!-- 拒绝 -->
+        <div>
+            <el-dialog v-model="showIsReject" width="30%">
+                <span>确认拒绝{{user.username}}同学?</span>
+                <template #footer>
+                    <el-button type="primary" size="small" @click="reject">确认</el-button>
+                </template>
+            </el-dialog>
         </div>
     </div>
 </template>
-
-<script setup>
-import { ref } from 'vue'
-import { GetAllDepartment } from '@/api/recruitment'
-
- defineProps(['user', 'status', 'current_role_id', 'loading'])
-const emit = defineEmits(['audit', 'change_status', 'setOfficial', 'FinallySetOfficial', 'reject_set'])
-
-const audit = (id, res) => {
-    emit('audit', id, res)
-}
-const change_status = () => {
-    emit('change_status', 1)
-}
-//获取所有部门
-const allDepartment = ref([])
-const getGepartments = (() => {
-    GetAllDepartment().then(res => {
-        Object.keys(res.data).forEach(val => {
-            allDepartment.value.push(res.data[val])
-        })
-    }).catch(err => {
-        console.log(err);
-    })
-})
-getGepartments()
-//预录取
-const showSetOfficial = ref(false)
-const showIsSet = ref(false)
-const department = ref()
-const id = ref()
-const set_official = (user_id) => {
-    showSetOfficial.value = true
-    id.value = user_id
-}
-const isSet = () => {
-    showIsSet.value = true
-}
-const set = () => {
-    showIsSet.value = false
-    showSetOfficial.value = false
-    emit('setOfficial', department, id)
-}
-//拒绝
-const showRejectSet = ref(false)
-// 录取
-const showFinallySetOfficial = ref(false)
-const finally_set_official = (user_id) => {
-    showFinallySetOfficial.value = true
-    id.value = user_id
-}
-const finally_set = () => {
-    console.log();
-    showFinallySetOfficial.value = false
-    emit('FinallySetOfficial', id)
-}
-</script>
-
 <style scoped>
 .header {
     text-align: start;
@@ -214,6 +229,7 @@ const finally_set = () => {
 
 .info {
     width: 100%;
+    /* margin-top: 20px; */
 }
 
 .cell-item {
@@ -238,6 +254,7 @@ td {
 
 td {
     padding: 15px;
+    /* min-width: 100px; */
 }
 
 .content {
@@ -270,5 +287,11 @@ td {
     display: flex;
     flex-direction: row;
     justify-content: center;
+}
+
+/* 预录取 */
+.acceptDepartmentOption {
+    width: 100%;
+
 }
 </style>

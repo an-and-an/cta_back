@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { nextTick, ref } from 'vue';
-import { getAllRoles } from '@/api/getRouter';
+import { nextTick, ref } from 'vue'
+import { getAllRoles } from '@/api/getRouter'
 import { getRouterByRole, setRoleRouters } from '@/api/setRoleRouters'
 import { router, asyncRoutes } from '@/router'
 import { ElTree } from 'element-plus'
@@ -69,9 +69,7 @@ const btnClick = () => {
     }
     const res = getRouter(_r, showRouter.value)
     _data.routers = res
-    setRoleRouters(_data).then(res => {
-        console.log(res)
-    })
+    setRoleRouters(_data)
 }
 const showClick = (roleName: string) => {
     // 首先获取role对应的routers

@@ -1,7 +1,6 @@
 <template>
   <div>
-    <h4>竞赛积分首页</h4>
-    <el-row>
+    <el-row style="width:100%;min-width:1200px" >
       <el-col :span="5">
         <el-select v-model="getRecordInfo.semester" @change="changeSemester" placeholder="Select" size="large">
           <el-option v-for="item in options" :key="item" :label="item" :value="item" />
@@ -13,19 +12,23 @@
           <el-option label="B组" :value="false" />
         </el-select>
       </el-col>
-      <el-col :span="4">
+      <el-col :span="2">
         <el-upload action="" :limit="1" :on-change="onChange" :auto-upload="false">
           <template #trigger>
             <el-button type="primary">上传榜单</el-button>
           </template>
         </el-upload>
       </el-col>
-      <el-col :span="4">
+      <el-col :span="2">
         <el-button type="primary" @click="UPLOADTEMPLATE">下载模板</el-button>
       </el-col>
-      <el-col :span="4">
+      <el-col :span="2">
+        <el-button type="primary" @click="deLeteItems">批量删除</el-button>
+      </el-col>
+      <el-col :span="2">
         <el-button type="primary" @click="set">添加</el-button>
       </el-col>
+      
     </el-row>
     <list :list="creditList" :select="BaseRow" :is-page="false">
       <el-table-column v-for="(item, index) in flexRow" :key="index" :label="item" width="80">
@@ -33,7 +36,7 @@
           <el-popover effect="light" trigger="hover" placement="top" width="auto">
             <template #default>
               <p>{{ scope.row[scope.column.label]?.description }}</p>
-              <div style="text-align: right; margin: 0">
+              <div style="text-align: right; margin: 0;">
                 <el-button size="small" type="danger" @click="handlerDel(scope.row[scope.column.label])">删除
                 </el-button>
                 <el-button size="small" type="primary" @click="handlerEdit(scope.row[scope.column.label])">修改
@@ -94,7 +97,14 @@
           </el-select>
         </el-form-item>
       </el-form>
-
+    </el-dialog>
+    <el-dialog v-model="deleteDialog">
+      <template #footer>
+          <el-button @click="deleteMany" type="primary"> 
+            确认
+          </el-button>
+      </template>
+      <el-input v-model="inputToDelete" @change="deleteMany"  placeholder="请输入要删除记录的比赛名称" />
     </el-dialog>
   </div>
 
@@ -103,6 +113,7 @@
 import { ref, reactive } from "vue"
 import { read, utils } from 'xlsx'
 import { GetRecord, UpdateRecord, SetRecord, DeleteRecord } from '@/api/competition_credit'
+import { apiOver } from '@/utils/api'
 import { ElMessage } from 'element-plus'
 import List from '@/components/common/list/index.vue'
 // 获取/查询积分记录, public
@@ -150,7 +161,7 @@ const dialogRow = ref([
     label: '上传',
     prop: 'upload',
     width: 180
-  },
+  }
 ])
 const dialogList = ref([])
 const flexRow = ref([])
@@ -159,14 +170,14 @@ const dialog = ref(false)
 const table_dialog = ref(false)
 const compititionName = ref('')
 const currentData = ref({
-  id: 0,
+  id: '',
   description: '',
-  integral: 0,
+  integral: '',
 })
 const currentYear = date.getFullYear()
 const getRecordInfo = ref({
   semester: `${currentYear}-${currentYear + 1}`,
-  group: true,
+  group: false,
 })
 const options = ref([])
 for (let i = 0; i < 4; i++) {
@@ -269,7 +280,22 @@ async function UPLOAD() {
   const len = dialogList.value.length
   await Promise.all(dialogList.value.map(async (item, idx) => {
     const { integral, studentId } = item
+    // if (integral === 4) description = `前10%`
     let description = ''
+    // switch (integral) {
+    //   case 4:
+    //     description = `前10%`
+    //     break;
+    //   case 3:
+    //     description = '前20%'
+    //     break;
+    //   case 2:
+    //     description = '前30%'
+    //     break;
+    //   case 1:
+    //     description = '参与奖'
+    //     break;
+    // }
     if (item.rank <= Math.ceil(len * .1)) description = `前10%`
     else if (item.rank <= Math.ceil(len * .3)) description = '前20%'
     else if (item.rank <= Math.ceil(len * .6)) description = '前30%'
@@ -343,46 +369,60 @@ const rules = ref(
 )
 
 function setNewRecord() {
-  isShowSet.value = false
-  SetRecord(setData.value).then(res => {
-    if (res.code === 0) {
-      getRecord()
-      ElMessage({
-        type: 'success',
-        message: '添加成功！',
-        duration: 1000,
-        offset: 250,
-      })
-    } else if (res.code === -2) {
-      ElMessage({
-        type: 'warning',
-        message: '该用户不存在！',
-        duration: 2000,
-        offset: 250,
-      })
-    } else if (res.code === -3) {
-      ElMessage({
-        type: 'warning',
-        message: '请勿重复添加！',
-        duration: 2000,
-        offset: 250,
-      })
-    }
-    else {
-      ElMessage({
-        type: 'error',
-        message: '添加失败，请检查输入！',
-        durationa: 1000,
-        offseta: 250,
-      })
-    }
+  SetRecord(setData).then(res => {
+    apiOver(() => {
+      isShowSet.value = false  
+    }, res.code, res.message, {
+      duration: 1000,
+      offset: 250,
+    })
+    getRecord()
   })
 }
+      
+//批量删除
+const inputToDelete=ref()
+const deleteDialog=ref(false)
+function deLeteItems() {
+  deleteDialog.value=true
+}
+function checkCompetition(array, name) {
+  var flag = false
+  var deleteSuccess = true
+  array.forEach(item => {
+    for (var i in item) {
+      if (i === inputToDelete.value) {
+        flag = true
+        DeleteRecord({ id: item[i].id }).then(res => {
+          if(res.code != 0) deleteSuccess = false
+        })
+      }
+    }
+  })
+  if (flag) {
+    if (deleteSuccess) apiOver(() => { getRecord() }, 0, '删除成功！', { offset: 250, duration: 1000 })
+    else  apiOver(() => { }, 1, '删除失败，请检查操作！', { offset: 250, duration: 1000 })
+  } else {
+    apiOver(()=>{},2,'请输入正确的比赛名称！',{offset:250,duration:1000})
+  }
+}
+function deleteMany() {
+  if (inputToDelete.value ) {
+    deleteDialog.value = false
+    checkCompetition(creditList.value,inputToDelete.value)
+  } else {
+    apiOver(()=>{},2,'请输入需要批量删除数据的比赛名称！',{offset:250,duration:1000})
+  }
+  
+  
+}
+
 //换组
 function changeGroup(val) {
   getRecordInfo.value.group = val
   getRecord()
 }
+
 //换届
 function changeSemester(val) {
   getRecordInfo.value.semester = val

@@ -1,20 +1,15 @@
 <template>
-
-  <!-- 筛选、搜索 -->
+  <!-- 搜索 -->
   <top 
     :total="total" 
-    :showSelectDepartmentView="showSelectDepartmentView"
-    @changeUserInfo="changeUserInfo" 
-    @changeUserInfoByState="changeUserInfoByState"
-    @showAddDialog="showAddOfficial = true" 
-    @searchRecruitment="searchRecruitment"
+    @searchRecruitment="searchRecruitment" 
     @derive="deriveExcel"
-    @pageSizeUpdate="pageSizeUpdate" 
+    @pageSizeUpdate="pageSizeUpdate"
   />
 
   <!-- 展示、列表 -->
   <recruitmentTable 
-    :userInfo="recuitmentsUserInfo" 
+    :userInfo="recuitmentsUserInfo"
     @itemClick="itemClick" 
     id="table" 
   />
@@ -23,10 +18,9 @@
   <el-dialog v-model="isShowDetailRecruitmrntInfo" size="50%">
     <review 
       :user="DetailRecruitmrntInfo" 
-      :status="checkStatus" 
-      :current_role_id="current_role_id" 
-      @FinallySetOfficial="FinallySetOfficial"
-      @FinallyRejectOfficial="FinallyRejectOfficial"  
+      :current_role_department="getRecruitmentsData.department" 
+      :current_role_id="current_role_id"
+      @change_status="change_status"
       class="details"
     />
   </el-dialog>
@@ -43,8 +37,8 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import { GetUserinfo } from '@/api/login'
+import { GetRecruitment } from '@/api/recruitment'
 import { ElMessage } from 'element-plus'
-import { GetRecruitment, FinallySendOffer, SetOfficial } from '@/api/recruitment'
 import top from './top.vue'
 import recruitmentTable from './recruitmentTable.vue'
 import review from './review.vue'
@@ -52,23 +46,11 @@ import bottom from '../bottom.vue'
 import * as XLSX from 'xlsx'
 
 //初始值
-const showSelectDepartmentView = ref(false)
-const current_role_id = ref()
+const current_role_id = ref(27)
 const getUserInfo = async () => {
   const { data } = await GetUserinfo()
-  //21-----最高管理员
-  //28-----正副会长
-  //27-----正副部长
-  current_role_id.value = data.roles.id
-  if (!data.type) {
-    if (data.roles.roleName !== 'root') return
-    else showSelectDepartmentView.value = true
-  } else {
-    if (data.identity.department !== '理事会')
-      getRecruitmentsData.department =
-        getRecruitmentsData.department ||
-        data.identity.department
-    else showSelectDepartmentView.value = true
+  if (data.identity.department !== '理事会') {
+    getRecruitmentsData.department =getRecruitmentsData.department || data.identity.department 
   }
   GetRecruitment(getRecruitmentsData).then(res => {
     recuitmentsUserInfo.value = res.list
@@ -77,16 +59,16 @@ const getUserInfo = async () => {
 }
 getUserInfo()
 
-//获取干事申请表
+//获取提交的干事申请表
 const recuitmentsUserInfo = ref([])
 const getRecruitmentsData = reactive({
   department: "",
   page: 1,
   pageSize: 10,
-  status: "Accepted",
+  status: "FinallyAccepted",
   content: ''
 })
-//
+
 //获取干事申请表
 const getRecruitments = async () => {
   const res = await GetRecruitment(getRecruitmentsData)
@@ -102,23 +84,7 @@ const getRecruitments = async () => {
   }
 }
 getRecruitments()
-//选取状态
-const changeUserInfoByState = (value) => {
-  if (value == "Accepted") {
-    status.value = 4
-  } else {
-    status.value = 6
-  }
-  if (value) {
-    getRecruitmentsData.status = value
-  }
-  getRecruitments()
-}
-//选取部门
-const changeUserInfo = (value) => {
-  getRecruitmentsData.department = value
-  getRecruitments(getRecruitmentsData)
-}
+
 //浏览申请表详细信息
 const checkStatus = ref()
 const isShowDetailRecruitmrntInfo = ref(false)
@@ -136,64 +102,13 @@ const itemClick = (id, status) => {
     class: _.user.class,
   }
 }
+
 //搜索干事申请表
 const searchRecruitment = (searchValue) => {
   getRecruitmentsData.content = searchValue
   getRecruitments()
 }
-//最终录取
-const status = ref(4)
-const FinallySetOfficial = (id) => {
-  FinallySendOffer({
-    id: id.value
-  }).then(res => {
-    if (res.code == 0) {
-      status.value = 6
-      ElMessage({
-        type: 'success',
-        message: "已录取！",
-        offset: 200,
-        duration: 1000,
-      })
-      isShowDetailRecruitmrntInfo.value = false
-      getRecruitments()
-    } else {
-      ElMessage({
-        type: 'error',
-        message: "操作失败，请重新操作！",
-        offset: 200,
-        duration: 1000,
-      })
-    }
-  })
-}
-//最终拒绝
-const FinallyRejectOfficial = (id, department) => {
-  SetOfficial({
-    id: id.value,
-    department: department.value,
-    res: false
-  }).then(res => {
-    status.value = 5
-    if (res.code == 0) {
-      ElMessage({
-        type: "success",
-        message: '已拒绝！',
-        offset: 250,
-        duration: 1000,
-      })
-      isShowDetailRecruitmrntInfo.value = false
-      getRecruitments()
-    } else {
-      ElMessage({
-        type: "error",
-        message: '操作失败,请重新操作！',
-        offset: 250,
-        duration: 2000,
-      })
-    }
-  })
-}
+
 //页码显示
 const total = ref()
 const getNewPage = (page) => {
@@ -204,11 +119,13 @@ const pageSizeUpdate = (pageSize) => {
   getRecruitmentsData.pageSize = pageSize
   getRecruitments()
 }
-//导出全部
+//导出
 const deriveExcel = async () => {
+  getRecruitmentsData.pageSize = total.value
+  getRecruitments()
   let workbook = XLSX.utils.table_to_book(document.getElementById('table'));
   try {
-    XLSX.writeFile(workbook, '录取结果.xlsx');
+    XLSX.writeFile(workbook, '最终录取结果.xlsx');
     ElMessage({
       type: 'success',
       message: '导出成功!'

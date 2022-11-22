@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="width:100%;min-width:1400px">
     <el-row style="width:100%;min-width:500px;">
       <el-col :span="1">
         <el-button text type="primary" @click="set">新建</el-button>
@@ -71,9 +71,9 @@
 import { ref } from 'vue'
 import { debounce } from '@/utils'
 import { ElMessage } from 'element-plus'
-import displayQuestion from './displayQuestion.vue'
 import { read, utils } from 'xlsx'
 import { SetNewQuestion } from '@/api/computer_competition'
+import displayQuestion from './displayQuestion.vue'
 
 const emit = defineEmits(['setQuestion', 'search', 'update'])
 

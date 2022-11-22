@@ -1,31 +1,59 @@
 <template>
   <!-- 筛选、搜索 -->
-  <top @changeUserInfo="changeUserInfo" @changeUserInfoByState="changeUserInfoByState"
-    @showAddDialog="showAddOfficial = true" @searchRecruitment="searchRecruitment" @derive="deriveExcel"
-    :showSelectDepartmentView="showSelectDepartmentView" />
+  <top 
+    :total="total" 
+    :showSelectDepartmentView="showSelectDepartmentView" 
+    @changeUserInfo="changeUserInfo" 
+    @changeUserInfoByState="changeUserInfoByState"
+    @showAddDialog="showAddOfficial = true" 
+    @searchRecruitment="searchRecruitment" 
+    @derive="deriveExcel"
+    @pageSizeUpdate="pageSizeUpdate"
+  />
+
   <!-- 展示、列表 -->
-  <recruitmentTable :userInfo="recuitmentsUserInfo" @itemClick="itemClick" id="table" />
+  <recruitmentTable 
+    :userInfo="recuitmentsUserInfo"
+    @itemClick="itemClick" 
+    id="table" 
+  />
+
   <!-- 详细信息 -->
-  <el-drawer v-model="isShowDetailRecruitmrntInfo" size="50%">
-    <review :user="DetailRecruitmrntInfo" class="details" @audit="firstTrial" :status="checkStatus"
-      @change_status="change_status" @setOfficial="setOfficial" @FinallySetOfficial="FinallySetOfficial"
-      @reject_set="reject_set" :current_role_id="current_role_id" :isSelect="isSelectDepartment"
-      :current_role_department="getRecruitmentsData.department" />
-  </el-drawer>
+  <el-dialog v-model="isShowDetailRecruitmrntInfo" size="50%">
+    <review 
+      :user="DetailRecruitmrntInfo" 
+      :current_role_department="getRecruitmentsData.department" 
+      :current_role_id="current_role_id" 
+      :isSelect="isSelectDepartment"
+      @audit="firstTrial" :status="checkStatus"
+      @change_status="change_status" 
+      @setOfficial="setOfficial" 
+      @FinallySetOfficial="FinallySetOfficial"
+      @reject_set="reject_set" 
+      class="details"
+    />
+  </el-dialog>
   <!-- 页码 -->
-  <bottom class="pager" :pageTotal="total" :page="getRecruitmentsData.page" @getNewPage="getNewPage"
-    @pageSizeUpdate="pageSizeUpdate" :pageSize="getRecruitmentsData.pageSize" />
+  <bottom  
+    :page-total="total" 
+    :page="getRecruitmentsData.page"
+    :page-size="getRecruitmentsData.pageSize" 
+    @getNewPage="getNewPage"
+    @pageSizeUpdate="pageSizeUpdate" 
+    class="pager"
+  />
 </template>
 <script setup>
 import { ref, reactive } from 'vue'
+import { GetUserinfo } from '@/api/login'
+import { GetRecruitment, SetOfficial } from '@/api/recruitment'
+import { ElMessage } from 'element-plus'
 import top from './top.vue'
 import recruitmentTable from './recruitmentTable.vue'
 import review from './review.vue'
 import bottom from '../bottom.vue'
-import { GetUserinfo } from '@/api/login'
-import { GetRecruitment, SetOfficial } from '@/api/recruitment'
-import { ElMessage } from 'element-plus'
 import * as XLSX from 'xlsx'
+
 //初始值
 const showSelectDepartmentView = ref(false)
 const current_role_id = ref()
@@ -54,6 +82,7 @@ const getUserInfo = async () => {
   })
 }
 getUserInfo()
+
 //获取提交的干事申请表
 const recuitmentsUserInfo = ref([])
 const getRecruitmentsData = reactive({
@@ -63,26 +92,23 @@ const getRecruitmentsData = reactive({
   status: "firstTrialed",
   content: ''
 })
-//获取干事申请表
-const getRecruitments = (data) => {
-  return new Promise((resolved, rejected) => {
-    GetRecruitment(data).then(res => {
-      total.value = res.total
-      recuitmentsUserInfo.value = res.list
-      if (recuitmentsUserInfo.length === 0) {
-        ElMessage({
-          message: '没有相关用户！',
-          type: 'warning',
-          offset: 250,
-          duration: 1000
-        })
-      }
-      resolved()
-    })
-  })
 
+//获取干事申请表
+const getRecruitments = async () => {
+  const res = await GetRecruitment(getRecruitmentsData)
+  total.value = res.total
+  recuitmentsUserInfo.value = res.list
+  if(res.code!=0 ||res.list.length() == 0) {
+    ElMessage({
+      message: '没有相关用户！',
+      type: 'warning',
+      offset: 250,
+      duration: 1000
+    })
+  }
 }
-getRecruitments(getRecruitmentsData)
+getRecruitments()
+
 //选取状态
 const changeUserInfoByState = (value) => {
   if (value == "firstTrialed") {
@@ -93,13 +119,15 @@ const changeUserInfoByState = (value) => {
   if (value) {
     getRecruitmentsData.status = value
   }
-  getRecruitments(getRecruitmentsData)
+  getRecruitments()
 }
+
 //选取部门
 const changeUserInfo = (value) => {
   getRecruitmentsData.department = value
-  getRecruitments(getRecruitmentsData)
+  getRecruitments()
 }
+
 //浏览申请表详细信息
 const checkStatus = ref()
 const isShowDetailRecruitmrntInfo = ref(false)
@@ -117,6 +145,7 @@ const itemClick = (id, status) => {
     class: _.user.class,
   }
 }
+
 // 预录取是否选部门
 const isSelectDepartment = ref(false)
 //预录取
@@ -135,7 +164,7 @@ const setOfficial = (accept_department, accept_id, res) => {
         offset: 250,
       })
       isShowDetailRecruitmrntInfo.value = false
-      getRecruitments(getRecruitmentsData)
+      getRecruitments()
     } else {
       ElMessage({
         type: "error",
@@ -145,51 +174,30 @@ const setOfficial = (accept_department, accept_id, res) => {
     }
   })
 }
+
 //拒绝
 const reject_set = () => {
   status.value = 5
 }
+
 //搜索干事申请表
 const searchRecruitment = (searchValue) => {
   getRecruitmentsData.content = searchValue
-  getRecruitments({ ...getRecruitmentsData })
+  getRecruitments()
 }
 
 //页码显示
 const total = ref()
 const getNewPage = (page) => {
   getRecruitmentsData.page = page
-  getRecruitments(getRecruitmentsData)
+  getRecruitments()
 }
 const pageSizeUpdate = (pageSize) => {
   getRecruitmentsData.pageSize = pageSize
-  getRecruitments(getRecruitmentsData)
+  getRecruitments()
 }
 //导出
 const deriveExcel = async () => {
-  // const { list } = await GetRecruitment({
-  //   page: 1,
-  //   pageSize: total.value,
-  //   status: "firstTrialed",
-  // });
-  // const data = [
-  //   ['id', '第一志愿', '第二志愿', '姓名', '学院', '专业'],
-  // ]
-  // list.forEach((v) => {
-  //   const { id, firstChoice, secondChoice, user } = v;
-  //   const { username, college, major } = user
-  //   const _ = [id, firstChoice, secondChoice, username, college, major]
-  //   data.push(_)
-  // })
-  // const _1 = XLSX.utils.aoa_to_sheet(data)
-  //
-  // const res = XLSX.utils.sheet_to_csv(_1)
-  // XLSX.writeFile(_1, "Report.xlsb")
-  // const _1 = XLSX.utils.json_to_sheet(data)
-  // const _2 = XLSX.utils.sheet_to_csv(_1)
-  // XLSX.writeFile(_2, "Report.xlsb");
-  getRecruitmentsData.pageSize = total.value
-  getRecruitments(getRecruitmentsData)
   let workbook = XLSX.utils.table_to_book(document.getElementById('table'));
   try {
     XLSX.writeFile(workbook, '初筛结果.xlsx');

@@ -12,6 +12,9 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src'),
     },
   },
+  server: {
+    hmr: true
+  },
   css: {
     preprocessorOptions: {
       scss: {

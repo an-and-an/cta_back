@@ -2,14 +2,10 @@ import request from '@/utils/request'
 import { ElMessage } from 'element-plus'
 // 登录接口
 export const Login = data => {
-  // data.type = Boolean(data.type === true)
   return request({
     url: '/admin/login',
     method: 'post',
     data,
-    // headers: {
-    //   'Content-Type': 'application/json'
-    // }
   })
 }
 
@@ -45,12 +41,10 @@ export const CreateAdmin = data => {
 }
 //获取所有管理员
 export const GetAllAdmin = (data) => {
-  // if (!data.username) delete data.username
   return request({
     url: '/admin/getAllAdmin',
     method: 'get',
     params: data,
-    // data: data,
   })
 }
 //修改管理员密码
@@ -70,7 +64,6 @@ export const DeleteAdmin = (adminid) => {
 }
 //更新个人信息
 export const UpdateSelfInfo = (data) => {
-  // console.log("data:-------------", data);
   return request({
     url: '/admin/updateSelfInfo',
     method: 'put',

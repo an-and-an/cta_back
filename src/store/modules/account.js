@@ -20,11 +20,16 @@ export default {
   actions: {
     // 获取用户信息
     async getUserinfo({ commit }) {
-      const { code, data } = await GetUserinfo()
-      if (+code === 0) {
-        commit('setUserinfo', data)
-        return Promise.resolve(data)
+      try {
+        const { code, data } = await GetUserinfo()
+        if (+code === 0) {
+          commit('setUserinfo', data)
+          return Promise.resolve(data)
+        }
+      } catch (err) {
+        throw new Error(err.message)
       }
+
     },
   },
 }

@@ -25,8 +25,8 @@
       <h2 class="title">您访问的页面不存在</h2>
     </template>
 
-    <router-link to="/">
-      <el-button type="primary">返回首页</el-button>
+    <router-link to="/personalcenter">
+      <el-button type="primary">返回</el-button>
     </router-link>
   </div>
 </template>

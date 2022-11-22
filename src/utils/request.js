@@ -1,23 +1,4 @@
 /*
- *                        .::::.
- *                      .::::::::.
- *                     :::::::::::
- *                  ..:::::::::::'
- *               '::::::::::::'
- *                 .::::::::::
- *            '::::::::::::::..
- *                 ..::::::::::::.
- *               ``::::::::::::::::
- *                ::::``:::::::::'        .:::.
- *               ::::'   ':::::'       .::::::::.
- *             .::::'      ::::     .:::::::'::::.
- *            .:::'       :::::  .:::::::::' ':::::.
- *           .::'        :::::.:::::::::'      ':::::.
- *          .::'         ::::::::::::::'         ``::::.
- *      ...:::           ::::::::::::'              ``::.
- *     ````':.          ':::::::::'                  ::::..
- *                        '.:::::'                    ':'````..
- *
  * @Descripttion:
  * @version:
  * @Date: 2021-04-20 11:06:21
@@ -37,24 +18,17 @@ import router from '@/router'
 const service = axios.create({
   baseURL: 'http://yumingxi.xyz:3100/api',
   timeout: 10000,
-  // withCredentials: true,
 })
 // 拦截请求
 service.interceptors.request.use(
   config => {
     const { authorization } = store.state.app
-    /**
-     * const authorization = store.state.app.authorization
-     * cosnt { authorization } = store.state.app
-     */
-    // console.log(authorization)
     if (authorization) {
       config.headers.Authorization = `Bearer ${authorization}`
     }
     return config
   },
   error => {
-    // console.log(error);
     return Promise.reject(error)
   }
 )

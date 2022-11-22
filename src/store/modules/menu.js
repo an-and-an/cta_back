@@ -94,18 +94,20 @@ export default {
 
       // 方式二：有动态菜单
       // 从后台获取菜单
-      const { code, data } = await GetMenus()
+      try {
+        const { code, data } = await GetMenus()
+        if (+code === 0) {
+          // 过滤出需要添加的动态路由
+          const filterRoutes = getFilterRoutes(asyncRoutes, data)
 
-      if (+code === 0) {
-        // 过滤出需要添加的动态路由
-        const filterRoutes = getFilterRoutes(asyncRoutes, data)
+          filterRoutes.forEach(route => router.addRoute(route))
+          // 生成菜单
+          const menus = getFilterMenus([...fixedRoutes, ...filterRoutes])
 
-        filterRoutes.forEach(route => router.addRoute(route))
-
-        // 生成菜单
-        const menus = getFilterMenus([...fixedRoutes, ...filterRoutes])
-
-        commit('SET_MENUS', menus)
+          commit('SET_MENUS', menus)
+        }
+      } catch (error) {
+        throw new Error(error.message)
       }
     },
   },

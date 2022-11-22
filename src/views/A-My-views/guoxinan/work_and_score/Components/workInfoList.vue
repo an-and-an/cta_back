@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="basic_box" id="basic_box">
     <el-table :data="list" style="width: 100%" :span-method="spanMethod" max-height="65vh">
       <el-table-column label="序号" width="70" align="center" >
         <template #default="scope">
@@ -62,9 +62,14 @@ function dialogClick(scope) {
   padding: 0;
 }
 
+#basic_box{
+  width: 100%;
+  min-width: 600px;
+}
 .team_member_info div {
   width: 100%;
   height: 30px;
+ 
 }
 
 .team_member_info .team_leader {

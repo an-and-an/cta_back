@@ -15,7 +15,6 @@
       </el-select>
     </div>
     <!-- 搜索 -->
-    <!-- 查询干事申请表 -->
     <div class="searchInputBox" id="searchInputBox">
       <el-input v-model="recruitmentSearch" @input="getRecruitmentSearch" :clearable="true" resize="both"
         placeholder="请输入干事名">
@@ -28,7 +27,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref } from 'vue'
 import { GetAllDepartment } from '@/api/recruitment'
 import { debounce } from '@/utils'
 const props = defineProps(['showSelectDepartmentView','total'])
@@ -58,11 +57,11 @@ getGepartments()
 const recruitmentSearch = ref()
 const getRecruitmentSearch = debounce(() => {
   emit('searchRecruitment', recruitmentSearch.value)
-}, 1000)
+}, 500)
 //导出全部
-const derive = () =>  {
+function derive() {
   emit('pageSizeUpdate', props.total)
-  setTimeout(function(){  emit('derive')},1000);
+  setTimeout(function(){ emit('derive')},1000)
 }
 </script >
 

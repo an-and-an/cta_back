@@ -8,7 +8,7 @@ import lock from './modules/lock'
 // 固定菜单
 export const fixedRoutes = [...personalcenter]
 // 动态菜单
-import users from './modules/users';
+import users from './modules/users'
 import admins from './modules/admins'
 import news from './modules/news'
 import materials from './modules/materials'
@@ -21,13 +21,13 @@ import competition_credit from './modules/competition_credit'
 export const asyncRoutes = [
   ...users,
   ...admins,
-  ...news,
-  ...materials,
-  ...guoxinan,
   ...recruitment,
-  ...active,
+  ...news, 
   ...banner,
+  ...active,
+  ...guoxinan,
   ...competition_credit,
+  ...materials,
 ]
 const res = (function print(routers) {
   const res = []

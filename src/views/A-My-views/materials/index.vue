@@ -78,7 +78,11 @@ const pageSizeUpdate = (pageSize) => {
 </script>
 <template>
     <div class="basic_box">
-        <setQuestion @setQuestion="setNewQuetion" @search="search" @update="getList" />
+        <setQuestion 
+            @setQuestion="setNewQuetion" 
+            @search="search" 
+            @update="getList" 
+        />
         <displayQuestion :questionList="questionList" :showOp="true" @update="getList" />
         <bottom 
         :pageTotal="total" 

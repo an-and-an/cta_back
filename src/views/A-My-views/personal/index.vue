@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from 'vue'
 import { GetUserinfo, UpdateSelfInfo } from '@/api/login'
-import { ElMessage } from 'element-plus'
 import { encryptByMd5 } from '@/utils/encrypt'
+import { apiOver } from '@/utils/api'
 import Img from '@/assets/img/personalCenter_user.png'
 const currentUser = ref({
   "id": "",
@@ -12,43 +12,50 @@ const currentUser = ref({
   "phone": "",
   "roles": "",
 })
-GetUserinfo().then(res => {
-  currentUser.value = res.data
-  // console.log(" currentUser.value --", currentUser.value)
+const getUserInfo = () => {
+  GetUserinfo().then(res => {
+    currentUser.value = res.data
 })
-//更新信息
-const updateInfo = () => {
-  UpdateSelfInfo({
-    password: encryptByMd5(newPassword.value),
-    avatarUrl: currentUser.value.avatarUrl,
-    email: currentUser.value.email,
-    phone: currentUser.value.phone,
-  }).then(res => {
-    //修改成功
-    if (res.code == 0)
-      ElMessage({
-        type: "success",
-        message: res.message,
-        offset: 250,
-        duration: 2000,
-      })
-    //修改失败
-    else
-      ElMessage({
-        type: "error",
-        message: res.message,
-        offset: 250,
-        duration: 2000,
-      })
-  })
 }
+getUserInfo()
+//更新信息
+// const updateInfo = () => {
+//   UpdateSelfInfo({
+//     password: encryptByMd5(newPassword.value),
+//     avatarUrl: currentUser.value.avatarUrl,
+//     email: currentUser.value.email,
+//     phone: currentUser.value.phone,
+//   }).then(res => {
+//     //修改成功
+//     if (res.code == 0)
+//       ElMessage({
+//         type: "success",
+//         message: res.message,
+//         offset: 250,
+//         duration: 2000,
+//       })
+//     //修改失败
+//     else
+//       ElMessage({
+//         type: "error",
+//         message: res.message,
+//         offset: 250,
+//         duration: 2000,
+//       })
+//   })
+// }
 //修改头像
 const avatarUrl = ref("")
 const isShowChangeAvatar = ref(false)
 const successfullyUploadAvater = (res) => {
   avatarUrl.value = res.data[0].Host + "/" + res.data[0].RelativePath
   currentUser.value.avatarUrl = avatarUrl.value
-  updateInfo()
+  UpdateSelfInfo({ avatarUrl: currentUser.value.avatarUrl }).then(res => {
+    apiOver(() => { getUserInfo }, res.code, res.message, {
+      duration: 1000,
+      offset: 250,
+    })
+  })
 }
 //修改电话
 const newPhone = ref()
@@ -59,7 +66,12 @@ const modifyBondPhone = () => {
 const modifyBondPhone_confirm = () => {
   currentUser.value.phone = newPhone
   showModifyBondPhone.value = false
-  updateInfo()
+  UpdateSelfInfo({ phone: currentUser.value.phone }).then(res => {
+    apiOver(() => { getUserInfo }, res.code, res.message, {
+      duration: 1000,
+      offset: 250,
+    })
+  })
 }
 // 修改邮箱
 const newEmail = ref()
@@ -70,7 +82,12 @@ const modifyBondEmail = () => {
 const modifyBondEmail_confirm = () => {
   currentUser.value.email = newEmail
   showModifyBondEmail.value = false
-  updateInfo()
+  UpdateSelfInfo({ email: currentUser.value.email }).then(res => {
+    apiOver(() => { getUserInfo }, res.code, res.message, {
+      duration: 1000,
+      offset: 250,
+    })
+  })
 }
 //修改密码
 const newPassword = ref()
@@ -80,8 +97,16 @@ const modifyBondPassword = () => {
 }
 const modifyBondPassword_confirm = () => {
   showModifyBondPassword.value = false
-  updateInfo()
+  UpdateSelfInfo({ password: encryptByMd5(newPassword.value) }).then(res => {
+    apiOver(() => { getUserInfo }, res.code, res.message, {
+      duration: 1000,
+      offset: 250,
+    })
+  })
 }
+//
+const iconSize = 25
+const iconColor=' rgb(153, 154, 170)'
 </script>
 <template>
   <div>
@@ -101,29 +126,36 @@ const modifyBondPassword_confirm = () => {
             </el-upload>
           </div>
         </div>
-        <!-- 修改头像 -->
         <span id="personal_center_avater_username">{{ currentUser.type ? currentUser.username :
             currentUser.nickName
         }}</span>
         <div id="personal_center_avater_bababa">这个家伙很懒，什么都没有留下</div>
       </div>
-      <!-- -- -->
       <div id="personal_center_aside_text">
         <!-- 用户 -->
         <div id="personal_center_aside_userroles">
-          <div id="personal_center_icon_user"><img style="width: 25px;" :src="Img" alt="用户">
+          <div id="personal_center_icon_user">
+            <el-icon :size="iconSize" :color="iconColor">
+              <User />
+            </el-icon>
           </div>
           <div id="personal_center_icon_roles">{{ currentUser.roles.roleDescription }}</div>
         </div>
         <!-- 协会 -->
         <div id="personal_center_aside_userroles">
-          <div id="personal_center_icon_user"><img style="width: 25px;" :src="Img" alt="协会">
+          <div id="personal_center_icon_user">
+            <el-icon :size="iconSize" :color="iconColor">
+              <DeleteLocation />
+            </el-icon>
           </div>
           <div id="personal_center_icon_roles">计算机技术协会</div>
         </div>
         <!-- 地址 -->
         <div id="personal_center_aside_userroles">
-          <div id="personal_center_icon_user"><img style="width: 25px;" :src="Img" alt="协会">
+          <div id="personal_center_icon_user">
+            <el-icon :size="iconSize" :color="iconColor">
+              <School />
+            </el-icon>
           </div>
           <div id="personal_center_icon_roles">四川轻化工大学</div>
         </div>
@@ -198,7 +230,7 @@ const modifyBondPassword_confirm = () => {
     </div>
   </div>
 </template>
-<style>
+<style scoped>
 * {
   margin: 0;
   padding: 0;
@@ -247,7 +279,6 @@ const modifyBondPassword_confirm = () => {
   top: 0;
   width: 100%;
   height: 100%;
-  border: 2px solid green;
   border-radius: 20px;
   background-color: rgba(0, 0, 0, 0.7);
   display: flex;
@@ -296,6 +327,7 @@ const modifyBondPassword_confirm = () => {
 #personal_center_icon_roles {
   float: left;
   font-size: 18px;
+  line-height:50px;
   color: rgb(153, 154, 170);
 }
 

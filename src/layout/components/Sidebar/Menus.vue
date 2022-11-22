@@ -17,9 +17,9 @@
 </template>
 <script>
 import { computed, defineComponent } from 'vue'
-import Submenu from './Submenu.vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
+import Submenu from './Submenu.vue'
 import config from './config/menu.module.scss'
 
 export default defineComponent({

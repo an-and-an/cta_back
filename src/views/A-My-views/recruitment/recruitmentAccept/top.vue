@@ -2,8 +2,8 @@
 import { ref } from 'vue';
 import { GetAllDepartment } from '@/api/recruitment'
 import { debounce } from '@/utils'
-const props = defineProps(['showSelectDepartmentView'])
-const emit = defineEmits(['searchRecruitment', 'changeUserInfoByState', 'changeUserInfo', 'derive'])
+const props = defineProps(['showSelectDepartmentView','total'])
+const emit = defineEmits(['searchRecruitment', 'changeUserInfoByState', 'changeUserInfo','pageSizeUpdate', 'derive'])
 //获取所有部门
 const allDepartment = ref([])
 const getGepartments = (() => {
@@ -27,10 +27,11 @@ getGepartments()
 const recruitmentSearch = ref()
 const getRecruitmentSearch = debounce(() => {
   emit('searchRecruitment', recruitmentSearch.value)
-}, 1000)
-//导出
-const derive = () => {
-  emit('derive')
+}, 500)
+//导出全部
+function derive() {
+  emit('pageSizeUpdate', props.total)
+  setTimeout(function(){ emit('derive')},1000)
 }
 </script >
 <template>
@@ -50,11 +51,13 @@ const derive = () => {
       </el-select>
     </div>
     <!-- 搜索 -->
-    <!-- 查询干事申请表 -->
     <div class="searchInputBox" id="searchInputBox">
-      <el-input v-model="recruitmentSearch" @input="getRecruitmentSearch" :clearable="true" resize="both"
-        suffix-icon="Search" placeholder="请输入干事名">
-      </el-input>
+      <el-input 
+      v-model="recruitmentSearch" 
+      @input="getRecruitmentSearch" 
+      resize="both"
+      :clearable="true"
+      suffix-icon="Search" placeholder="请输入干事名" />
     </div>
     <div>
       <el-button type="primary" @click="derive">导出全部</el-button>

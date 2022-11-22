@@ -127,10 +127,10 @@ const finally_reject_official = (user_id, user_department) => {
             </table>
         </el-card>
         <div class="bottom_button" id="bottom_button">
-            <el-button v-if="status == 4 && current_role_id == 21" type="primary"
+            <el-button v-if="status == 4 &&( current_role_id == 21 ||  current_role_id == 28)" type="primary"
                 @click="finally_set_official(user.id, user.finallyDepartment)">录取
             </el-button>
-            <el-button v-if="status == 4 && current_role_id == 21 && current_role_id == 9" type="primary"
+            <el-button v-if="status == 4 && (current_role_id == 21 || current_role_id == 27 || current_role_id == 28)" type="primary"
                 @click="finally_reject_official(user.id)">
                 拒绝
             </el-button>

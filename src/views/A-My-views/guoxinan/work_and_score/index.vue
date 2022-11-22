@@ -1,13 +1,25 @@
 <template>
-  <div>
-    <searchBox  :total="total" @search="getSearch" @exportTable="deriveExcel" @pageSizeUpdate="pageSizeUpdate" />
-    <workInfoList :list="teams" id="table" />
-    <!-- <bottom class="pager" :pageTotal="total" :page="getTeamInfo.page" @getNewPage="getNewPage"
-      @pageSizeUpdate="pageSizeUpdate" /> -->
-    <bottom class="pager" :page-total="total" :page="getTeamInfo.page" @getNewPage="getNewPage"
-    @pageSizeUpdate="pageSizeUpdate" :page-size="getTeamInfo.pageSize" />
+  <div style="width:100%;height:auto;min-width:700px;">
+    <searchBox  
+    :total="total" 
+    @search="getSearch" 
+    @exportTable="deriveExcel" 
+    @pageSizeUpdate="pageSizeUpdate" />
+
+    <workInfoList 
+    :list="teams" 
+    id="table" />
+
+    <bottom
+    :page-total="total" 
+    :page="getTeamInfo.page" 
+    :page-size="getTeamInfo.pageSize"
+    @getNewPage="getNewPage"
+    @pageSizeUpdate="pageSizeUpdate" 
+    class="pager" />
   </div>
 </template>
+
 <script setup>
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
@@ -15,14 +27,16 @@ import { GetAllWorkAndScore, GetAllTeam } from '@/api/guoxinan'
 import * as XLSX from 'xlsx'
 import searchBox from './Components/searchBox.vue'
 import workInfoList from './Components/workInfoList.vue'
-import bottom from '@/views/A-My-Views/recruitment/bottom.vue'
+import bottom from '@/views/A-My-views/recruitment/bottom.vue'
 
 //获取已经打分的作品信息及其分数
-const workScoreList = ref([])
-function getAllWorkAndScore() {
-  GetAllWorkAndScore().then(res => {
-  })
-}
+// const workScoreList = ref([])
+// function getAllWorkAndScore() {
+//   GetAllWorkAndScore().then(res => {
+//   })
+// }
+
+
 const teams = ref([])
 const getTeamInfo = ref({
   page: 1,
@@ -77,7 +91,7 @@ const getNewPage = (page) => {
   getTeamInfo.value.page = page
   getAllTeam()
 }
-const pageSizeUpdate =(pageSize) => {
+const pageSizeUpdate = (pageSize) => {
   getTeamInfo.value.pageSize = pageSize
   getAllTeam()
 }

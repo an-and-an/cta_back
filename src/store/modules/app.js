@@ -75,7 +75,6 @@ export default {
           console.log(err)
         }
         commit('setToken', authorization)
-
         return
       }
 

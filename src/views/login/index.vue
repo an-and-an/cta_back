@@ -35,7 +35,6 @@ import { Login } from '@/api/login'
 import { useStore } from 'vuex'
 import { encryptByMd5 } from '@/utils/encrypt.js'
 import { useRouter, useRoute } from 'vue-router'
-// import { title } from 'process'
 export default defineComponent({
   name: 'login',
   setup() {
@@ -54,18 +53,14 @@ export default defineComponent({
       },
       title: '社团成员',
       rules: {
-        username: [
+        username:
+        [
           { required: true, message: '请输入用户名', trigger: 'blur' },
         ],
-        password: [
+        password:
+        [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          // {
-          //   min: 6,
-          //   max: 12,
-          //   message: '长度在 6 到 12 个字符',
-          //   trigger: 'blur',
-          // },
-        ],
+        ]
       },
       loading: false,
       btnText: computed(() => (state.loading ? '登录中...' : '登录')),
