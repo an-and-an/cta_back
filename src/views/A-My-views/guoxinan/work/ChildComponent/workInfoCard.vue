@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps(['work'])
+const props = defineProps(['work','isGet'])
 const emit = defineEmits(['audit'])
 const trial = (res) => {
   emit('audit', props.work.id, res)
@@ -22,10 +22,10 @@ const trial = (res) => {
             {{work.websiteIntroduction}}
           </div>
           <span style="margin-right:20px">
-            <el-link href="work.websiteUrl" target="_blank">查看网页</el-link>
+            <el-link :href="work.websiteUrl" target="_blank">查看网页</el-link>
           </span>
-          <span>
-            <el-link href="work.githubUrl" target="_blank">源代码</el-link>
+          <span v-if="isGet">
+            <el-link :href="work.githubUrl"  target="_blank">源代码</el-link>
           </span>
           <div class="bottom">
             <el-button text type="primary" @click="trial(true)">通过</el-button>

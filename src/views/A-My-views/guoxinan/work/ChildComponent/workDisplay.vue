@@ -1,58 +1,73 @@
 <template>
   <div>
     <h5>国信安作品审核</h5>
-    <el-tabs tab-position="right" class="demo-tabs">
-      <el-tab-pane label="静态">
-        <div class="given_box">
-          <div v-for="item in staticWorkList" class="card_container">
-            <workInfoCard :work="item" @audit="getFirstTrial" />
-          </div>
-        </div>
+    <el-tabs tab-position="right" class="demo-tabs" >
+
+      <el-tab-pane label="静态" >
+        <el-row :gutter="15" justify="start" >
+          <el-col  :span="12"  v-for="item in staticWorkList" class="card_container">
+            <workInfoCard :work="item" :isGet="false" @audit="getFirstTrial" />
+          </el-col>
+        </el-row>
       </el-tab-pane>
+
       <el-tab-pane label="动态" class="work_box">
-        <div class="given_box">
-          <div v-for="item in dynamicWorkList" class="card_container">
-            <workInfoCard :work="item" @audit="getFirstTrial" />
-          </div>
-        </div>
+        <el-row :gutter="30" justify="start" >
+          <el-col  :span="12"  v-for="item in dynamicWorkList" class="card_container">
+            <workInfoCard :work="item" :isGet="true" @audit="getFirstTrial" />
+          </el-col>
+        </el-row>
       </el-tab-pane>
+
       <el-tab-pane label="已拒绝">
-        <div class="given_box">
-          <div v-for="item in rejectedWorkList" class="card_container">
-            <workInfoCard :work="item" @audit="getFirstTrial" />
-          </div>
-        </div>
+        <el-row :gutter="30" justify="start" >
+          <el-col  :span="12"  v-for="item in rejectedWorkList" class="card_container">
+            <workInfoCard :work="item" :isGet="true" @audit="getFirstTrial" />
+          </el-col>
+        </el-row>
       </el-tab-pane>
+
     </el-tabs>
   </div>
 </template>
+
+
 <script setup>
 import workInfoCard from './workInfoCard.vue'
-import { GetUnapprovedWork, FirstTrialGxaWork } from '@/api/guoxinan'
 import { ref } from 'vue'
+import { GetUnapprovedWork, FirstTrialGxaWork } from '@/api/guoxinan'
+
+
 //国信安作品初审
 const getFirstTrial = (id, ans) => {
   FirstTrialGxaWork({
     id: id,
     status: ans,
   }).then(res => {
-    console.log(res.message);
     getUnapprovedWork()
   })
 }
+
+
 //获取所有未审核或拒绝的作品
 const staticWorkList = ref([])
 const dynamicWorkList = ref([])
 const rejectedWorkList = ref([])
+
 const getUnapprovedWork = () => {
   GetUnapprovedWork().then(res => {
+    console.log("the res is:",res);
     dynamicWorkList.value = res.data.dynamic
     staticWorkList.value = res.data.static
     rejectedWorkList.value = res.data.rejected
+    console.log(dynamicWorkList.value);
   })
 }
 getUnapprovedWork()
+
 </script>
+
+
 <style scoped>
 .demo-tabs>.el-tabs__content {
   padding: 32px;
@@ -66,13 +81,11 @@ getUnapprovedWork()
   height: 100%;
 }
 
-.given_box {
-  display: flex;
-  justify-content: center;
-}
 
 .card_container {
   width: 520px;
-  display: flex;
+  margin-bottom: 20px;
+  /* margin: 10px; */
 }
+
 </style>
