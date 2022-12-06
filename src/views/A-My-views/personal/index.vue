@@ -44,6 +44,18 @@ getUserInfo()
 //       })
 //   })
 // }
+
+//修改昵称
+// {
+//   "nickName": "ymx",
+//   "password": "123",
+//   "avatarUrl": "string",
+//   "email": "string",
+//   "phone": "string"
+// }
+
+
+
 //修改头像
 const avatarUrl = ref("")
 const isShowChangeAvatar = ref(false)

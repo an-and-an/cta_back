@@ -255,7 +255,6 @@ export function getTime(type) {
  * @return {*}
  */
 // //防抖
-
 export function debounce(fn, wait) {
   let timer
   return function (...args) {

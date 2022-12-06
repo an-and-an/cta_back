@@ -99,25 +99,48 @@ const itemClick = (id, idx, score) => {
         <el-collapse-item v-for="project in props.infoList" :key="project.id" :title="project.workName
         ">
           <el-descriptions title="项目信息" direction:vertical :column="4">
-            <el-descriptions-item label="名称" span="1">
-              <div>{{project.workName}}</div>
+            <el-descriptions-item>
+              <el-descriptions title="作品名称" style="width:300px;min-width:200px" >
+                <el-descriptions-item >
+                  <div  style="font-size:20px;">{{project.workName}}</div>
+                </el-descriptions-item>
+              </el-descriptions>
             </el-descriptions-item>
-            <el-descriptions-item label="部署网站" span="1">
-              <div><a :href="project.websiteUrl" target="_blank"><button>访问</button></a></div>
+
+            <el-descriptions-item>
+              <el-descriptions title="部署网站" style="width:300px;min-width:100px">
+                <el-descriptions-item >
+                  <div><a :href="project.websiteUrl" target="_blank"><button>访问</button></a></div>
+                </el-descriptions-item>
+              </el-descriptions>
             </el-descriptions-item>
-            <el-descriptions-item label="源代码" span="1">
-              <div><a :href="project.githubUrl" target="_blank"><button>查看</button></a></div>
+
+            <el-descriptions-item>
+              <el-descriptions title="源代码" style="width:300px;min-width:100px">
+                <el-descriptions-item >
+                  <div><a :href="project.githubUrl" target="_blank"><button>查看</button></a></div>
+                </el-descriptions-item>
+              </el-descriptions>
             </el-descriptions-item>
-            <el-descriptions-item label="类型">
-              <div>{{ props.type ? '静态' : '动态'}}</div>
+
+            <el-descriptions-item>
+              <el-descriptions title="类型" style="width:300px;min-width:100px">
+                <el-descriptions-item >
+                  <div>{{ props.type ? '静态' : '动态'}}</div>
+                </el-descriptions-item>
+              </el-descriptions>
             </el-descriptions-item>
-            <el-descriptions-item label="作品描述" span="1">
-              <div>{{ project.websiteIntroduction }}</div>
+
+            <el-descriptions-item>
+              <el-descriptions title="类作品描述型" >
+                <el-descriptions-item >
+                  <div>{{ project.websiteIntroduction }}</div>
+                </el-descriptions-item>
+              </el-descriptions>
             </el-descriptions-item>
           </el-descriptions>
           <br>
-          <!-- </el-card> -->
-          <!-- <el-card id="static_project_mark_detail"> -->
+
           <el-descriptions title="您的评分" direction:vertical :column="1">
             <el-descriptions-item v-for="rule in ratingRules" :key="rule.column" span="1">
               <template #label>
@@ -133,7 +156,6 @@ const itemClick = (id, idx, score) => {
               </el-row>
             </el-descriptions-item>
           </el-descriptions>
-          <!-- </el-card> -->
         </el-collapse-item>
       </el-collapse>
     </el-card>
@@ -142,6 +164,7 @@ const itemClick = (id, idx, score) => {
 </template>
 <style scoped>
 .box>>>.el-card__body {
-  padding: 0 10px !important;
+  padding: 0 35px !important;
 }
+
 </style>

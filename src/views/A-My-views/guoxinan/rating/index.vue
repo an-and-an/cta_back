@@ -17,7 +17,7 @@ const getAllProject = (() => {
     )
   })
 })
-// getAllProject()
+getAllProject()
 </script>
 <template>
   <div>

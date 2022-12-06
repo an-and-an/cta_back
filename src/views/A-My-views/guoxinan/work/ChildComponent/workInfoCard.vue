@@ -9,7 +9,9 @@ const trial = (res) => {
   <div>
     <div class="work_info_card_box">
       <el-card :body-style="{ padding: '5px' }">
-        <img :src="work.showImg" class="image" />
+        <div class="image_box">
+          <img :src="work.showImg" class="image" />
+        </div>
         <div style="padding: 14px">
           <span>{{work.gxaApplicationForm
           .teamName}}</span>
@@ -17,9 +19,9 @@ const trial = (res) => {
           <span>{{work.gxaApplicationForm
           .workName}}</span>
           <br />
-          <div
-            style="overflow: hidden;text-overflow:ellipsis; white-space: nowrap; width:100%;height: 30px;font-size: 18px;">
-            {{work.websiteIntroduction}}
+          <!--  -->
+          <div style="  overflow: hidden;text-overflow:ellipsis; white-space: nowrap;width:100%;height: auto;font-size: 18px;">
+            <span :title="work.websiteIntroduction" >{{work.websiteIntroduction}}</span>
           </div>
           <span style="margin-right:20px">
             <el-link :href="work.websiteUrl" target="_blank">查看网页</el-link>
@@ -39,11 +41,17 @@ const trial = (res) => {
 <style scoped>
 .work_info_card_box {
   width: 500px;
+  height: auto;
 }
 
-.image {
+.image_box{
   width: 490px;
-  height: 275px;
+  height: 490px;
+}
+.image_box .image {
+  background-size:contain; 
+  width: 490px;
+  object-fit: cover;
 
 }
 </style>
