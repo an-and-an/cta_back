@@ -1,26 +1,28 @@
 <template>
-  <div>
-    <h5>国信安作品审核</h5>
-    <el-tabs tab-position="right" class="demo-tabs" >
+  <div style="width:100%;padding: 0 3%">
+    <h5 >国信安作品审核</h5>
+    <el-tabs tab-position="top" class="demo-tabs" >
 
-      <el-tab-pane label="静态" >
-        <el-row :gutter="15" justify="start" >
+      <el-tab-pane label="静态" class="work_box" style="padding:0">
+        <el-row :gutter="12" justify="start" >
           <el-col  :span="12"  v-for="item in staticWorkList" class="card_container">
-            <workInfoCard :work="item" :isGet="false" @audit="getFirstTrial" />
+            <div style="float:left;">
+              <workInfoCard :work="item" :isGet="false" @audit="getFirstTrial"  />
+            </div>
           </el-col>
         </el-row>
       </el-tab-pane>
 
       <el-tab-pane label="动态" class="work_box">
-        <el-row :gutter="30" justify="start" >
+        <el-row :gutter="12" justify="start" >
           <el-col  :span="12"  v-for="item in dynamicWorkList" class="card_container">
             <workInfoCard :work="item" :isGet="true" @audit="getFirstTrial" />
           </el-col>
         </el-row>
       </el-tab-pane>
 
-      <el-tab-pane label="已拒绝">
-        <el-row :gutter="30" justify="start" >
+      <el-tab-pane label="已拒绝" class="work_box">
+        <el-row :gutter="12" justify="start" >
           <el-col  :span="12"  v-for="item in rejectedWorkList" class="card_container">
             <workInfoCard :work="item" :isGet="true" @audit="getFirstTrial" />
           </el-col>
@@ -56,11 +58,12 @@ const rejectedWorkList = ref([])
 
 const getUnapprovedWork = () => {
   GetUnapprovedWork().then(res => {
-    console.log("the res is:",res);
+    
     dynamicWorkList.value = res.data.dynamic
     staticWorkList.value = res.data.static
+    // console.log("the staticWorkList is:",dynamicWorkList.value);
     rejectedWorkList.value = res.data.rejected
-    console.log(dynamicWorkList.value);
+    // console.log(dynamicWorkList.value);
   })
 }
 getUnapprovedWork()
@@ -85,6 +88,8 @@ getUnapprovedWork()
 .card_container {
   width: 520px;
   margin-bottom: 20px;
+  /* position:sticky;
+  top: 10px; */
   /* margin: 10px; */
 }
 

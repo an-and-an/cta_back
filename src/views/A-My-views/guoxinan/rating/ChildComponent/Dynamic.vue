@@ -96,8 +96,8 @@ const itemClick = (id, idx, score) => {
   <div class="box">
     <el-card>
       <el-collapse v-model="showDynanmicGroupMark">
-        <el-collapse-item v-for="project in props.infoList" :key="project.id" :title="project.workName
-        ">
+        <el-collapse-item v-for="project in props.infoList" :key="project.id" :title="(
+project.id+'&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;'+project.workName)">
           <el-descriptions title="项目信息" direction:vertical :column="4">
             <el-descriptions-item>
               <el-descriptions title="作品名称" style="width:300px;min-width:200px" >
@@ -132,9 +132,9 @@ const itemClick = (id, idx, score) => {
             </el-descriptions-item>
 
             <el-descriptions-item>
-              <el-descriptions title="类作品描述型" >
-                <el-descriptions-item >
-                  <div>{{ project.websiteIntroduction }}</div>
+              <el-descriptions title="作品描述类型" >
+                <el-descriptions-item   >
+                  <span  :title="project.websiteIntroduction"  class="desc" >{{ project.websiteIntroduction }}</span>
                 </el-descriptions-item>
               </el-descriptions>
             </el-descriptions-item>
@@ -167,4 +167,12 @@ const itemClick = (id, idx, score) => {
   padding: 0 35px !important;
 }
 
+
+.desc{
+  /* background-color: red !important; */
+  /* width:200px !important; */
+  height: auto;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
 </style>
