@@ -2,6 +2,7 @@ const Layout = () => import("@/layout/index.vue")
 const Work = () => import("@/views/A-My-views/guoxinan/work/index.vue")
 const Rating = () => import("@/views/A-My-views/guoxinan/rating/index.vue")
 const WorkAndScore = () => import('@/views/A-My-views/guoxinan/work_and_score/index.vue')
+const Score = () => import('@/views/A-My-views/guoxinan/work_score/index.vue')
 export default [
   {
     path: '/guoxinan',
@@ -29,6 +30,13 @@ export default [
         name: 'work_score',
         component: WorkAndScore,
         meta: { title: '报名队伍' },
+        icon: 'Tickets'
+      },
+      {
+        path: 'score',
+        name: 'score',
+        component: Score,
+        meta: { title: '作品分数' },
         icon: 'Tickets'
       },
     ]

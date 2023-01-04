@@ -7,7 +7,7 @@
         <el-row :gutter="12" justify="start" >
           <el-col  :span="12"  v-for="item in staticWorkList" class="card_container">
             <div style="float:left;">
-              <workInfoCard :work="item" :isGet="false" @audit="getFirstTrial"  />
+              <workInfoCard :work="item" :isGet="true" @audit="getFirstTrial"  />
             </div>
           </el-col>
         </el-row>
