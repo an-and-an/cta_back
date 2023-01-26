@@ -7,16 +7,15 @@
       :default-current-page="1" :current-page="page" @size-change="handleSizeChange" />
   </div>
 </template>
-<script setup>
-import { ref } from 'vue'
+<script lang="ts" setup>
 const pageSizes = ref(['10', '20', '40', '80', '100', '200'])
 const emit = defineEmits(['pageChange', 'sizeChange'])
 defineProps(['totalNumber', 'page'])
 //当前页变化
-function handler(newPage) {
+function handler(newPage: any) {
   emit('pageChange', newPage)
 }
-function handleSizeChange(newPageSize) {
+function handleSizeChange(newPageSize: any) {
   emit('sizeChange', newPageSize)
 }
 </script>

@@ -1,3 +1,5 @@
+
+import { ROLES_OPTIONS } from '@/directive/roles';
 const Layout = () => import("@/layout/index.vue")
 const ActiveList = () => import('@/views/A-My-views/active/activeList/index.vue')
 export default [
@@ -12,7 +14,14 @@ export default [
         path: 'activelist',
         name: 'activelist',
         component: ActiveList,
-        meta: { title: '活动列表' },
+        meta: {
+          title: '活动列表',
+          apis: [
+            ROLES_OPTIONS['activelist'].CREATE,
+            ROLES_OPTIONS['activelist'].DELETE,
+            ROLES_OPTIONS['activelist'].UPDATE,
+          ]
+        },
         icon: 'EditPen'
       },
     ]

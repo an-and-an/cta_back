@@ -9,14 +9,14 @@
     <pager v-if="isPage" :page="page" :total-number="totalNumber" @page-change="pageChange" @size-change="sizeChange" />
   </div>
 </template>
-<script setup>
+<script lang="ts" setup>
 import Pager from './pager.vue'
 defineProps(['list', 'select', 'totalNumber', 'page', 'isPage'])
 const emit = defineEmits(['pageChange', 'sizeChange'])
-function pageChange(n) {
+function pageChange(n: number) {
   emit('pageChange', n)
 }
-function sizeChange(n) {
+function sizeChange(n: number) {
   emit('sizeChange', n)
 }
 </script>

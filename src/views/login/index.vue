@@ -11,11 +11,12 @@
       </el-form-item>
       <el-form-item>
         <el-button-group style="width:100%">
-          <el-button :loading="loading" type="primary" class="btn" @click="submit" style="width:50%">登录
-          </el-button>
-          <el-button type="primary" class="btn" @click="changeModelType" style="width:50%">
-            切换
-          </el-button>
+          <el-button
+            :loading="loading"
+            type="primary"
+            class="btn"
+            @click="submit"
+          >登录</el-button>
         </el-button-group>
       </el-form-item>
     </el-form>
@@ -47,9 +48,9 @@ export default defineComponent({
     const loginForm = ref(null)
     const state = reactive({
       model: {
-        username: '',
-        password: '',
-        type: true,
+        username: 'ymx',
+        password: '157617',
+        type: false,
       },
       title: '社团成员',
       rules: {
@@ -64,60 +65,39 @@ export default defineComponent({
       },
       loading: false,
       btnText: computed(() => (state.loading ? '登录中...' : '登录')),
-      //切换
-      changeModelType: () => {
-        state.model.type = !state.model.type;
-        if (state.model.type) {
-          loginForm.value.$el.style.transition = "0.8s"
-          loginForm.value.$el.style.transform = 'rotateY(360deg)'
-        } else {
-          loginForm.value.$el.style.transition = "0.8s"
-          loginForm.value.$el.style.transform = 'rotateX(360deg)'
-        }
-        setTimeout(() => {
-          loginForm.value.$el.style.transition = ''
-          loginForm.value.$el.style.transform = ''
-          if (state.model.type) {
-            state.title = '社团成员'
-          } else {
-            state.title = '管理员'
-          }
-        }, 300)
-        return;
-      },
       submit: () => {
-        if (state.loading) {
-          return
-        }
+        if (state.loading) return
+
         loginForm.value.validate(async valid => {
           if (valid) {
             state.loading = true
-            const { code, data, message } = await Login({
-              ...state.model,
-              password: encryptByMd5(state.model.password)
-            })
-            if (+code === 0) {
-              ctx.$message.success({
-                message: '登录成功',
-                duration: 1000,
+            try {
+              const { code, data, message } = await Login({
+                ...state.model,
+                password: encryptByMd5(state.model.password)
               })
+              if (+code === 0) {
+                ctx.$message.success({
+                  message: '登录成功',
+                  duration: 1000,
+                })
 
-              const targetPath = decodeURIComponent(route.query.redirect)
-              if (targetPath.startsWith('http')) {
-                // 如果是一个url地址
-                window.location.href = targetPath
-              } else if (targetPath.startsWith('/')) {
-                // 如果是内部路由地址
-                router.push(targetPath)
+                const targetPath = decodeURIComponent(route.query.redirect)
+                if (targetPath.startsWith('/')) {
+                  // 如果是内部路由地址
+                  router.push(targetPath)
+                } else {
+                  router.push('/')
+                }
+                store.dispatch('app/setToken', data)
               } else {
-                // 改动
-                router.push('/personalcenter')
+                ctx.$message.error(message)
               }
-              store.dispatch('app/setToken', data)
-            } else {
-              ctx.$message.error(message)
+            } catch (e) {
+
+            } finally {
+              state.loading = false
             }
-            state.loading = false
           }
         })
       },

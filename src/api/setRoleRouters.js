@@ -13,3 +13,25 @@ export const getRouterByRole = role => {
     url: '/routers/getRouterByRole/' + role
   })
 }
+export const updateRoleInfo = ({ id, roleName, roleDescription }) => {
+  return request({
+    method: "PUT",
+    url: '/routers/updateRoleInfo',
+    data: { id, roleName, roleDescription }
+  })
+}
+
+export const addRoleApi = ({ roleName, roleDescription }) => {
+  return request({
+    method: "POST",
+    url: '/routers/createRoles',
+    data: { roleName, roleDescription }
+  })
+}
+
+export const deleteRoleApi = id => {
+  return request({
+    method: "DELETE",
+    url: `/routers/deleteRoles/${id}`,
+  })
+}

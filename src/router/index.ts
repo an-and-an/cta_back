@@ -29,18 +29,33 @@ export const asyncRoutes = [
   ...competition_credit,
   ...materials,
 ]
-const res = (function print(routers) {
-  const res = []
+
+export const asyncRoutesTree = (function print(routers: any[]): any[] {
+  const res: any[] = []
   routers.forEach((router) => {
-    const { meta, name, children } = router
-    const ans = { title: meta.title, name }
-    if (children) {
-      ans.children = print(children)
+    const { meta, name, children }: any = router
+    const ans: any = {
+      title: meta?.title as string,
+      name: <string>name,
+      children: [],
+      isYear: false,
+      isApi: false,
     }
-    res.push(ans)
-  })
-  return res
-})(asyncRoutes)
+    if (children) ans.children = print(children)
+    else {
+      ans.isYear = true;
+      ans.children = meta!.apis?.map((v: any) => ({
+        name: v.label as string,
+        title: v.label as string,
+        isApi: true,
+        isYear: false,
+        value: v.value as number,
+      }))
+    }
+    res.push(ans);
+  });
+  return res;
+})(asyncRoutes);
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
