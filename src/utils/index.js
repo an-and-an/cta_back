@@ -4,9 +4,6 @@
  * @param {string} cFormat
  * @returns {string | null}
  */
-
-
-
 import { createStore } from 'vuex'
 //创建一个实例
 export function parseTime(time, cFormat) {
@@ -131,7 +128,13 @@ export function byteLength(str) {
   }
   return s
 }
-
+// export function debounce(fn, delay) {
+//   let timer = null
+//   return function(...args) {
+//     timer && clearTimeout(timer);
+//     timer = setTimeout(() => fn.apply(this, args), delay)
+//   }
+// }
 /**
  * @param {Array} actual
  * @returns {Array}

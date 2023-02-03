@@ -1,28 +1,16 @@
-/*
- * @Descripttion:
- * @version:
- * @Date: 2021-04-20 11:06:21
- * @LastEditors: huzhushan@126.com
- * @LastEditTime: 2021-09-18 15:44:39
- * @Author: huzhushan@126.com
- * @HomePage: https://huzhushan.gitee.io/vue3-element-admin
- * @Github: https://github.com/huzhushan/vue3-element-admin
- * @Donate: https://huzhushan.gitee.io/vue3-element-admin/donate/
- */
-
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import store from '@/store'
 import router from '@/router'
-
 const service = axios.create({
   baseURL: 'http://yumingxi.xyz:3100/api',
   timeout: 10000,
 })
 // 拦截请求
 service.interceptors.request.use(
-  config => {
-    const { authorization } = store.state.app
+  (config: any) => {
+    const { state }: any = store;
+    const { authorization } = state.app
     if (authorization) {
       config.headers.Authorization = `Bearer ${authorization}`
     }
@@ -37,6 +25,7 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   // 响应成功进入第1个函数，该函数的参数是响应对象
   response => {
+    response.data.status = response.data.code
     return response.data
   },
   // 响应失败进入第2个函数，该函数的参数是错误对象

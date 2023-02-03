@@ -19,7 +19,6 @@ export default [
             ROLES_OPTIONS['credit1'].CREATE,
             ROLES_OPTIONS['credit1'].UPDATE,
             ROLES_OPTIONS['credit1'].DELETE,
-            
           ]
         },
         icon: 'Odometer',

@@ -1,5 +1,10 @@
-import { ElMessage } from 'element-plus'
-export function apiOver(callback, code, message, config = {}) {
+import { ElMessage } from 'element-plus';
+export function apiOver(
+  callback: Function,
+  code: number,
+  message: string,
+  config = {}
+) {
   if (code === 0) {
     callback()
     ElMessage( { type:'success', ...config , message } )
