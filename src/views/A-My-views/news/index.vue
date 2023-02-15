@@ -209,6 +209,7 @@ const getNewPage = (page) => {
     getNewsData.page = page
     getAllTable()
 }
+
 const pageSizeUpdate = (pageSize) => {
     getNewsData.pageSize = pageSize
     getAllTable()

@@ -17,6 +17,7 @@ export default [
         meta: {
           title: "新闻管理",
           apis: [
+            ROLES_OPTIONS['news1'].LOOK,
             ROLES_OPTIONS["news1"].CREATE,
             ROLES_OPTIONS["news1"].DELETE,
             ROLES_OPTIONS["news1"].UPDATE,

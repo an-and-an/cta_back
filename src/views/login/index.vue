@@ -1,7 +1,6 @@
 <template>
   <div class="login" style="perspective: 500px">
     <el-form class="form face" :model="model" :rules="rules" ref="loginForm">
-      <h1 class="title">{{ title }}</h1>
       <el-form-item prop="username">
         <el-input
           class="text"

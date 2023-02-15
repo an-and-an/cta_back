@@ -22,21 +22,22 @@
       </el-table-column>
       <el-table-column  prop="" label="修改" width="80px">
         <template #default="scope">
-          <el-button  v-if="!scope.row.isApprove && (props.currentUserId == scope.row.author.id)" size="small" @click="modify(scope.row.id)" type="primary">
+          <el-button v-my-roles="ROLES_KEY.UPDATE" size="small" @click="modify(scope.row.id)" type="primary">
             <el-icon> <Edit /> </el-icon>
           </el-button>
         </template>
       </el-table-column>
-      <el-table-column v-if="props.currentRoleId == 21 || props.currentRoleId == 22" prop="" label="操作" width="100px">
+      <el-table-column prop="" label="操作" width="100px">
         <template #default="scope">
           <el-button  
-            v-if="scope.row.isApprove" 
+            v-my-roles="ROLES_KEY.REPULSE"
+            v-if="scope.row.isApprove"
             @click="cancelDisplay(scope.row.id)" 
             type="primary" 
             size="small"> 打回
           </el-button>
 
-          <el-button-group v-if="!scope.row.isApprove" class="ml-4" size="small">
+          <el-button-group v-my-roles="ROLES_KEY.AUDIT" v-if="!scope.row.isApprove" class="ml-4" size="small">
             <el-button type="primary" @click="audit(scope.row.id, true)">
               <el-icon><Check /></el-icon>
             </el-button>
@@ -62,6 +63,7 @@
 </template>
 <script setup>
 import { ref } from 'vue'
+import { ROLES_KEY, isShowComponent } from '@/directive/roles';
 const props = defineProps(['tableData', 'currentRoleId','currentUserId'])
 const emit = defineEmits(['checkNews', 'modifyNews', 'cancelNews', 'auditNews'])
 

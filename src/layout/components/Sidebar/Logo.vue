@@ -1,7 +1,7 @@
 <template>
   <div class="brand">
     <img class="logo" src="~@/assets/cta_logo.png" @click="goHome" />
-    <div class="title">计算机技术协会</div>
+    <div class="title">学科竞赛协同管理平台</div>
   </div>
 </template>
 <script>
