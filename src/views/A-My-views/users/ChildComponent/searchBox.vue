@@ -1,20 +1,23 @@
 <script setup>
-import { ref } from 'vue';
-import { debounce } from '@/utils'
-const emit = defineEmits(['search'])
-const inputValue = ref()
-const getSearch = debounce(() => {
-  emit('search', inputValue.value)
-}, 500)
-const getSearchByEnter = () => {
-  emit('search', inputValue.value)
-}
+import { ref, watch } from "vue";
+import { debounce } from "@/utils";
+const emit = defineEmits(["search"]);
+const inputValue = ref();
+
+watch(inputValue, debounce(() => {
+  emit("search", inputValue.value);
+}, 500));
 </script>
-      
+
 <template>
   <div class="search_user_by_studentid_box">
-    <el-input v-model="inputValue" @input="getSearch" @change="getSearchByEnter" :clearable="true" resize="both"       placeholder="请输入用户名"
-      suffix-icon="Search"/>
+    <el-input
+      v-model="inputValue"
+      :clearable="true"
+      resize="both"
+      placeholder="请输入用户名或学号"
+      suffix-icon="Search"
+    />
   </div>
 </template>
 <style scoped>

@@ -20,7 +20,7 @@
 </template>
 <script setup>
 import { ElMessage } from 'element-plus';
-import {  reactive,  watch } from 'vue'
+import { reactive, watch } from 'vue'
 const emit = defineEmits(['offUpdate', 'updatePassword'])
 const props = defineProps(['showUpdate', 'username', 'isShow'])
 //关闭对话框

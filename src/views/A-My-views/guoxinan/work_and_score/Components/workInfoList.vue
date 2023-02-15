@@ -16,22 +16,10 @@
       <el-table-column label="班级" prop="class" width="80" align="center" />
       <el-table-column label="学号" prop="studentId" width="120" align="center" />
       <el-table-column label="qq" prop="qq" width="120" align="center" />
-      <el-table-column label="操作" width="220" align="center" fixed="right">
-        <template #default="scope">
-          <el-button type="primary" text @click="dialogClick(scope.row.introductionToWorks)">作品简介</el-button>
-          <el-button type="primary" text @click="dialogClick(scope.row.teamMemberSpecialty)">成员简介</el-button>
-        </template>
-      </el-table-column>
     </el-table>
-    <el-dialog v-model="dialog">
-      {{ currentText }}
-    </el-dialog>
   </div>
 </template>
 <script setup>
-import { ref } from 'vue';
-const dialog = ref(false);
-const currentText = ref('')
 const props = defineProps(['list'])
 function spanMethod({ row, column, rowIndex, columnIndex }) {
   if (columnIndex < 5 || columnIndex === 11) {
@@ -48,12 +36,6 @@ function spanMethod({ row, column, rowIndex, columnIndex }) {
     }
   }
 }
-
-function dialogClick(scope) {
-  currentText.value = scope
-  dialog.value = true
-}
-
 
 </script>
 <style scoped>

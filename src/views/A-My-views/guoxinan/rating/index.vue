@@ -8,13 +8,8 @@ const staticProjects = ref([])
 const dynanmicProjects = ref([])
 const getAllProject = (() => {
   GetAllProject().then(res => {
-    console.log(res);
-    staticProjects.value = res.data.static.sort(
-      (a, b) => a.score.filter(_ => _ !== 0).length - b.score.filter(_ => _ !== 0).length
-    )
-    dynanmicProjects.value = res.data.dynamic.sort(
-      (a, b) => a.score.filter(_ => _ !== 0).length - b.score.filter(_ => _ !== 0).length
-    )
+    staticProjects.value = res.data.static;
+    dynanmicProjects.value = res.data.dynamic;
   })
 })
 getAllProject()
@@ -25,6 +20,6 @@ getAllProject()
     <h3>静态组</h3>
     <Dynamic :infoList="staticProjects" :type="true" />
     <h3>动态组</h3>
-    <Dynamic :infoList="dynanmicProjects" />
+    <Dynamic :info-list="dynanmicProjects" />
   </div>
 </template>

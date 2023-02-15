@@ -1,22 +1,36 @@
 <template>
-  <div class="login" style="perspective:500px;">
+  <div class="login" style="perspective: 500px">
     <el-form class="form face" :model="model" :rules="rules" ref="loginForm">
       <h1 class="title">{{ title }}</h1>
       <el-form-item prop="username">
-        <el-input class="text" v-model="model.username" prefix-icon="User" clearable placeholder="用户名" />
+        <el-input
+          class="text"
+          v-model="model.username"
+          prefix-icon="User"
+          clearable
+          placeholder="用户名"
+        />
       </el-form-item>
       <el-form-item prop="password">
-        <el-input class="text" v-model="model.password"  prefix-icon="Lock" show-password clearable
-          placeholder="密码" />
+        <el-input
+          class="text"
+          v-model="model.password"
+          prefix-icon="Lock"
+          show-password
+          clearable
+          placeholder="密码"
+          @keydown.enter="submit"
+        />
       </el-form-item>
       <el-form-item>
-        <el-button-group style="width:100%">
+        <el-button-group style="width: 100%">
           <el-button
             :loading="loading"
             type="primary"
             class="btn"
             @click="submit"
-          >登录</el-button>
+            >登录</el-button
+          >
         </el-button-group>
       </el-form-item>
     </el-form>
@@ -31,84 +45,79 @@ import {
   toRefs,
   ref,
   computed,
-} from 'vue'
-import { Login } from '@/api/login'
-import { useStore } from 'vuex'
-import { encryptByMd5 } from '@/utils/encrypt.js'
-import { useRouter, useRoute } from 'vue-router'
+} from "vue";
+import { Login } from "@/api/login";
+import { useStore } from "vuex";
+import { encryptByMd5 } from "@/utils/encrypt.js";
+import { useRouter, useRoute } from "vue-router";
 export default defineComponent({
-  name: 'login',
+  name: "login",
   setup() {
     //getCurrentInstance函数返回当前组件的实例对象
     //获取组件的上下文
-    const { proxy: ctx } = getCurrentInstance() // 可以把ctx当成vue2中的this
-    const store = useStore()
-    const router = useRouter()
-    const route = useRoute()
-    const loginForm = ref(null)
+    const { proxy: ctx } = getCurrentInstance(); // 可以把ctx当成vue2中的this
+    const store = useStore();
+    const router = useRouter();
+    const route = useRoute();
+    const loginForm = ref(null);
     const state = reactive({
       model: {
-        username: 'ymx',
-        password: '157617',
+        username: "ymx",
+        password: "157617",
         type: false,
       },
-      title: '社团成员',
+      title: "社团成员",
       rules: {
-        username:
-        [
-          { required: true, message: '请输入用户名', trigger: 'blur' },
+        username: [
+          { required: true, message: "请输入用户名", trigger: "blur" },
         ],
-        password:
-        [
-          { required: true, message: '请输入密码', trigger: 'blur' },
-        ]
+        password: [{ required: true, message: "请输入密码", trigger: "blur" }],
       },
       loading: false,
-      btnText: computed(() => (state.loading ? '登录中...' : '登录')),
+      btnText: computed(() => (state.loading ? "登录中..." : "登录")),
       submit: () => {
-        if (state.loading) return
+        if (state.loading) return;
 
-        loginForm.value.validate(async valid => {
+        loginForm.value.validate(async (valid) => {
           if (valid) {
-            state.loading = true
+            state.loading = true;
             try {
               const { code, data, message } = await Login({
                 ...state.model,
-                password: encryptByMd5(state.model.password)
-              })
+                password: encryptByMd5(state.model.password),
+              });
               if (+code === 0) {
                 ctx.$message.success({
-                  message: '登录成功',
+                  message: "登录成功",
                   duration: 1000,
-                })
+                });
 
-                const targetPath = decodeURIComponent(route.query.redirect)
-                if (targetPath.startsWith('/')) {
+                const targetPath = decodeURIComponent(route.query.redirect);
+                if (targetPath.startsWith("/")) {
                   // 如果是内部路由地址
-                  router.push(targetPath)
+                  router.push(targetPath);
                 } else {
-                  router.push('/')
+                  router.push("/");
                 }
-                store.dispatch('app/setToken', data)
+                store.dispatch("app/setToken", data);
               } else {
-                ctx.$message.error(message)
+                ctx.$message.error(message);
               }
             } catch (e) {
-
             } finally {
-              state.loading = false
+              state.loading = false;
             }
           }
-        })
+        });
       },
-    })
+    });
 
     return {
       ...toRefs(state),
       loginForm,
-    }
+    };
   },
-})
+});
 </script>
 
 <style lang="scss" scoped>

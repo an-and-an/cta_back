@@ -17,6 +17,7 @@ export default [
         meta: {
           title: "用户管理",
           apis: [
+            ROLES_OPTIONS['users1'].LOOK,
             ROLES_OPTIONS["users1"].UPDATE,
             ROLES_OPTIONS["users1"].DELETE,
           ],

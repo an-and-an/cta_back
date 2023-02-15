@@ -1,14 +1,19 @@
 import store from '@/store';
 export const ROLES_KEY = {
-  CREATE:  0b00000001,  // 新建
-  UPDATE:  0b00000010,  // 更新
-  DELETE:  0b00000100,  // 删除
-  AUDIT:   0b00001000,  // 审核
-  REPULSE: 0b00010000,  // 打回（将审核通过的作品打回）
-  RATING:  0b00100000,  // 打分（特用于国信安打分）
+  LOOK:    0b000000001,  // 查看
+  CREATE:  0b000000010,  // 新建
+  UPDATE:  0b000000100,  // 更新
+  DELETE:  0b000001000,  // 删除
+  AUDIT:   0b000010000,  // 审核
+  REPULSE: 0b000100000,  // 打回（将审核通过的作品打回）
+  RATING:  0b001000000,  // 打分（特用于国信安打分）
 }
 
 const OPTIONS: any = {
+  LOOK: {
+    label: 'LOOK',
+    value: ROLES_KEY.LOOK
+  },
   CREATE: {
     label: 'CREATE',
     value: ROLES_KEY.CREATE

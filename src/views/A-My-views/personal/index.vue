@@ -1,147 +1,151 @@
 <script setup>
-import { ref } from 'vue'
-import { GetUserinfo, UpdateSelfInfo } from '@/api/login'
-import { encryptByMd5 } from '@/utils/encrypt'
-import { apiOver } from '@/utils/api'
-import Img from '@/assets/img/personalCenter_user.png'
+import { ref } from "vue";
+import { GetUserinfo, UpdateSelfInfo } from "@/api/login";
+import { encryptByMd5 } from "@/utils/encrypt";
+import { apiOver } from "@/utils/api";
+import Img from "@/assets/img/personalCenter_user.png";
 const currentUser = ref({
-  "id": "",
-  "username": "",
-  "avatarUrl": "",
-  "email": "",
-  "phone": "",
-  "roles": "",
-})
+  id: "",
+  username: "",
+  avatarUrl: "",
+  email: "",
+  phone: "",
+  roles: "",
+});
 const getUserInfo = () => {
-  GetUserinfo().then(res => {
-    currentUser.value = res.data
-})
-}
-getUserInfo()
-//更新信息
-// const updateInfo = () => {
-//   UpdateSelfInfo({
-//     password: encryptByMd5(newPassword.value),
-//     avatarUrl: currentUser.value.avatarUrl,
-//     email: currentUser.value.email,
-//     phone: currentUser.value.phone,
-//   }).then(res => {
-//     //修改成功
-//     if (res.code == 0)
-//       ElMessage({
-//         type: "success",
-//         message: res.message,
-//         offset: 250,
-//         duration: 2000,
-//       })
-//     //修改失败
-//     else
-//       ElMessage({
-//         type: "error",
-//         message: res.message,
-//         offset: 250,
-//         duration: 2000,
-//       })
-//   })
-// }
-
-//修改昵称
-// {
-//   "nickName": "ymx",
-//   "password": "123",
-//   "avatarUrl": "string",
-//   "email": "string",
-//   "phone": "string"
-// }
-
-
+  GetUserinfo().then((res) => {
+    currentUser.value = res.data;
+  });
+};
+getUserInfo();
 
 //修改头像
-const avatarUrl = ref("")
-const isShowChangeAvatar = ref(false)
+const avatarUrl = ref("");
+const isShowChangeAvatar = ref(false);
 const successfullyUploadAvater = (res) => {
-  avatarUrl.value = res.data[0].Host + "/" + res.data[0].RelativePath
-  currentUser.value.avatarUrl = avatarUrl.value
-  UpdateSelfInfo({ avatarUrl: currentUser.value.avatarUrl }).then(res => {
-    apiOver(() => { getUserInfo }, res.code, res.message, {
-      duration: 1000,
-      offset: 250,
-    })
-  })
-}
+  avatarUrl.value = res.data[0].Host + "/" + res.data[0].RelativePath;
+  currentUser.value.avatarUrl = avatarUrl.value;
+  UpdateSelfInfo({ avatarUrl: currentUser.value.avatarUrl }).then((res) => {
+    apiOver(
+      () => {
+        getUserInfo;
+      },
+      res.code,
+      res.message,
+      {
+        duration: 1000,
+        offset: 250,
+      }
+    );
+  });
+};
 //修改电话
-const newPhone = ref()
-const showModifyBondPhone = ref(false)
+const newPhone = ref();
+const showModifyBondPhone = ref(false);
 const modifyBondPhone = () => {
-  showModifyBondPhone.value = true
-}
+  showModifyBondPhone.value = true;
+};
 const modifyBondPhone_confirm = () => {
-  currentUser.value.phone = newPhone
-  showModifyBondPhone.value = false
-  UpdateSelfInfo({ phone: currentUser.value.phone }).then(res => {
-    apiOver(() => { getUserInfo }, res.code, res.message, {
-      duration: 1000,
-      offset: 250,
-    })
-  })
-}
+  currentUser.value.phone = newPhone;
+  showModifyBondPhone.value = false;
+  UpdateSelfInfo({ phone: currentUser.value.phone }).then((res) => {
+    apiOver(
+      () => {
+        getUserInfo;
+      },
+      res.code,
+      res.message,
+      {
+        duration: 1000,
+        offset: 250,
+      }
+    );
+  });
+};
 // 修改邮箱
-const newEmail = ref()
-const showModifyBondEmail = ref(false)
+const newEmail = ref();
+const showModifyBondEmail = ref(false);
 const modifyBondEmail = () => {
-  showModifyBondEmail.value = true
-}
+  showModifyBondEmail.value = true;
+};
 const modifyBondEmail_confirm = () => {
-  currentUser.value.email = newEmail
-  showModifyBondEmail.value = false
-  UpdateSelfInfo({ email: currentUser.value.email }).then(res => {
-    apiOver(() => { getUserInfo }, res.code, res.message, {
-      duration: 1000,
-      offset: 250,
-    })
-  })
-}
+  currentUser.value.email = newEmail;
+  showModifyBondEmail.value = false;
+  UpdateSelfInfo({ email: currentUser.value.email }).then((res) => {
+    apiOver(
+      () => {
+        getUserInfo;
+      },
+      res.code,
+      res.message,
+      {
+        duration: 1000,
+        offset: 250,
+      }
+    );
+  });
+};
 //修改密码
-const newPassword = ref()
-const showModifyBondPassword = ref(false)
+const newPassword = ref();
+const showModifyBondPassword = ref(false);
 const modifyBondPassword = () => {
-  showModifyBondPassword.value = true
-}
+  showModifyBondPassword.value = true;
+};
 const modifyBondPassword_confirm = () => {
-  showModifyBondPassword.value = false
-  UpdateSelfInfo({ password: encryptByMd5(newPassword.value) }).then(res => {
-    apiOver(() => { getUserInfo }, res.code, res.message, {
-      duration: 1000,
-      offset: 250,
-    })
-  })
-}
+  showModifyBondPassword.value = false;
+  UpdateSelfInfo({ password: encryptByMd5(newPassword.value) }).then((res) => {
+    apiOver(
+      () => {
+        getUserInfo;
+      },
+      res.code,
+      res.message,
+      {
+        duration: 1000,
+        offset: 250,
+      }
+    );
+  });
+};
 //
-const iconSize = 25
-const iconColor=' rgb(153, 154, 170)'
+const iconSize = 25;
+const iconColor = " rgb(153, 154, 170)";
 </script>
 <template>
   <div>
     <!-- 侧边 -->
     <div id="personal_center_aside" class="inline-flex">
       <!-- 头像 -->
-      <div id="personal_center_avater_region" @mouseenter="isShowChangeAvatar = true"
-        @mouseleave="isShowChangeAvatar = false">
+      <div
+        id="personal_center_avater_region"
+        @mouseenter="isShowChangeAvatar = true"
+        @mouseleave="isShowChangeAvatar = false"
+      >
         <div id="personal-avatar-container">
-          <img :src="currentUser.avatarUrl" alt="用户头像" id="personal_center_avater">
+          <img
+            :src="currentUser.avatarUrl"
+            alt="用户头像"
+            id="personal_center_avater"
+          />
           <div v-if="isShowChangeAvatar" id="modify_avater_mask">
-            <el-upload action="https://yibindfxy.top:444/application/upload/file" :show-file-list="false"
-              :on-success="successfullyUploadAvater" name="file[]">
+            <el-upload
+              action="https://yibindfxy.top:444/application/upload/file"
+              :show-file-list="false"
+              :on-success="successfullyUploadAvater"
+              name="file[]"
+            >
               <div>
-                <span style="color: white; font-size: 28px;">上传头像</span>
+                <span style="color: white; font-size: 28px">上传头像</span>
               </div>
             </el-upload>
           </div>
         </div>
-        <span id="personal_center_avater_username">{{ currentUser.type ? currentUser.username :
-            currentUser.nickName
+        <span id="personal_center_avater_username">{{
+          currentUser.nickName
         }}</span>
-        <div id="personal_center_avater_bababa">这个家伙很懒，什么都没有留下</div>
+        <div id="personal_center_avater_bababa">
+          这个家伙很懒，什么都没有留下
+        </div>
       </div>
       <div id="personal_center_aside_text">
         <!-- 用户 -->
@@ -151,7 +155,9 @@ const iconColor=' rgb(153, 154, 170)'
               <User />
             </el-icon>
           </div>
-          <div id="personal_center_icon_roles">{{ currentUser.roles.roleDescription }}</div>
+          <div id="personal_center_icon_roles">
+            {{ currentUser.roles.roleDescription }}
+          </div>
         </div>
         <!-- 协会 -->
         <div id="personal_center_aside_userroles">
@@ -179,21 +185,28 @@ const iconColor=' rgb(153, 154, 170)'
         <span id="personal_center_content_top_title">账号绑定</span>
       </div>
       <div id="personal_center_content_main">
-        <div id="personal_center_content_main_one">
-        </div>
+        <div id="personal_center_content_main_one"></div>
         <!-- 绑定信息 -->
         <div id="personal_center_content_main_two">
           <!-- 手机号 -->
           <div id="prsonal_bond_info_phone">
             <div>密保手机</div>
-            <p id="prsonal_bond_info_phone_d">已绑定手机：{{ currentUser.phone }}
-              <button @click="modifyBondPhone" id="prsonal_bond_phone_info_btn">立即修改</button>
+            <p id="prsonal_bond_info_phone_d">
+              已绑定手机：{{ currentUser.phone }}
+              <button @click="modifyBondPhone" id="prsonal_bond_phone_info_btn">
+                立即修改
+              </button>
             </p>
           </div>
           <!-- 修改手机号 -->
           <el-dialog width="35%" v-model="showModifyBondPhone">
             <template #footer>
-              <el-button @click="modifyBondPhone_confirm" type="primary" size="small">确认</el-button>
+              <el-button
+                @click="modifyBondPhone_confirm"
+                type="primary"
+                size="small"
+                >确认</el-button
+              >
             </template>
             <el-form>
               <el-form-item label="手机号 ">
@@ -204,14 +217,22 @@ const iconColor=' rgb(153, 154, 170)'
           <!-- 邮箱 -->
           <div id="prsonal_bond_info_email">
             <div>邮箱</div>
-            <p id="prsonal_bond_info_email_d">已绑定邮箱：{{ currentUser.email }}
-              <button @click="modifyBondEmail" id="prsonal_bond_email_info_btn">立即修改</button>
+            <p id="prsonal_bond_info_email_d">
+              已绑定邮箱：{{ currentUser.email }}
+              <button @click="modifyBondEmail" id="prsonal_bond_email_info_btn">
+                立即修改
+              </button>
             </p>
           </div>
           <!-- 修改邮箱 -->
           <el-dialog width="35%" v-model="showModifyBondEmail">
             <template #footer>
-              <el-button @click="modifyBondEmail_confirm" type="primary" size="small">确认</el-button>
+              <el-button
+                @click="modifyBondEmail_confirm"
+                type="primary"
+                size="small"
+                >确认</el-button
+              >
             </template>
             <el-form>
               <el-form-item label="邮箱 ">
@@ -222,14 +243,25 @@ const iconColor=' rgb(153, 154, 170)'
           <!-- 修改密码 -->
           <div id="prsonal_bond_info_password" v-if="!currentUser.type">
             <div>修改密码</div>
-            <p id="prsonal_bond_info_password_d">修改个人密码
-              <button @click="modifyBondPassword" id="prsonal_bond_password_info_btn">立即修改</button>
+            <p id="prsonal_bond_info_password_d">
+              修改个人密码
+              <button
+                @click="modifyBondPassword"
+                id="prsonal_bond_password_info_btn"
+              >
+                立即修改
+              </button>
             </p>
           </div>
           <!-- 修改密码 -->
           <el-dialog width="35%" v-model="showModifyBondPassword">
             <template #footer>
-              <el-button @click="modifyBondPassword_confirm" type="primary" size="small">确认</el-button>
+              <el-button
+                @click="modifyBondPassword_confirm"
+                type="primary"
+                size="small"
+                >确认</el-button
+              >
             </template>
             <el-form>
               <el-form-item label="密码 ">
@@ -268,7 +300,6 @@ const iconColor=' rgb(153, 154, 170)'
   display: flex;
   flex-direction: column;
   justify-content: center;
-
 }
 
 #personal-avatar-container {
@@ -301,7 +332,6 @@ const iconColor=' rgb(153, 154, 170)'
 
 /**/
 #personal_center_avater_username {
-
   top: 170px;
   width: 100%;
   text-align: center;
@@ -310,7 +340,6 @@ const iconColor=' rgb(153, 154, 170)'
 }
 
 #personal_center_avater_bababa {
-
   top: 210px;
   width: 100%;
   height: 30px;
@@ -318,7 +347,6 @@ const iconColor=' rgb(153, 154, 170)'
   color: rgb(153, 154, 170);
   font-size: 17px;
   z-index: 3;
-
 }
 
 /*左侧栏*/
@@ -333,13 +361,12 @@ const iconColor=' rgb(153, 154, 170)'
   float: left;
   width: 45px;
   font-size: 35px;
-
 }
 
 #personal_center_icon_roles {
   float: left;
   font-size: 18px;
-  line-height:50px;
+  line-height: 50px;
   color: rgb(153, 154, 170);
 }
 
@@ -358,8 +385,8 @@ const iconColor=' rgb(153, 154, 170)'
   float: left;
   margin-top: 30px;
   margin-left: 2%;
-  width: 65%;
-  min-width: 500px;
+  /* width: 65%; */
+  min-width: 350px;
   height: 500px;
 }
 

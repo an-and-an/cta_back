@@ -1,20 +1,22 @@
 <script setup>
-defineProps(['tableInfo'])
-const emit = defineEmits(['deleteUser', 'update'])
+import { ROLES_KEY } from '@/directive/roles';
+
+defineProps(["tableInfo"]);
+const emit = defineEmits(["deleteUser", "update"]);
 const edit = (updateId, updateUsername) => {
-  emit('update', updateId, updateUsername)
-}
+  emit("update", updateId, updateUsername);
+};
 const deleteUser = (id) => {
-  emit('deleteUser', id)
-}
+  emit("deleteUser", id);
+};
 </script>
 <template>
-  <div style="width:100%;min-width:1000px">
+  <div style="width: 100%; min-width: 1000px">
     <el-table :data="tableInfo" :highlight-current-row="true" max-height="73vh">
       <el-table-column prop="avatarUrl" label="头像" width="100px">
         <template #default="scope">
-          <div style="width: 50px; height: 50px; border-radius:25px;">
-            <img id="avatar-img" :src="scope.row.avatarUrl" alt="">
+          <div style="width: 50px; height: 50px; border-radius: 25px">
+            <img id="avatar-img" :src="scope.row.avatarUrl" alt="" />
           </div>
         </template>
       </el-table-column>
@@ -30,13 +32,23 @@ const deleteUser = (id) => {
       <el-table-column prop="" label="操作" width="200px" fixed="right">
         <template #default="scope">
           <!-- 修改按钮 -->
-          <el-button @click="edit(scope.row.id, scope.row.username)" type="primary" circle>
+          <el-button
+            v-my-roles="ROLES_KEY.UPDATE"
+            @click="edit(scope.row.id, scope.row.username)"
+            type="primary"
+            circle
+          >
             <el-icon>
               <Edit />
             </el-icon>
           </el-button>
           <!-- 删除按钮 -->
-          <el-button @click="deleteUser(scope.row.id)" type="danger" circle>
+          <el-button 
+            v-my-roles="ROLES_KEY.DELETE"
+            @click="deleteUser(scope.row.id)"
+            type="danger"
+            circle
+          >
             <el-icon>
               <Delete />
             </el-icon>

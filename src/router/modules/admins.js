@@ -19,6 +19,7 @@ export default [
         meta: {
           title: "管理员列表",
           apis: [
+            ROLES_OPTIONS["admin1"].LOOK,
             ROLES_OPTIONS["admin1"].CREATE,
             ROLES_OPTIONS["admin1"].DELETE,
             ROLES_OPTIONS["admin1"].UPDATE,
