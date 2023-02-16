@@ -1,6 +1,6 @@
 <script setup>
 import Dynamic from './ChildComponent/Dynamic.vue'
-import { GetAllProject } from '@/api/guoxinan'
+import { GetAllProject } from '@/api/guoxinan';
 import { ref } from 'vue'
 //静态组
 const staticProjects = ref([])

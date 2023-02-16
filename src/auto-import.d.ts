@@ -106,6 +106,8 @@ declare global {
   const ref: typeof import('vue')['ref']
   const resolveComponent: typeof import('vue')['resolveComponent']
   const resolveDirective: typeof import('vue')['resolveDirective']
+  const setFinallyList: typeof import('./api/guoxinan.js')['setFinallyList']
+  const setNetworkScore: typeof import('./api/guoxinan.js')['setNetworkScore']
   const setRoleRouters: typeof import('./api/setRoleRouters.js')['setRoleRouters']
   const setWinners: typeof import('./api/previous_winners.js')['setWinners']
   const shallowReactive: typeof import('vue')['shallowReactive']
@@ -129,4 +131,5 @@ declare global {
   const watchEffect: typeof import('vue')['watchEffect']
   const watchPostEffect: typeof import('vue')['watchPostEffect']
   const watchSyncEffect: typeof import('vue')['watchSyncEffect']
+  const withdrawFinallyList: typeof import('./api/guoxinan.js')['withdrawFinallyList']
 }

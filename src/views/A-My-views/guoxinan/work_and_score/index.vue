@@ -1,22 +1,22 @@
 <template>
   <div style="width:100%;height:auto;min-width:700px;">
     <searchBox  
-    :total="total" 
-    @search="getSearch" 
-    @exportTable="deriveExcel" 
-    @pageSizeUpdate="pageSizeUpdate" />
+      :total="total" 
+      @search="getSearch" 
+      @exportTable="deriveExcel" 
+      @pageSizeUpdate="pageSizeUpdate" />
 
     <workInfoList 
-    :list="teams" 
-    id="table" />
+      :list="teams" 
+      id="table" />
 
     <bottom
-    :page-total="total" 
-    :page="getTeamInfo.page" 
-    :page-size="getTeamInfo.pageSize"
-    @getNewPage="getNewPage"
-    @pageSizeUpdate="pageSizeUpdate" 
-    class="pager" />
+      :page-total="total" 
+      :page="getTeamInfo.page" 
+      :page-size="getTeamInfo.pageSize"
+      @getNewPage="getNewPage"
+      @pageSizeUpdate="pageSizeUpdate" 
+      class="pager" />
   </div>
 </template>
 
@@ -28,14 +28,6 @@ import * as XLSX from 'xlsx'
 import searchBox from './Components/searchBox.vue'
 import workInfoList from './Components/workInfoList.vue'
 import bottom from '@/views/A-My-views/recruitment/bottom.vue'
-
-//获取已经打分的作品信息及其分数
-// const workScoreList = ref([])
-// function getAllWorkAndScore() {
-//   GetAllWorkAndScore().then(res => {
-//   })
-// }
-
 
 const teams = ref([])
 const getTeamInfo = ref({

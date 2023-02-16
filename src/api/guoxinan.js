@@ -36,11 +36,32 @@ export const GetAllWorkAndScore = () => {
   })
 }
 //获取所有已经报名了的队伍
-
 export const GetAllTeam = (data) => {
   return request({
     url: '/gxa/registeredList',
     method: 'get',
     params:data,
   })
+}
+// 
+export const setNetworkScore = ({ id, score }) => {
+  return request({
+    url: '/gxa/setnetworkScore',
+    method: 'put',
+    data: { id, score },
+  });
+}
+
+export const setFinallyList = () => {
+  return request({
+    url: '/gxa/setFinallyList',
+    method: 'GET',
+  })
+}
+
+export const withdrawFinallyList = () => {
+  return request({
+    url: '/gxa/withdrawFinallyList',
+    method: 'GET',
+  });
 }
