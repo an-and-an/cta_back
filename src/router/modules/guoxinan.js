@@ -14,6 +14,15 @@ export default [
     icon: 'HomeFilled',
     children: [
       {
+        path: 'work_score',
+        name: 'work_score',
+        component: WorkAndScore,
+        meta: {
+          title: '报名队伍',
+        },
+        icon: 'Tickets'
+      },
+      {
         path: 'work',
         name: 'work',
         component: Work,
@@ -37,11 +46,11 @@ export default [
         icon: 'EditPen'
       },
       {
-        path: 'work_score',
-        name: 'work_score',
-        component: WorkAndScore,
+        path: 'network',
+        name: 'network',
+        component: Network,
         meta: {
-          title: '报名队伍',
+          title: '网络分数',
         },
         icon: 'Tickets'
       },
@@ -51,15 +60,6 @@ export default [
         component: Score,
         meta: {
           title: '作品分数',
-        },
-        icon: 'Tickets'
-      },
-      {
-        path: 'network',
-        name: 'network',
-        component: Network,
-        meta: {
-          title: '网络分数',
         },
         icon: 'Tickets'
       },

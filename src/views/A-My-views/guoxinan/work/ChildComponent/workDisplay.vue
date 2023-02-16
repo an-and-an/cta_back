@@ -44,7 +44,6 @@ const getFirstTrial = (id, ans) => {
     id: id,
     status: ans,
   }).then((res) => {
-    console.log(res);
     getUnapprovedWork();
   });
 };
@@ -55,9 +54,10 @@ const dynamicWorkList = ref([]);
 
 const getUnapprovedWork = () => {
   GetUnapprovedWork().then((res) => {
-    dynamicWorkList.value = res.data.dynamicList;
-    staticWorkList.value = res.data.staticList;
-    console.log(dynamicWorkList.value);
+    if (res.code === 0) {
+      dynamicWorkList.value = res.data.dynamicList;
+      staticWorkList.value = res.data.staticList;
+    } else ElMessage({ type: 'error', message: res.message });
   });
 };
 getUnapprovedWork();

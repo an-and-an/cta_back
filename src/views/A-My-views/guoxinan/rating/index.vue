@@ -1,15 +1,19 @@
 <script setup>
+import { ElMessage } from 'element-plus';
 import Dynamic from './ChildComponent/Dynamic.vue'
 import { GetAllProject } from '@/api/guoxinan';
 import { ref } from 'vue'
 //静态组
-const staticProjects = ref([])
+const staticProjects = ref([]);
 //动态组
-const dynanmicProjects = ref([])
+const dynanmicProjects = ref([]);
 const getAllProject = (() => {
   GetAllProject().then(res => {
-    staticProjects.value = res.data.static;
-    dynanmicProjects.value = res.data.dynamic;
+    if (res.code !== 0) ElMessage({ type: 'error', message: res.message });
+    else {
+      staticProjects.value = res.data.static;
+      dynanmicProjects.value = res.data.dynamic;
+    }
   })
 })
 getAllProject()

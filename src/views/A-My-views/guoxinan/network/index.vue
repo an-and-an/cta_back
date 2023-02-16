@@ -15,8 +15,14 @@ async function audit(id, score) {
   }
 }
 async function init() {
-  const res = await GetAllProject();
-  dynamic.value = res.data.dynamic;
+  try {
+    const res = await GetAllProject();
+    if (res.code !== 0) {
+      ElMessage({ type: 'error', message: res.message });
+    } else dynamic.value = res.data.dynamic;
+  } catch (error) {
+    console.log(error.message);
+  }
 }
 init();
 </script>
