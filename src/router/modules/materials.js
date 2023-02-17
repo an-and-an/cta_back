@@ -17,6 +17,7 @@ export default [
         meta: {
           title: "竞赛题库",
           apis: [
+            ROLES_OPTIONS['material1'].LOOK,
             ROLES_OPTIONS['material1'].CREATE,
             ROLES_OPTIONS['material1'].UPDATE,
             ROLES_OPTIONS['material1'].DELETE,

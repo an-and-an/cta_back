@@ -16,6 +16,7 @@ export default [
         meta: {
           title: '竞赛积分',
           apis: [
+            ROLES_OPTIONS['credit1'].LOOK,
             ROLES_OPTIONS['credit1'].CREATE,
             ROLES_OPTIONS['credit1'].UPDATE,
             ROLES_OPTIONS['credit1'].DELETE,

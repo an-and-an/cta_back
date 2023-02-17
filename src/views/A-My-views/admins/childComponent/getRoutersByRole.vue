@@ -24,7 +24,7 @@
           >
             修改信息
           </el-button>
-          <el-popconfirm v-if="scope.row.id > 31" title="确定删除？" @confirm="DelHandler(scope.row)">
+          <el-popconfirm v-if="scope.row.id > 32" title="确定删除？" @confirm="DelHandler(scope.row)">
             <template #reference>
               <el-button
                 text

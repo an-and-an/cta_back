@@ -17,6 +17,7 @@ export default [
         meta: {
           title: '活动列表',
           apis: [
+            ROLES_OPTIONS['activelist'].LOOK,
             ROLES_OPTIONS['activelist'].CREATE,
             ROLES_OPTIONS['activelist'].DELETE,
             ROLES_OPTIONS['activelist'].UPDATE,

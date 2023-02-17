@@ -34,6 +34,7 @@
 </template>
 
 <script setup>
+import { ElMessage } from 'element-plus';
 import workInfoCard from "./workInfoCard.vue";
 import { ref } from "vue";
 import { GetUnapprovedWork, FirstTrialGxaWork } from "@/api/guoxinan";

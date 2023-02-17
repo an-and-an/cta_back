@@ -41,7 +41,7 @@ export default [
         component: Rating,
         meta: {
           title: '评分',
-          apis: [ROLES_OPTIONS['rating'].RATING],
+          // apis: [ROLES_OPTIONS['rating'].RATING],
         },
         icon: 'EditPen'
       },
@@ -61,7 +61,7 @@ export default [
         meta: {
           title: '作品分数',
         },
-        icon: 'Tickets'
+        icon: 'Tickets',
       },
     ]
   }

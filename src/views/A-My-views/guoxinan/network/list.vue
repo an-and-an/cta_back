@@ -7,7 +7,6 @@
     </el-table-column>
     <el-table-column label="打分">
       <template #default="scope">
-        <!-- {{ scope.row.networkScore }} -->
         <el-rate
           v-model="scope.row.networkScore"
           :allow-half="true"
