@@ -3,31 +3,19 @@
     <h5>国信安作品审核</h5>
     <el-tabs tab-position="top" class="demo-tabs">
       <el-tab-pane label="静态" class="work_box" style="padding: 0">
-        <el-row :gutter="12" justify="start">
-          <el-col
-            :span="12"
-            v-for="item in staticWorkList"
-            :key="item.id"
-            class="card_container"
-          >
-            <div style="float: left">
-              <workInfoCard :work="item" :isGet="true" @audit="getFirstTrial" />
-            </div>
-          </el-col>
-        </el-row>
+        <div class="card">
+          <div v-for="item in staticWorkList" :key="item.id" class="card_item">
+            <workInfoCard :work="item" :isGet="true" @audit="getFirstTrial" />
+          </div>
+        </div>
       </el-tab-pane>
 
       <el-tab-pane label="动态" class="work_box">
-        <el-row :gutter="12" justify="start">
-          <el-col
-            :span="12"
-            v-for="item in dynamicWorkList"
-            :key="item.id"
-            class="card_container"
-          >
+        <div class="card">
+          <div v-for="item in dynamicWorkList" :key="item.id" class="card_item">
             <workInfoCard :work="item" :isGet="true" @audit="getFirstTrial" />
-          </el-col>
-        </el-row>
+          </div>
+        </div>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -77,11 +65,12 @@ getUnapprovedWork();
   height: 100%;
 }
 
-.card_container {
-  width: 520px;
-  margin-bottom: 20px;
-  /* position:sticky;
-  top: 10px; */
-  /* margin: 10px; */
+.card {
+  width: 100%;
+}
+.card_item {
+  float: left;
+  height: 450px;
+  margin: 20px;
 }
 </style>
