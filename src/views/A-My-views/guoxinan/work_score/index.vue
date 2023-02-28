@@ -3,8 +3,8 @@
     <el-button @click="download" type="primary">下载</el-button>
     <el-button @click="setFinally" type="primary">一键设置决赛名单</el-button>
     <el-button @click="withdrawFinally" type="primary">一键撤回决赛名单</el-button>
-    <list-cpm :list="dynamicList" :select="select" :group="true" />
-    <list-cpm :list="staticList" :select="select" :group="false" />
+    <list-cpm :list="dynamicList" :select="dynamicSelect" :group="true" />
+    <list-cpm :list="staticList" :select="staticSelect" :group="false" />
   </div>
 </template>
 <script setup>
@@ -17,12 +17,14 @@ import listCpm from './list.vue';
 const workInfo = ref();
 const dynamicList = ref([]);
 const staticList = ref([]);
-const select = ref([]);
+const staticSelect = ref([]);
+const dynamicSelect = ref([]);
 function getAllWorkInfo() {
   GetAllWorkAndScore().then((res) => {
-    select.value = res.data.teachers;
+    staticSelect.value = res.data.staticTeacher;
     dynamicList.value = res.data.dynamicList;
     staticList.value = res.data.staticList;
+    dynamicSelect.value = res.data.dynamicTeacher;
   });
 }
 

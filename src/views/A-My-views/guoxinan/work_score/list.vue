@@ -1,6 +1,7 @@
 <template>
   <h3>{{ group ? '动态组' : '静态组' }}</h3>
   <el-table :data="list" style="width: 1000px" max-height="600">
+    <el-table-column fixed="left" type="index" width="50" />
     <el-table-column fixed="left" prop="teamName" label="队伍" width="160" align="center" />
     <el-table-column label="作品" width="200px" align="center">
       <template #default="scope">
@@ -10,7 +11,7 @@
     <el-table-column
       v-for="(item, idx) in select"
       :key="item"
-      :prop="`teacher${idx + 1}`"
+      :prop="item"
       :label="`teacher${idx + 1}`"
       width="100"
       align="center"
