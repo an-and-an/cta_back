@@ -346,9 +346,9 @@ const modifyAdminPassward = () => {
   //关闭对话框
   showEditAdminPassward.value = false;
   //输入的两次密码一致
-  if (CurrentAdminPassward.value == CurrentAdminPasswardAgain.value) {
+  if (updateInfo.CurrentAdminPassward == updateInfo.CurrentAdminPasswardAgain) {
     SetAdminPassword({
-      password: encryptByMd5(CurrentAdminPassward.value),
+      password: encryptByMd5(updateInfo.CurrentAdminPassward),
       id: CurrentAdminInEditUserId.value,
     }).then((res) => {
       //修改成功

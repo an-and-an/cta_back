@@ -85,7 +85,6 @@ const ratingRules = ref([
 //评分
 const itemClick = (id, idx, score) => {
   SetScore({ id, idx, score }).catch((err) => {
-    console.log(err);
     ElMessage({ type: 'error', message: err.message });
   });
 };
@@ -97,9 +96,7 @@ const itemClick = (id, idx, score) => {
         <el-collapse-item
           v-for="project in props.infoList"
           :key="project.id"
-          :title="
-            project.id + '&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;' + project.workName
-          "
+          :title="project.id + '&nbsp;&nbsp; &nbsp; &nbsp; &nbsp;' + project.workName"
         >
           <el-descriptions title="项目信息" direction:vertical :column="3">
             <el-descriptions-item>
@@ -108,7 +105,9 @@ const itemClick = (id, idx, score) => {
                 style="min-width: 100px"
               >
                 <el-descriptions-item>
-                  <div style="font-size: 20px">{{ project.workName }}</div>
+                  <div style="font-size: 20px">
+                    {{ project.workName }}
+                  </div>
                 </el-descriptions-item>
               </el-descriptions>
             </el-descriptions-item>
