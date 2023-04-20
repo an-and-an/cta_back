@@ -44,6 +44,7 @@ import {
 import { apiOver } from '@/utils/api';
 import ConditionCpm from './childCpm/condition.vue';
 import ListCpm from './childCpm/listV2.vue';
+// import ListCpm from './childCpm/list.vue';
 import DialogCpm from './childCpm/dialog.vue';
 const dialogRef = ref<InstanceType<typeof DialogCpm>>();
 const conditionRef = ref<InstanceType<typeof ConditionCpm>>();

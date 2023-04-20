@@ -9,7 +9,7 @@ watch(activeTagPage, (n, o) => n === 'current_cadre' && currentCadres.value.getC
 </script>  
 <template>
     <div>
-        <h2>计算机技术协会</h2>
+        <!-- <h2>计算机技术协会</h2> -->
         <div>
             <el-tabs v-model="activeTagPage" class="demo-tabs">
                 <el-tab-pane label="干部干事概览" name="current_all">
